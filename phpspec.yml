@@ -1,0 +1,6 @@
+formatter.name: pretty
+
+suites:
+  default:
+    psr4_prefix: EzSystems\EzPlatformQueryFieldType
+    namespace: EzSystems\EzPlatformQueryFieldType

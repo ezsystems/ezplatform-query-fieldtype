@@ -1,0 +1,2 @@
+bdquery: { name: "query" }
+field_definition.bdquery.default_value: "Default value"

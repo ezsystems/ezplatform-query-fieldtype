@@ -1,0 +1,21 @@
+{% extends '@EzSystemsRepositoryForms/ContentType/field_types.html.twig' %}
+
+{% block query_field_definition_edit %}
+    <div class="query-query-type{% if group_class is not empty %} {{ group_class }}{% endif %}">
+        {{- form_label(form.QueryType) -}}
+        {{- form_errors(form.QueryType) -}}
+        {{- form_widget(form.QueryType) -}}
+    </div>
+
+    <div class="query-returned-type{% if group_class is not empty %} {{ group_class }}{% endif %}">
+        {{- form_label(form.ReturnedType) -}}
+        {{- form_errors(form.ReturnedType) -}}
+        {{- form_widget(form.ReturnedType) -}}
+    </div>
+
+    <div class="query-parameters{% if group_class is not empty %} {{ group_class }}{% endif %}">
+        {{- form_label(form.Parameters) -}}
+        {{- form_errors(form.Parameters) -}}
+        {{- form_widget(form.Parameters) -}}
+    </div>
+{% endblock %}

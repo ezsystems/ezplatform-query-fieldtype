@@ -1,0 +1,14 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    EzSystems\EzPlatformQueryFieldType\GraphQL\QueryFieldResolver:
+        tags:
+            - { name: overblog_graphql.resolver, alias: "QueryFieldValue", method: "resolveQueryField" }
+
+    EzSystems\EzPlatformQueryFieldType\GraphQL\QueryFieldDefinitionMapper:
+        decorates: EzSystems\EzPlatformGraphQL\Schema\Domain\Content\Mapper\FieldDefinition\FieldDefinitionMapper
+        arguments:
+            $innerMapper: '@EzSystems\EzPlatformQueryFieldType\GraphQL\QueryFieldDefinitionMapper.inner'

@@ -1,0 +1,25 @@
+QueryFieldDefinition:
+    type: object
+    inherits: [FieldDefinition]
+    config:
+        fields:
+            settings:
+                type: QueryFieldSettings
+                resolve: "@=value.getFieldSettings()"
+
+QueryFieldSettings:
+    type: object
+    config:
+        fields:
+            queryType:
+                type: String
+                description: "Identifier of the query type executed by the field"
+                resolve: "@=value['QueryType']"
+            parameters:
+                type: String
+                description: "JSON of query type parameters"
+                resolve: "@=value['Parameters']"
+            returnedType:
+                type: String
+                description: "Content type returned by the field"
+                resolve: "@=value['ReturnedType']"
