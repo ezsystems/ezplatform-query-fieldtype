@@ -1,0 +1,15 @@
+{% extends '@EzPublishCore/content_fields.html.twig' %}
+
+{% block query_field %}
+{% spaceless %}
+    {{ render(controller(
+        "ez_content:viewAction",
+        {
+            "contentId": contentInfo.id,
+            "queryFieldDefinitionIdentifier": field.fieldDefIdentifier,
+            "viewType": "query_field"
+        }
+    )) }}
+
+{% endspaceless %}
+{% endblock %}

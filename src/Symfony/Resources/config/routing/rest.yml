@@ -1,0 +1,9 @@
+ezpublish_rest_query_field_results:
+    path: /api/ezp/v2/content/objects/{contentId}/versions/{versionNumber}/fields/{fieldDefinitionIdentifier}/query/results
+    defaults:
+        _controller: EzSystems\EzPlatformQueryFieldType\Controller\QueryFieldRestController:getResults
+    methods: [GET]
+    requirements:
+        contentId: \d+
+        fieldId: \d+
+        versionNumber: \d+

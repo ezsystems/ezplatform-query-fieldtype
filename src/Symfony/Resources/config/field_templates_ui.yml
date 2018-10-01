@@ -1,0 +1,6 @@
+system:
+    admin_group:
+        field_templates:
+            -
+                template: "BDEzPlatformQueryFieldTypeBundle::fieldtype_ui.html.twig"
+                priority: 10

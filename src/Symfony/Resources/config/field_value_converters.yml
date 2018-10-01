@@ -1,0 +1,11 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    EzSystems\EzPlatformQueryFieldType\Form\Type\FieldType\QueryFieldType: ~
+
+    EzSystems\EzPlatformQueryFieldType\Persistence\Legacy\Content\FieldValue\Converter\QueryConverter:
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: query}

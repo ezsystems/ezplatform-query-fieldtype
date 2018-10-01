@@ -1,0 +1,6 @@
+{% for result in query_results %}
+    {{ render(controller("ez_content:viewAction", {
+        "contentId": result.id,
+        "viewType": children_view_type
+    })) }}
+{% endfor %}

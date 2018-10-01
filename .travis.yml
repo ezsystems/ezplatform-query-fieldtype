@@ -1,0 +1,22 @@
+language: php
+
+php:
+  - 7.1
+
+branches:
+  only:
+    - master
+    - dev
+
+env:
+  matrix:
+    - TARGET="phpspec"
+
+before_script:
+  - COMPOSER_MEMORY_LIMIT=-1 composer install
+
+script:
+  - if [ "$TARGET" == "phpspec" ] ; then ./vendor/bin/phpspec run -n; fi
+
+notification:
+  email: false
