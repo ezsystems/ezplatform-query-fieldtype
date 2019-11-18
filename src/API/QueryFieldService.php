@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\QueryType\QueryTypeRegistry;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Executes a query and returns the results.
@@ -75,17 +76,17 @@ class QueryFieldService
      *
      * @return array
      */
-    private function resolveParameters(string $parameters, Content $content): array
+    private function resolveParameters(string $parametersString, Content $content): array
     {
-        $parameters = json_decode($parameters, true);
-        foreach ($parameters as $key => $parameter) {
+        $parameters = [];
+        foreach (Yaml::parse($parametersString) as $key => $parameter) {
             $parameters[$key] = $this->applyContentToParameter($content, $parameter);
         }
 
         return $parameters;
     }
 
-    private function applyContentToParameter(Content $content, string $parameter)
+    protected function applyContentToParameter(Content $content, string $parameter)
     {
         if (substr($parameter, 0, 2) !== '@=') {
             return $parameter;

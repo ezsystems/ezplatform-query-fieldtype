@@ -6,12 +6,16 @@
  */
 namespace EzSystems\EzPlatformQueryFieldType\FieldType\Query;
 
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\QueryType\QueryTypeRegistry;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
+use Symfony\Component\Yaml\Exception\ParseException;
+use Symfony\Component\Yaml\Yaml;
 
 class Type extends FieldType
 {
@@ -22,6 +26,14 @@ class Type extends FieldType
         'Parameters' => ['type' => 'string', 'default' => ''],
         'ReturnedType' => ['type' => 'string', 'default' => ''],
     ];
+
+    /** @var \eZ\Publish\Core\QueryType\QueryTypeRegistry */
+    private $queryTypeRegistry;
+
+    public function __construct(QueryTypeRegistry $queryTypeRegistry)
+    {
+        $this->queryTypeRegistry = $queryTypeRegistry;
+    }
 
     /**
      * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
@@ -49,9 +61,7 @@ class Type extends FieldType
      */
     public function validate(FieldDefinition $fieldDefinition, SPIValue $fieldValue)
     {
-        $validationErrors = [];
-
-        return $validationErrors;
+        return [];
     }
 
     /**
@@ -181,15 +191,21 @@ class Type extends FieldType
     {
         $errors = [];
 
-        if (isset($fieldSettings['QueryType'])) {
-            /**
-             * $errors[] = new ValidationError("Query type %query_type does not exist", null, ['%query_type%' => $fieldSettings['QueryType']]);.
-             */
+        if (!isset($fieldSettings['QueryType'])) {
+            $errors[] = new ValidationError('A query type needs to be selected');
+        } else {
+            try {
+                $this->queryTypeRegistry->getQueryType($fieldSettings['QueryType']);
+            } catch (InvalidArgumentException $e) {
+                $errors[] = new ValidationError('The selected query type does not exist');
+            }
         }
 
         if (isset($fieldSettings['Parameters']) && $fieldSettings['Parameters']) {
-            if (json_decode($fieldSettings['Parameters']) === null) {
-                $errors[] = new ValidationError('Parameters is not a valid json structure');
+            try {
+                Yaml::parse($fieldSettings['Parameters']);
+            } catch (ParseException $e) {
+                $errors[] = new ValidationError('Parameters is not a valid YAML string');
             }
         }
 
