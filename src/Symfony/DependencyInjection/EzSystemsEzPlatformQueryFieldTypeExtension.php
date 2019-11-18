@@ -15,7 +15,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Yaml\Yaml;
 
-class BDEzPlatformQueryFieldTypeExtension extends Extension implements PrependExtensionInterface
+class EzSystemsEzPlatformQueryFieldTypeExtension extends Extension implements PrependExtensionInterface
 {
     public function load(array $configs, ContainerBuilder $container)
     {
@@ -35,7 +35,8 @@ class BDEzPlatformQueryFieldTypeExtension extends Extension implements PrependEx
 
     public function prepend(ContainerBuilder $container)
     {
-        $container->prependExtensionConfig('assetic', ['bundles' => ['BDEzPlatformQueryFieldTypeBundle']]);
+        // Do we still need this ? Not in v3, for sure.
+        $container->prependExtensionConfig('assetic', ['bundles' => ['EzSystemsEzPlatformQueryFieldTypeBundle']]);
 
         $configFile = __DIR__ . '/../Resources/config/field_templates.yml';
         $config = Yaml::parse(file_get_contents($configFile));
@@ -57,7 +58,7 @@ class BDEzPlatformQueryFieldTypeExtension extends Extension implements PrependEx
         $contentViewDefaults['query_field'] = [
             'default' => [
                 'controller' => QueryFieldController::class . ':renderQueryFieldAction',
-                'template' => 'BDEzPlatformQueryFieldTypeBundle::query_field_view.html.twig',
+                'template' => 'EzSystemsEzPlatformQueryFieldTypeBundle::query_field_view.html.twig',
                 'match' => [],
             ],
         ];

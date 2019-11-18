@@ -1,8 +1,8 @@
 system:
     default:
         fielddefinition_settings_templates:
-            - { template: "BDEzPlatformQueryFieldTypeBundle::fielddefinition_settings.html.twig" }
+            - { template: "EzSystemsEzPlatformQueryFieldTypeBundle::fielddefinition_settings.html.twig" }
         fielddefinition_edit_templates:
-            - { template: "BDEzPlatformQueryFieldTypeBundle::field_types.html.twig" }
+            - { template: "EzSystemsEzPlatformQueryFieldTypeBundle::field_types.html.twig" }
         field_templates:
-            - { template: "BDEzPlatformQueryFieldTypeBundle::fieldtype_ui.html.twig" }
+            - { template: "EzSystemsEzPlatformQueryFieldTypeBundle::fieldtype_ui.html.twig" }
