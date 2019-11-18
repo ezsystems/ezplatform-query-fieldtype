@@ -1,5 +1,6 @@
 services:
     EzSystems\EzPlatformQueryFieldType\FieldType\Query\Type:
+        autowire: true
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezcontentquery}

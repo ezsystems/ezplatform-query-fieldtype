@@ -42,6 +42,7 @@ class QueryFormMapper implements FieldDefinitionFormMapperInterface, FieldValueF
                     'label' => 'Query type',
                     'property_path' => 'fieldSettings[QueryType]',
                     'choices' => $this->queryTypes,
+                    'required' => true,
                 ]
             )
             ->add('ReturnedType', Type\ChoiceType::class,
@@ -49,6 +50,7 @@ class QueryFormMapper implements FieldDefinitionFormMapperInterface, FieldValueF
                     'label' => 'Returned type',
                     'property_path' => 'fieldSettings[ReturnedType]',
                     'choices' => $this->getContentTypes(),
+                    'required' => true,
                 ]
             )
             ->add('Parameters', Type\TextareaType::class,
