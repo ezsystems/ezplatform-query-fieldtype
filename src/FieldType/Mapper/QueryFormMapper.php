@@ -18,9 +18,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class QueryFormMapper implements FieldDefinitionFormMapperInterface, FieldValueFormMapperInterface
 {
-    /**
-     * @var ContentTypeService
-     */
+    /** @var ContentTypeService */
     private $contentTypeService;
 
     /**

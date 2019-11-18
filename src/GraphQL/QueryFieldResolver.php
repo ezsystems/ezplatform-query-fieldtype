@@ -12,9 +12,7 @@ use EzSystems\EzPlatformGraphQL\GraphQL\Value\Field;
 
 class QueryFieldResolver
 {
-    /**
-     * @var \EzSystems\EzPlatformQueryFieldType\API\QueryFieldService
-     */
+    /** @var \EzSystems\EzPlatformQueryFieldType\API\QueryFieldService */
     private $queryFieldService;
 
     public function __construct(QueryFieldService $queryFieldService)

@@ -20,19 +20,13 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
  */
 class QueryFieldService
 {
-    /**
-     * @var \eZ\Publish\Core\QueryType\QueryTypeRegistry
-     */
+    /** @var \eZ\Publish\Core\QueryType\QueryTypeRegistry */
     private $queryTypeRegistry;
 
-    /**
-     * @var \eZ\Publish\API\Repository\SearchService
-     */
+    /** @var \eZ\Publish\API\Repository\SearchService */
     private $searchService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\ContentTypeService
-     */
+    /** @var \eZ\Publish\API\Repository\ContentTypeService */
     private $contentTypeService;
 
     public function __construct(

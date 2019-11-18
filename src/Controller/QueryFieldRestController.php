@@ -18,24 +18,16 @@ use eZ\Publish\Core\REST\Server\Values\RestContent;
 
 final class QueryFieldRestController
 {
-    /**
-     * @var \EzSystems\EzPlatformQueryFieldType\API\QueryFieldService
-     */
+    /** @var \EzSystems\EzPlatformQueryFieldType\API\QueryFieldService */
     private $queryFieldService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\ContentService
-     */
+    /** @var \eZ\Publish\API\Repository\ContentService */
     private $contentService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\ContentTypeService
-     */
+    /** @var \eZ\Publish\API\Repository\ContentTypeService */
     private $contentTypeService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\LocationService
-     */
+    /** @var \eZ\Publish\API\Repository\LocationService */
     private $locationService;
 
     public function __construct(

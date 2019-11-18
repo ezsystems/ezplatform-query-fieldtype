@@ -11,9 +11,7 @@ use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 
 final class QueryFieldController
 {
-    /**
-     * @var \EzSystems\EzPlatformQueryFieldType\API\QueryFieldService
-     */
+    /** @var \EzSystems\EzPlatformQueryFieldType\API\QueryFieldService */
     private $queryFieldService;
 
     public function __construct(QueryFieldService $queryFieldService)
