@@ -1,2 +1,2 @@
-bdquery: { name: "query" }
-field_definition.bdquery.default_value: "Default value"
+ezcontentquery: { name: "Content query" }
+field_definition.ezcontentquery.default_value: "Default value"

@@ -43,7 +43,7 @@ class QueryFieldServiceSpec extends ObjectBehavior
             'fieldDefinitions' => [
                 new Values\ContentType\FieldDefinition([
                     'identifier' => self::FIELD_DEFINITION_IDENTIFIER,
-                    'fieldTypeIdentifier' => 'query',
+                    'fieldTypeIdentifier' => 'ezcontentquery',
                     'fieldSettings' => [
                         'ReturnedType' => 'folder',
                         'QueryType' => self::QUERY_TYPE_IDENTIFIER,

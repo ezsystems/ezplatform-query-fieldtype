@@ -1,1 +1,3 @@
-field_definition: { bdquery: { default_value: "Default value" }}
+field_definition:
+    ezcontentquery:
+        default_value: "Default value"

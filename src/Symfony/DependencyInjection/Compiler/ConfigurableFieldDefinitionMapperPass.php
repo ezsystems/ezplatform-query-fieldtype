@@ -24,7 +24,7 @@ class ConfigurableFieldDefinitionMapperPass implements CompilerPassInterface
         }
 
         $parameter = $container->getParameter(self::PARAMETER);
-        $parameter['query'] = [
+        $parameter['ezcontentquery'] = [
             'definition_type' => 'QueryFieldDefinition',
             'value_resolver' => 'resolver("QueryFieldValue", [field, content])',
         ];
