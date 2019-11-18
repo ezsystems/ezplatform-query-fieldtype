@@ -2,11 +2,11 @@ services:
     EzSystems\EzPlatformQueryFieldType\FieldType\Query\Type:
         parent: ezpublish.fieldType
         tags:
-            - {name: ezpublish.fieldType, alias: query}
+            - {name: ezpublish.fieldType, alias: ezcontentquery}
 
     EzSystems\EzPlatformQueryFieldType\FieldType\Mapper\QueryFormMapper:
         tags:
-            - { name: ez.fieldFormMapper.definition, fieldType: query }
-            - { name: ez.fieldFormMapper.value, fieldType: query }
+            - { name: ez.fieldFormMapper.definition, fieldType: ezcontentquery }
+            - { name: ez.fieldFormMapper.value, fieldType: ezcontentquery }
         arguments:
             $contentTypeService: '@ezpublish.api.service.content_type'

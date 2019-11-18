@@ -61,7 +61,7 @@ class Type extends FieldType
      */
     public function getFieldTypeIdentifier()
     {
-        return 'query';
+        return 'ezcontentquery';
     }
 
     /**

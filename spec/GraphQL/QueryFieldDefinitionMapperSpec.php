@@ -14,7 +14,7 @@ use PhpSpec\ObjectBehavior;
 class QueryFieldDefinitionMapperSpec extends ObjectBehavior
 {
     const FIELD_IDENTIFIER = 'test';
-    const FIELD_TYPE_IDENTIFIER = 'query';
+    const FIELD_TYPE_IDENTIFIER = 'ezcontentquery';
     const RETURNED_CONTENT_TYPE_IDENTIFIER = 'folder';
     const GRAPHQL_TYPE = 'FolderContent';
 

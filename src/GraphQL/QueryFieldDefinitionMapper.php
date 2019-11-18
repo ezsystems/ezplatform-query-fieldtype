@@ -47,7 +47,7 @@ class QueryFieldDefinitionMapper extends DecoratingFieldDefinitionMapper impleme
 
     protected function getFieldTypeIdentifier(): string
     {
-        return 'query';
+        return 'ezcontentquery';
     }
 
     private function getDomainTypeName($typeIdentifier)

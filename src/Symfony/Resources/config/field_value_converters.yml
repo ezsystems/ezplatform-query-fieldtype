@@ -8,4 +8,4 @@ services:
 
     EzSystems\EzPlatformQueryFieldType\Persistence\Legacy\Content\FieldValue\Converter\QueryConverter:
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: query}
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezcontentquery}
