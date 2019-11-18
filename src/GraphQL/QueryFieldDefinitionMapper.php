@@ -14,14 +14,10 @@ use EzSystems\EzPlatformGraphQL\Schema\Domain\Content\NameHelper;
 
 class QueryFieldDefinitionMapper extends DecoratingFieldDefinitionMapper implements FieldDefinitionMapper
 {
-    /**
-     * @var NameHelper
-     */
+    /** @var NameHelper */
     private $nameHelper;
 
-    /**
-     * @var ContentTypeService
-     */
+    /** @var ContentTypeService */
     private $contentTypeService;
 
     public function __construct(
