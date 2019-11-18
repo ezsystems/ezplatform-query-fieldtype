@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 namespace EzSystems\EzPlatformQueryFieldType\Persistence\Legacy\Content\FieldValue\Converter;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
@@ -72,7 +76,7 @@ class QueryConverter implements Converter
         $fieldDef->fieldTypeConstraints->fieldSettings = [
             'QueryType' => $storageDef->dataText1 ?: null,
             'ReturnedType' => $storageDef->dataText2 ?: null,
-            'Parameters' => $storageDef->dataText5 ?: ''
+            'Parameters' => $storageDef->dataText5 ?: '',
         ];
     }
 

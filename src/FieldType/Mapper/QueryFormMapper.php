@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 namespace EzSystems\EzPlatformQueryFieldType\FieldType\Mapper;
 
 use EzSystems\EzPlatformQueryFieldType\Form\Type\FieldType\QueryFieldType;
@@ -20,7 +24,8 @@ class QueryFormMapper implements FieldDefinitionFormMapperInterface, FieldValueF
     private $contentTypeService;
 
     /**
-     * List of query types
+     * List of query types.
+     *
      * @var array
      */
     private $queryTypes;
@@ -34,7 +39,7 @@ class QueryFormMapper implements FieldDefinitionFormMapperInterface, FieldValueF
     public function mapFieldDefinitionForm(FormInterface $fieldDefinitionForm, FieldDefinitionData $data)
     {
         $fieldDefinitionForm
-            ->add('QueryType',Type\ChoiceType::class,
+            ->add('QueryType', Type\ChoiceType::class,
                 [
                     'label' => 'Query type',
                     'property_path' => 'fieldSettings[QueryType]',
@@ -51,7 +56,7 @@ class QueryFormMapper implements FieldDefinitionFormMapperInterface, FieldValueF
             ->add('Parameters', Type\TextareaType::class,
                 [
                     'label' => 'Parameters',
-                    'property_path' => 'fieldSettings[Parameters]'
+                    'property_path' => 'fieldSettings[Parameters]',
                 ]
             );
     }

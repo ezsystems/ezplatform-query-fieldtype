@@ -1,4 +1,9 @@
 <?php
+
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 namespace EzSystems\EzPlatformQueryFieldType\Controller;
 
 use EzSystems\EzPlatformQueryFieldType\API\QueryFieldService;
@@ -38,8 +43,7 @@ final class QueryFieldRestController
         ContentService $contentService,
         ContentTypeService $contentTypeService,
         LocationService $locationService
-    )
-    {
+    ) {
         $this->queryFieldService = $queryFieldService;
         $this->contentService = $contentService;
         $this->contentTypeService = $contentTypeService;
@@ -52,7 +56,7 @@ final class QueryFieldRestController
 
         return new ContentList(
             array_map(
-                function(Content $content) {
+                function (Content $content) {
                     return new RestContent(
                         $content->contentInfo,
                         $this->locationService->loadLocation($content->contentInfo->mainLocationId),
