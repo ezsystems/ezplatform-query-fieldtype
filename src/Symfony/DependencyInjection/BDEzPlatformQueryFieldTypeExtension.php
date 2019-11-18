@@ -1,4 +1,9 @@
 <?php
+
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 namespace EzSystems\EzPlatformQueryFieldType\Symfony\DependencyInjection;
 
 use EzSystems\EzPlatformQueryFieldType\Controller\QueryFieldController;
@@ -52,9 +57,9 @@ class BDEzPlatformQueryFieldTypeExtension extends Extension implements PrependEx
         $contentViewDefaults['query_field'] = [
             'default' => [
                 'controller' => QueryFieldController::class . ':renderQueryFieldAction',
-                'template' => "BDEzPlatformQueryFieldTypeBundle::query_field_view.html.twig",
+                'template' => 'BDEzPlatformQueryFieldTypeBundle::query_field_view.html.twig',
                 'match' => [],
-            ]
+            ],
         ];
         $container->setParameter('ezsettings.default.content_view_defaults', $contentViewDefaults);
     }

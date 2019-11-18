@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 namespace EzSystems\EzPlatformQueryFieldType\FieldType\Query;
 
 use eZ\Publish\SPI\Persistence\Content\Field;
@@ -19,7 +23,7 @@ class SearchField implements Indexable
      */
     public function getIndexData(Field $field, FieldDefinition $fieldDefinition)
     {
-        return array(
+        return [
             new Search\Field(
                 'value',
                 $field->value->data,
@@ -30,7 +34,7 @@ class SearchField implements Indexable
                 $field->value->data,
                 new Search\FieldType\FullTextField()
             ),
-        );
+        ];
     }
 
     /**
@@ -40,9 +44,9 @@ class SearchField implements Indexable
      */
     public function getIndexDefinition()
     {
-        return array(
+        return [
             'value' => new Search\FieldType\StringField(),
-        );
+        ];
     }
 
     /**

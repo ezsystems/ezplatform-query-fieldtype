@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 namespace EzSystems\EzPlatformQueryFieldType\FieldType\Query;
 
 use eZ\Publish\Core\FieldType\FieldType;
@@ -11,14 +15,13 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 class Type extends FieldType
 {
-    protected $validatorConfigurationSchema = array();
+    protected $validatorConfigurationSchema = [];
 
     protected $settingsSchema = [
         'QueryType' => ['type' => 'string', 'default' => ''],
         'Parameters' => ['type' => 'string', 'default' => ''],
         'ReturnedType' => ['type' => 'string', 'default' => ''],
     ];
-
 
     /**
      * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
@@ -105,7 +108,7 @@ class Type extends FieldType
     /**
      * Throws an exception if value structure is not of expected format.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the value does not match the expected structure
      *
      * @param \eZ\Publish\Core\FieldType\TextLine\Value $value
      */
@@ -180,16 +183,16 @@ class Type extends FieldType
 
         if (isset($fieldSettings['QueryType'])) {
             /**
-             * $errors[] = new ValidationError("Query type %query_type does not exist", null, ['%query_type%' => $fieldSettings['QueryType']]);
+             * $errors[] = new ValidationError("Query type %query_type does not exist", null, ['%query_type%' => $fieldSettings['QueryType']]);.
              */
         }
 
         if (isset($fieldSettings['Parameters']) && $fieldSettings['Parameters']) {
             if (json_decode($fieldSettings['Parameters']) === null) {
-                $errors[] = new ValidationError("Parameters is not a valid json structure");
+                $errors[] = new ValidationError('Parameters is not a valid json structure');
             }
         }
 
-         return $errors;
+        return $errors;
     }
 }

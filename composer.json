@@ -24,7 +24,9 @@
         }
     },
     "require-dev": {
-        "phpspec/phpspec": "^5.1"
+        "phpspec/phpspec": "^5.1",
+        "ezsystems/ezplatform-code-style": "^0.1.0",
+        "friendsofphp/php-cs-fixer": "^2.16.0"
     },
     "extra": {
         "branch-alias": {

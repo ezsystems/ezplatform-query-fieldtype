@@ -1,4 +1,9 @@
 <?php
+
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 namespace EzSystems\EzPlatformQueryFieldType\GraphQL;
 
 use EzSystems\EzPlatformQueryFieldType\API\QueryFieldService;
@@ -12,7 +17,8 @@ class QueryFieldResolver
      */
     private $queryFieldService;
 
-    public function __construct(QueryFieldService $queryFieldService) {
+    public function __construct(QueryFieldService $queryFieldService)
+    {
         $this->queryFieldService = $queryFieldService;
     }
 

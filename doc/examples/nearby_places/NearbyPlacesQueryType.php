@@ -1,11 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bdunogier
- * Date: 29/09/2018
- * Time: 16:46
- */
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 namespace AppBundle\QueryType;
 
 use eZ\Publish\API\Repository\Values\Content\Query;

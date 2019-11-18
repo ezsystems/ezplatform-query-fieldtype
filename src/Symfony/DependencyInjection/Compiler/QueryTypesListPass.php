@@ -1,4 +1,9 @@
 <?php
+
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 namespace EzSystems\EzPlatformQueryFieldType\Symfony\DependencyInjection\Compiler;
 
 use EzSystems\EzPlatformQueryFieldType\FieldType\Mapper\QueryFormMapper;
@@ -28,7 +33,7 @@ class QueryTypesListPass implements CompilerPassInterface
         foreach ($container->getDefinition('ezpublish.query_type.registry')->getMethodCalls() as $methodCall) {
             if ($methodCall[0] === 'addQueryType') {
                 $queryTypes[] = $methodCall[1][0];
-            } else if ($methodCall[0] === 'addQueryTypes') {
+            } elseif ($methodCall[0] === 'addQueryTypes') {
                 foreach (array_keys($methodCall[1][0]) as $queryTypeIdentifier) {
                     $queryTypes[$this->buildQueryTypeName($queryTypeIdentifier)] = $queryTypeIdentifier;
                 }
@@ -40,9 +45,10 @@ class QueryTypesListPass implements CompilerPassInterface
     }
 
     /**
-     * Builds a human readable name out of a query type identifier
+     * Builds a human readable name out of a query type identifier.
      *
      * @param $queryTypeIdentifier
+     *
      * @return string
      */
     private function buildQueryTypeName($queryTypeIdentifier)
