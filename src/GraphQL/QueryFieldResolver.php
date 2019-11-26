@@ -24,4 +24,15 @@ class QueryFieldResolver
     {
         return $this->queryFieldService->loadFieldData($content, $field->fieldDefIdentifier);
     }
+
+    public function resolveQueryFieldDefinitionParameters(array $parameters): array
+    {
+        $return = [];
+
+        foreach ($parameters as $name => $value) {
+            $return[] = ['name' => $name, 'value' => $value];
+        }
+
+        return $return;
+    }
 }

@@ -1,13 +1,13 @@
-QueryFieldDefinition:
+ContentQueryFieldDefinition:
     type: object
     inherits: [FieldDefinition]
     config:
         fields:
             settings:
-                type: QueryFieldSettings
+                type: ContentQueryFieldSettings
                 resolve: "@=value.getFieldSettings()"
 
-QueryFieldSettings:
+ContentQueryFieldSettings:
     type: object
     config:
         fields:
@@ -16,10 +16,19 @@ QueryFieldSettings:
                 description: "Identifier of the query type executed by the field"
                 resolve: "@=value['QueryType']"
             parameters:
-                type: String
-                description: "JSON of query type parameters"
-                resolve: "@=value['Parameters']"
+                type: "[ContentQueryFieldParameter]"
+                description: "Parameters used to generate the Query from the Query type"
+                resolve: "@=resolver('QueryFieldDefinitionParameters', [value['Parameters']])"
             returnedType:
-                type: String
+                type: ContentType
                 description: "Content type returned by the field"
                 resolve: "@=value['ReturnedType']"
+
+ContentQueryFieldParameter:
+    type: object
+    config:
+        fields:
+            name:
+                type: String
+            value:
+                type: String
