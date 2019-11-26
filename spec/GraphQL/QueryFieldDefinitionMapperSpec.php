@@ -2,7 +2,7 @@
 
 namespace spec\EzSystems\EzPlatformQueryFieldType\GraphQL;
 
-use EzSystems\EzPlatformQueryFieldType\GraphQL\QueryFieldDefinitionMapper;
+use EzSystems\EzPlatformQueryFieldType\GraphQL\ContentQueryFieldDefinitionMapper;
 use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\Core\QueryType\QueryTypeRegistry;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
@@ -39,7 +39,7 @@ class QueryFieldDefinitionMapperSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType(QueryFieldDefinitionMapper::class);
+        $this->shouldHaveType(ContentQueryFieldDefinitionMapper::class);
         $this->shouldHaveType(FieldDefinitionMapper::class);
     }
 

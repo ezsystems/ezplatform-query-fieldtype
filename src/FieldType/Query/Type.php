@@ -14,8 +14,6 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\QueryType\QueryTypeRegistry;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
-use Symfony\Component\Yaml\Exception\ParseException;
-use Symfony\Component\Yaml\Yaml;
 
 class Type extends FieldType
 {
@@ -202,9 +200,7 @@ class Type extends FieldType
         }
 
         if (isset($fieldSettings['Parameters']) && $fieldSettings['Parameters']) {
-            try {
-                Yaml::parse($fieldSettings['Parameters']);
-            } catch (ParseException $e) {
+            if (!is_array($fieldSettings['Parameters'])) {
                 $errors[] = new ValidationError('Parameters is not a valid YAML string');
             }
         }

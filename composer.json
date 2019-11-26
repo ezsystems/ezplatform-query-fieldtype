@@ -16,6 +16,7 @@
     "minimum-stability": "stable",
     "require": {
         "php": ">=7.1",
+        "ext-json": "*",
         "ezsystems/ezplatform-graphql": "^1.0||^2.0",
         "ezsystems/ezpublish-kernel": "^7.0||^8.0"
     },

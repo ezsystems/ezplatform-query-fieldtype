@@ -36,6 +36,19 @@ class QueryFormMapper implements FieldDefinitionFormMapperInterface, FieldValueF
 
     public function mapFieldDefinitionForm(FormInterface $fieldDefinitionForm, FieldDefinitionData $data)
     {
+        $parametersForm = $fieldDefinitionForm->getConfig()->getFormFactory()->createBuilder()
+            ->create(
+                'Parameters',
+                Type\TextareaType::class,
+                [
+                    'label' => 'Parameters',
+                    'property_path' => 'fieldSettings[Parameters]',
+                ]
+            )
+            ->addModelTransformer(new ParametersTransformer())
+            ->setAutoInitialize(false)
+            ->getForm();
+
         $fieldDefinitionForm
             ->add('QueryType', Type\ChoiceType::class,
                 [
@@ -53,12 +66,7 @@ class QueryFormMapper implements FieldDefinitionFormMapperInterface, FieldValueF
                     'required' => true,
                 ]
             )
-            ->add('Parameters', Type\TextareaType::class,
-                [
-                    'label' => 'Parameters',
-                    'property_path' => 'fieldSettings[Parameters]',
-                ]
-            );
+            ->add($parametersForm);
     }
 
     public function mapFieldValueForm(FormInterface $fieldForm, FieldData $data)
