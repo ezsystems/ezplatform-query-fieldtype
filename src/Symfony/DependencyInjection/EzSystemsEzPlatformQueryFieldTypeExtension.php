@@ -30,7 +30,7 @@ class EzSystemsEzPlatformQueryFieldTypeExtension extends Extension implements Pr
         $loader->load('graphql.yml');
         $loader->load('services.yml');
 
-        $this->setContentViewConfig($container);
+        $this->addContentViewConfig($container);
     }
 
     public function prepend(ContainerBuilder $container)
@@ -47,12 +47,14 @@ class EzSystemsEzPlatformQueryFieldTypeExtension extends Extension implements Pr
         $config = Yaml::parse(file_get_contents($configFile));
         $container->prependExtensionConfig('ezpublish', $config);
         $container->addResource(new FileResource($configFile));
+
+        $this->prependTwigConfig($container);
     }
 
     /**
      * @param ContainerBuilder $container
      */
-    protected function setContentViewConfig(ContainerBuilder $container): void
+    protected function addContentViewConfig(ContainerBuilder $container): void
     {
         $contentViewDefaults = $container->getParameter('ezsettings.default.content_view_defaults');
         $contentViewDefaults['query_field'] = [
@@ -63,5 +65,10 @@ class EzSystemsEzPlatformQueryFieldTypeExtension extends Extension implements Pr
             ],
         ];
         $container->setParameter('ezsettings.default.content_view_defaults', $contentViewDefaults);
+    }
+
+    protected function prependTwigConfig(ContainerBuilder $container): void
+    {
+        $container->prependExtensionConfig('twig', Yaml::parseFile(__DIR__ . '/../Resources/config/twig.yml'));
     }
 }

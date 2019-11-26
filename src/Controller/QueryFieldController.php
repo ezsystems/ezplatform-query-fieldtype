@@ -22,7 +22,6 @@ final class QueryFieldController
     public function renderQueryFieldAction(ContentView $view, $queryFieldDefinitionIdentifier)
     {
         $view->addParameters([
-            'children_view_type' => 'line',
             'query_results' => $this->queryFieldService->loadFieldData(
                 $view->getContent(),
                 $queryFieldDefinitionIdentifier
