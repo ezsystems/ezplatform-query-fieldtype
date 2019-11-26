@@ -8,7 +8,7 @@ services:
         tags:
             - { name: overblog_graphql.resolver, alias: "QueryFieldValue", method: "resolveQueryField" }
 
-    EzSystems\EzPlatformQueryFieldType\GraphQL\QueryFieldDefinitionMapper:
+    EzSystems\EzPlatformQueryFieldType\GraphQL\ContentQueryFieldDefinitionMapper:
         decorates: EzSystems\EzPlatformGraphQL\Schema\Domain\Content\Mapper\FieldDefinition\FieldDefinitionMapper
         arguments:
-            $innerMapper: '@EzSystems\EzPlatformQueryFieldType\GraphQL\QueryFieldDefinitionMapper.inner'
+            $innerMapper: '@EzSystems\EzPlatformQueryFieldType\GraphQL\ContentQueryFieldDefinitionMapper.inner'

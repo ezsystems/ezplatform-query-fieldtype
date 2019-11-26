@@ -12,7 +12,7 @@ use EzSystems\EzPlatformGraphQL\Schema\Domain\Content\Mapper\FieldDefinition\Dec
 use EzSystems\EzPlatformGraphQL\Schema\Domain\Content\Mapper\FieldDefinition\FieldDefinitionMapper;
 use EzSystems\EzPlatformGraphQL\Schema\Domain\Content\NameHelper;
 
-class QueryFieldDefinitionMapper extends DecoratingFieldDefinitionMapper implements FieldDefinitionMapper
+class ContentQueryFieldDefinitionMapper extends DecoratingFieldDefinitionMapper implements FieldDefinitionMapper
 {
     /** @var NameHelper */
     private $nameHelper;
@@ -39,6 +39,15 @@ class QueryFieldDefinitionMapper extends DecoratingFieldDefinitionMapper impleme
         $fieldSettings = $fieldDefinition->getFieldSettings();
 
         return '[' . $this->getDomainTypeName($fieldSettings['ReturnedType']) . ']';
+    }
+
+    public function mapToFieldDefinitionType(FieldDefinition $fieldDefinition): ?string
+    {
+        if (!$this->canMap($fieldDefinition)) {
+            return parent::mapToFieldValueType($fieldDefinition);
+        }
+
+        return 'ContentQueryFieldDefinition';
     }
 
     protected function getFieldTypeIdentifier(): string

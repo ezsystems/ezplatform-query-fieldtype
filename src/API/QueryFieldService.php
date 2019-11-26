@@ -76,10 +76,9 @@ class QueryFieldService
      *
      * @return array
      */
-    private function resolveParameters(string $parametersString, Content $content): array
+    private function resolveParameters(array $parameters, Content $content): array
     {
-        $parameters = [];
-        foreach (Yaml::parse($parametersString) as $key => $parameter) {
+        foreach ($parameters as $key => $parameter) {
             $parameters[$key] = $this->applyContentToParameter($content, $parameter);
         }
 
