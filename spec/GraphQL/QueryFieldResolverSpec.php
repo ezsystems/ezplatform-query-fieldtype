@@ -2,7 +2,7 @@
 
 namespace spec\EzSystems\EzPlatformQueryFieldType\GraphQL;
 
-use EzSystems\EzPlatformQueryFieldType\API\QueryFieldService;
+use EzSystems\EzPlatformQueryFieldType\API\QueryFieldServiceInterface;
 use EzSystems\EzPlatformQueryFieldType\GraphQL\QueryFieldResolver;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use EzSystems\EzPlatformGraphQL\GraphQL\Value\Field;
@@ -12,7 +12,7 @@ class QueryFieldResolverSpec extends ObjectBehavior
 {
     const FIELD_DEFINITION_IDENTIFIER = 'test';
 
-    function let(QueryFieldService $queryFieldService)
+    function let(QueryFieldServiceInterface $queryFieldService)
     {
         $this->beConstructedWith($queryFieldService);
     }
@@ -22,7 +22,7 @@ class QueryFieldResolverSpec extends ObjectBehavior
         $this->shouldHaveType(QueryFieldResolver::class);
     }
 
-    function it_resolves_a_query_field(QueryFieldService $queryFieldService)
+    function it_resolves_a_query_field(QueryFieldServiceInterface $queryFieldService)
     {
         $content = new Content();
         $field = new Field(['fieldDefIdentifier' => self::FIELD_DEFINITION_IDENTIFIER, 'value' => new \stdClass()]);

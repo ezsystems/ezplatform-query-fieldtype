@@ -34,10 +34,10 @@ class QueryFieldServiceSpec extends ObjectBehavior
         $this->searchHits = [];
         $this->searchResult = new SearchResult(['searchHits' => $this->searchHits]);
 
-        $parameters = json_encode([
+        $parameters = [
             'param1' => 'value1',
             'param2' => 'value2',
-        ]);
+        ];
 
         $contentType = new Values\ContentType\ContentType([
             'fieldDefinitions' => [

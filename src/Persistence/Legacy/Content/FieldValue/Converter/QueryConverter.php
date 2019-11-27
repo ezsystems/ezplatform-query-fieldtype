@@ -21,7 +21,7 @@ class QueryConverter implements Converter
      *
      * @deprecated since 6.8, will be removed in 7.x, use default constructor instead.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLineConverter
+     * @return \EzSystems\EzPlatformQueryFieldType\Persistence\Legacy\Content\FieldValue\Converter\QueryConverter
      */
     public static function create()
     {

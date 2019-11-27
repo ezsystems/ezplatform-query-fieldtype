@@ -44,7 +44,7 @@ final class ContentQueryFieldDefinitionMapper extends DecoratingFieldDefinitionM
     public function mapToFieldDefinitionType(FieldDefinition $fieldDefinition): ?string
     {
         if (!$this->canMap($fieldDefinition)) {
-            return parent::mapToFieldValueType($fieldDefinition);
+            return parent::mapToFieldDefinitionType($fieldDefinition);
         }
 
         return 'ContentQueryFieldDefinition';
