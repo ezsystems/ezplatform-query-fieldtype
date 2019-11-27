@@ -35,8 +35,9 @@ final class EzSystemsEzPlatformQueryFieldTypeExtension extends Extension impleme
 
     public function prepend(ContainerBuilder $container)
     {
-        // Do we still need this ? Not in v3, for sure.
-        $container->prependExtensionConfig('assetic', ['bundles' => ['EzSystemsEzPlatformQueryFieldTypeBundle']]);
+        if ($container->hasExtension('assetic')) {
+            $container->prependExtensionConfig('assetic', ['bundles' => ['EzSystemsEzPlatformQueryFieldTypeBundle']]);
+        }
 
         $configFile = __DIR__ . '/../Resources/config/field_templates.yml';
         $config = Yaml::parse(file_get_contents($configFile));
