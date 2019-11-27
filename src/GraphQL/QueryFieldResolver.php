@@ -6,16 +6,16 @@
  */
 namespace EzSystems\EzPlatformQueryFieldType\GraphQL;
 
-use EzSystems\EzPlatformQueryFieldType\API\QueryFieldService;
+use EzSystems\EzPlatformQueryFieldType\API\QueryFieldServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use EzSystems\EzPlatformGraphQL\GraphQL\Value\Field;
 
 final class QueryFieldResolver
 {
-    /** @var \EzSystems\EzPlatformQueryFieldType\API\QueryFieldService */
+    /** @var \EzSystems\EzPlatformQueryFieldType\API\QueryFieldServiceInterface */
     private $queryFieldService;
 
-    public function __construct(QueryFieldService $queryFieldService)
+    public function __construct(QueryFieldServiceInterface $queryFieldService)
     {
         $this->queryFieldService = $queryFieldService;
     }

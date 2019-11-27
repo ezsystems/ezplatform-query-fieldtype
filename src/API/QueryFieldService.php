@@ -14,12 +14,11 @@ use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\QueryType\QueryTypeRegistry;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * Executes a query and returns the results.
  */
-final class QueryFieldService
+final class QueryFieldService implements QueryFieldServiceInterface
 {
     /** @var \eZ\Publish\Core\QueryType\QueryTypeRegistry */
     private $queryTypeRegistry;

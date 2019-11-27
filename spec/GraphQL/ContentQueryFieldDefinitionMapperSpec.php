@@ -11,7 +11,7 @@ use EzSystems\EzPlatformGraphQL\Schema\Domain\Content\Mapper\FieldDefinition\Fie
 use EzSystems\EzPlatformGraphQL\Schema\Domain\Content\NameHelper;
 use PhpSpec\ObjectBehavior;
 
-class QueryFieldDefinitionMapperSpec extends ObjectBehavior
+class ContentQueryFieldDefinitionMapperSpec extends ObjectBehavior
 {
     const FIELD_IDENTIFIER = 'test';
     const FIELD_TYPE_IDENTIFIER = 'ezcontentquery';
@@ -54,16 +54,25 @@ class QueryFieldDefinitionMapperSpec extends ObjectBehavior
 
     function it_delegates_value_type_to_the_inner_mapper_for_a_non_query_field_definition(FieldDefinitionMapper $innerMapper)
     {
-        $fieldDefinition = new FieldDefinition(['fieldTypeIdentifier' => 'lambda']);
+        $fieldDefinition = $this->getLambdaFieldDefinition();
         $innerMapper->mapToFieldValueType($fieldDefinition)->willReturn('SomeType');
         $this
             ->mapToFieldValueType($fieldDefinition)
             ->shouldBe('SomeType');
     }
 
-    function it_delegates_the_definition_type_to_the_parent_mapper(FieldDefinitionMapper $innerMapper)
+    function it_returns_the_correct_field_definition_GraphQL_type(FieldDefinitionMapper $innerMapper)
     {
         $fieldDefinition = $this->fieldDefinition();
+        $innerMapper->mapToFieldDefinitionType($fieldDefinition)->shouldNotBeCalled();
+        $this
+            ->mapToFieldDefinitionType($fieldDefinition)
+            ->shouldBe('ContentQueryFieldDefinition');
+    }
+
+    function it_delegates_field_definition_type_to_the_parent_mapper_for_a_non_query_field_definition(FieldDefinitionMapper $innerMapper)
+    {
+        $fieldDefinition = $this->getLambdaFieldDefinition();
         $innerMapper->mapToFieldDefinitionType($fieldDefinition)->willReturn('FieldValue');
         $this
             ->mapToFieldDefinitionType($fieldDefinition)
@@ -89,5 +98,13 @@ class QueryFieldDefinitionMapperSpec extends ObjectBehavior
             'fieldTypeIdentifier' => self::FIELD_TYPE_IDENTIFIER,
             'fieldSettings' => ['ReturnedType' => self::RETURNED_CONTENT_TYPE_IDENTIFIER]
         ]);
+    }
+
+    /**
+     * @return \eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition
+     */
+    protected function getLambdaFieldDefinition(): \eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition
+    {
+        return new FieldDefinition(['fieldTypeIdentifier' => 'lambda']);
     }
 }
