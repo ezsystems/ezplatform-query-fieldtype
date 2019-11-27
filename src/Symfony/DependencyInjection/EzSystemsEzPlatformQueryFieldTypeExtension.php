@@ -15,7 +15,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Yaml\Yaml;
 
-class EzSystemsEzPlatformQueryFieldTypeExtension extends Extension implements PrependExtensionInterface
+final class EzSystemsEzPlatformQueryFieldTypeExtension extends Extension implements PrependExtensionInterface
 {
     public function load(array $configs, ContainerBuilder $container)
     {

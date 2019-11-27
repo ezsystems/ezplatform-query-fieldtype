@@ -15,7 +15,7 @@ use eZ\Publish\Core\QueryType\QueryTypeRegistry;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 
-class Type extends FieldType
+final class Type extends FieldType
 {
     protected $validatorConfigurationSchema = [];
 

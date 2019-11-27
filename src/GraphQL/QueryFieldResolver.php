@@ -10,7 +10,7 @@ use EzSystems\EzPlatformQueryFieldType\API\QueryFieldService;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use EzSystems\EzPlatformGraphQL\GraphQL\Value\Field;
 
-class QueryFieldResolver
+final class QueryFieldResolver
 {
     /** @var \EzSystems\EzPlatformQueryFieldType\API\QueryFieldService */
     private $queryFieldService;

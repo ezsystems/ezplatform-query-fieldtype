@@ -11,7 +11,7 @@ use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\FieldType\Indexable;
 use eZ\Publish\SPI\Search;
 
-class SearchField implements Indexable
+final class SearchField implements Indexable
 {
     /**
      * Get index data for field for search backend.

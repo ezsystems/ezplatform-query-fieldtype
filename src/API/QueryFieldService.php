@@ -19,7 +19,7 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Executes a query and returns the results.
  */
-class QueryFieldService
+final class QueryFieldService
 {
     /** @var \eZ\Publish\Core\QueryType\QueryTypeRegistry */
     private $queryTypeRegistry;
@@ -85,7 +85,7 @@ class QueryFieldService
         return $parameters;
     }
 
-    protected function applyContentToParameter(Content $content, string $parameter)
+    private function resolveExpression(Content $content, string $parameter)
     {
         if (substr($parameter, 0, 2) !== '@=') {
             return $parameter;

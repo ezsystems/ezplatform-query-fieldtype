@@ -7,10 +7,9 @@
 namespace EzSystems\EzPlatformQueryFieldType\FieldType\Mapper;
 
 use Symfony\Component\Form\DataTransformerInterface;
-use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Yaml\Yaml;
 
-class ParametersTransformer implements DataTransformerInterface
+final class ParametersTransformer implements DataTransformerInterface
 {
     public function transform($value)
     {
