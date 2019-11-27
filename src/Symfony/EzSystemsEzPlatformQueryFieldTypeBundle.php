@@ -10,7 +10,7 @@ use EzSystems\EzPlatformQueryFieldType\Symfony\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class EzSystemsEzPlatformQueryFieldTypeBundle extends Bundle
+final class EzSystemsEzPlatformQueryFieldTypeBundle extends Bundle
 {
     public function build(ContainerBuilder $container)
     {

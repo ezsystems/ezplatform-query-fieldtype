@@ -12,7 +12,7 @@ use EzSystems\EzPlatformGraphQL\Schema\Domain\Content\Mapper\FieldDefinition\Dec
 use EzSystems\EzPlatformGraphQL\Schema\Domain\Content\Mapper\FieldDefinition\FieldDefinitionMapper;
 use EzSystems\EzPlatformGraphQL\Schema\Domain\Content\NameHelper;
 
-class ContentQueryFieldDefinitionMapper extends DecoratingFieldDefinitionMapper implements FieldDefinitionMapper
+final class ContentQueryFieldDefinitionMapper extends DecoratingFieldDefinitionMapper implements FieldDefinitionMapper
 {
     /** @var NameHelper */
     private $nameHelper;

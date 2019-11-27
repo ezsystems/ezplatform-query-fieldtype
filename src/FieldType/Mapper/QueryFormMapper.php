@@ -16,7 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class QueryFormMapper implements FieldDefinitionFormMapperInterface, FieldValueFormMapperInterface
+final class QueryFormMapper implements FieldDefinitionFormMapperInterface, FieldValueFormMapperInterface
 {
     /** @var ContentTypeService */
     private $contentTypeService;
