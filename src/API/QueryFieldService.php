@@ -48,7 +48,7 @@ final class QueryFieldService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function loadFieldData(Content $content, string $fieldDefinitionIdentifier): array
+    public function loadFieldData(Content $content, string $fieldDefinitionIdentifier): iterable
     {
         $fieldDefinition = $this->getFieldDefinition($content->contentInfo, $fieldDefinitionIdentifier);
         $queryType = $this->queryTypeRegistry->getQueryType($fieldDefinition->fieldSettings['QueryType']);
@@ -71,7 +71,7 @@ final class QueryFieldService
     }
 
     /**
-     * @param string $parameters parameters in JSON format
+     * @param array $parameters parameters that may include expressions to be resolved
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      *
      * @return array
@@ -79,7 +79,7 @@ final class QueryFieldService
     private function resolveParameters(array $parameters, Content $content): array
     {
         foreach ($parameters as $key => $parameter) {
-            $parameters[$key] = $this->applyContentToParameter($content, $parameter);
+            $parameters[$key] = $this->resolveExpression($content, $parameter);
         }
 
         return $parameters;
