@@ -50,6 +50,7 @@ final class EzSystemsEzPlatformQueryFieldTypeExtension extends Extension impleme
         $container->addResource(new FileResource($configFile));
 
         $this->prependTwigConfig($container);
+        $this->prependJMSTranslationConfig($container);
     }
 
     /**
@@ -71,5 +72,21 @@ final class EzSystemsEzPlatformQueryFieldTypeExtension extends Extension impleme
     protected function prependTwigConfig(ContainerBuilder $container): void
     {
         $container->prependExtensionConfig('twig', Yaml::parseFile(__DIR__ . '/../Resources/config/twig.yml'));
+    }
+
+    private function prependJMSTranslationConfig(ContainerBuilder $container): void
+    {
+        $container->prependExtensionConfig('jms_translation', [
+            'configs' => [
+                'ezplatform_query_fieldtype' => [
+                    'dirs' => [
+                        __DIR__ . '/../../',
+                    ],
+                    'output_dir' => __DIR__ . '/../Resources/translations/',
+                    'output_format' => 'xliff',
+                    'extractors' => ['ez_fieldtypes'],
+                ],
+            ],
+        ]);
     }
 }
