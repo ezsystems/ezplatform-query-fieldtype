@@ -1,17 +1,19 @@
 {% extends '@EzPublishCore/fielddefinition_settings.html.twig' %}
 
+{% trans_default_domain "fielddefinition" %}
+
 {% block ezcontentquery_settings %}
     <li class="ez-fielddefinition-setting query-type">
-        <div class="ez-fielddefinition-setting-name">{{ 'query_field_type.field_definition.query_type.label'|trans|desc("Query type:")}}</div>
+        <div class="ez-fielddefinition-setting-name">{{ 'ezcontentquery.query_type.label'|trans|desc("Query type:")}}</div>
         <div class="ez-fielddefinition-setting-value">
             {% if fielddefinition.fieldSettings.QueryType %}
                 fielddefinition.fieldSettings.QueryType
             {% else %}
-                <em>No defined Query Type</em>
+                <em>{{ "ezcontentquery.no_defined_query_types"|trans()|desc("There are no query types defined") }}</em>
             {% endif %}
         </div>
     </li>
-    <ul class="ez-fielddefinition-settings ez-fielddefinition-"{{ fielddefinition.fieldTypeIdentifier }}-settings">
+    <ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
         {% set defaultValue = null %}
         {% if fielddefinition.defaultValue.text is not same as('') %}
             {% set defaultValue = fielddefinition.defaultValue.text %}
