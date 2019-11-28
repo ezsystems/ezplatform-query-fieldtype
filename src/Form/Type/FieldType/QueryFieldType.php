@@ -41,12 +41,4 @@ class QueryFieldType extends AbstractType
     {
         $builder->addModelTransformer(new FieldValueTransformer($this->fieldTypeService->getFieldType('ezcontentquery')));
     }
-
-    public function buildView(FormView $view, FormInterface $form, array $options)
-    {
-    }
-
-    public function configureOptions(OptionsResolver $resolver)
-    {
-    }
 }
