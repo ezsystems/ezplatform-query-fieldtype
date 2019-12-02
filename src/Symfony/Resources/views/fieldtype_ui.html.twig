@@ -6,7 +6,8 @@
     {
         "contentId": contentInfo.id,
         "queryFieldDefinitionIdentifier": field.fieldDefIdentifier,
-        "viewType": "query_field"
+        "viewType": content_query_field_view,
+        "resultViewType": result_view_type|default(null)
     }
 )) }}
 {% endblock %}

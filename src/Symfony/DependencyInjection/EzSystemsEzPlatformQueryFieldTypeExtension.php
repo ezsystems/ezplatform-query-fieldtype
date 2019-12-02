@@ -44,11 +44,6 @@ final class EzSystemsEzPlatformQueryFieldTypeExtension extends Extension impleme
         $container->prependExtensionConfig('ezpublish', $config);
         $container->addResource(new FileResource($configFile));
 
-        $configFile = __DIR__ . '/../Resources/config/field_templates_ui.yml';
-        $config = Yaml::parse(file_get_contents($configFile));
-        $container->prependExtensionConfig('ezpublish', $config);
-        $container->addResource(new FileResource($configFile));
-
         $this->prependTwigConfig($container);
         $this->prependJMSTranslationConfig($container);
     }
@@ -59,7 +54,7 @@ final class EzSystemsEzPlatformQueryFieldTypeExtension extends Extension impleme
     protected function addContentViewConfig(ContainerBuilder $container): void
     {
         $contentViewDefaults = $container->getParameter('ezsettings.default.content_view_defaults');
-        $contentViewDefaults['query_field'] = [
+        $contentViewDefaults['content_query_field'] = [
             'default' => [
                 'controller' => QueryFieldController::class . ':renderQueryFieldAction',
                 'template' => 'EzSystemsEzPlatformQueryFieldTypeBundle::query_field_view.html.twig',

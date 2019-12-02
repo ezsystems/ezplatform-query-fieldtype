@@ -1,6 +1,6 @@
 {% for result in query_results %}
     {{ render(controller("ez_content:viewAction", {
         "contentId": result.id,
-        "viewType": content_query_line_view
+        "viewType": parameters['result_view_type']|default(content_query_line_view)
     })) }}
 {% endfor %}

@@ -1,6 +1,0 @@
-system:
-    admin_group:
-        field_templates:
-            -
-                template: "EzSystemsEzPlatformQueryFieldTypeBundle::fieldtype_ui.html.twig"
-                priority: 10
