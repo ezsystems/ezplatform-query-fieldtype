@@ -22,7 +22,7 @@ final class QueryFieldController
     public function renderQueryFieldAction(ContentView $view, $queryFieldDefinitionIdentifier)
     {
         $view->addParameters([
-            'query_results' => $this->queryFieldService->loadFieldData(
+            'query_results' => $this->queryFieldService->loadContentItems(
                 $view->getContent(),
                 $queryFieldDefinitionIdentifier
             ),

@@ -9,9 +9,8 @@ namespace EzSystems\EzPlatformQueryFieldType\API;
 use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\SearchService;
 use eZ\Publish\API\Repository\Values\Content\Content;
-use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
-use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\QueryType\QueryTypeRegistry;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
@@ -47,26 +46,24 @@ final class QueryFieldService implements QueryFieldServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function loadFieldData(Content $content, string $fieldDefinitionIdentifier): iterable
+    public function loadContentItems(Content $content, string $fieldDefinitionIdentifier): iterable
     {
-        $fieldDefinition = $this->getFieldDefinition($content->contentInfo, $fieldDefinitionIdentifier);
-        $queryType = $this->queryTypeRegistry->getQueryType($fieldDefinition->fieldSettings['QueryType']);
-        $parameters = $this->resolveParameters($fieldDefinition->fieldSettings['Parameters'], $content);
+        $query = $this->prepareQuery($content, $fieldDefinitionIdentifier);
 
         return array_map(
             function (SearchHit $searchHit) {
                 return $searchHit->valueObject;
             },
-            $this->searchService->findContent($queryType->getQuery($parameters))->searchHits
+            $this->searchService->findContent($query)->searchHits
         );
     }
 
-    public function getFieldDefinition(ContentInfo $contentInfo, string $fieldDefinitionIdentifier): FieldDefinition
+    public function countContentItems(Content $content, string $fieldDefinitionIdentifier): int
     {
-        return $queryFieldDefinition =
-            $this
-                ->contentTypeService->loadContentType($contentInfo->contentTypeId)
-                ->getFieldDefinition($fieldDefinitionIdentifier);
+        $query = $this->prepareQuery($content, $fieldDefinitionIdentifier);
+        $query->limit = 0;
+
+        return $this->searchService->findContent($query)->totalCount;
     }
 
     /**
@@ -97,5 +94,26 @@ final class QueryFieldService implements QueryFieldServiceInterface
                 'contentInfo' => $content->contentInfo,
             ]
         );
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     * @param string $fieldDefinitionIdentifier
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Query
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    private function prepareQuery(Content $content, string $fieldDefinitionIdentifier): Query
+    {
+        $fieldDefinition = $this
+            ->contentTypeService->loadContentType($content->contentInfo->contentTypeId)
+            ->getFieldDefinition($fieldDefinitionIdentifier);
+
+        $queryType = $this->queryTypeRegistry->getQueryType($fieldDefinition->fieldSettings['QueryType']);
+        $parameters = $this->resolveParameters($fieldDefinition->fieldSettings['Parameters'], $content);
+
+        return $queryType->getQuery($parameters);
     }
 }
