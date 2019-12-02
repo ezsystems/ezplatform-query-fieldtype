@@ -21,13 +21,9 @@ final class EzSystemsEzPlatformQueryFieldTypeExtension extends Extension impleme
     {
         $loader = new YamlFileLoader(
             $container,
-            new FileLocator(__DIR__ . '/../Resources/config')
+            new FileLocator(__DIR__ . '/../Resources/config/services/')
         );
 
-        $loader->load('fieldtypes.yml');
-        $loader->load('indexable_fieldtypes.yml');
-        $loader->load('field_value_converters.yml');
-        $loader->load('graphql.yml');
         $loader->load('services.yml');
 
         $this->addContentViewConfig($container);

@@ -1,3 +1,9 @@
+imports:
+    - { resource: fieldtypes.yml }
+    - { resource: indexable_fieldtypes.yml }
+    - { resource: field_value_converters.yml }
+    - { resource: graphql.yml }
+
 services:
     _defaults:
         autoconfigure: true
