@@ -26,7 +26,7 @@ class QueryFieldResolverSpec extends ObjectBehavior
     {
         $content = new Content();
         $field = new Field(['fieldDefIdentifier' => self::FIELD_DEFINITION_IDENTIFIER, 'value' => new \stdClass()]);
-        $queryFieldService->loadFieldData($content, self::FIELD_DEFINITION_IDENTIFIER)->willReturn([]);
+        $queryFieldService->loadContentItems($content, self::FIELD_DEFINITION_IDENTIFIER)->willReturn([]);
         $this->resolveQueryField($field, $content)->shouldReturn([]);
     }
 }

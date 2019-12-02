@@ -22,7 +22,7 @@ final class QueryFieldResolver
 
     public function resolveQueryField(Field $field, Content $content)
     {
-        return $this->queryFieldService->loadFieldData($content, $field->fieldDefIdentifier);
+        return $this->queryFieldService->loadContentItems($content, $field->fieldDefIdentifier);
     }
 
     public function resolveQueryFieldDefinitionParameters(array $parameters): array

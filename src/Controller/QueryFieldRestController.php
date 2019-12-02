@@ -57,7 +57,7 @@ final class QueryFieldRestController
                         $this->contentService->loadRelations($content->getVersionInfo())
                     );
                 },
-                $this->queryFieldService->loadFieldData($content, $fieldDefinitionIdentifier)
+                $this->queryFieldService->loadContentItems($content, $fieldDefinitionIdentifier)
             )
         );
     }

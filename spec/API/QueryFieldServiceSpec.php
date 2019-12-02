@@ -66,9 +66,9 @@ class QueryFieldServiceSpec extends ObjectBehavior
         $this->shouldHaveType(QueryFieldService::class);
     }
 
-    function it_loads_data_from_a_query_field_for_a_given_content_item()
+    function it_loads_items_from_a_query_field_for_a_given_content_item()
     {
-        $this->loadFieldData($this->getContent(), self::FIELD_DEFINITION_IDENTIFIER)->shouldBe($this->searchHits);
+        $this->loadContentItems($this->getContent(), self::FIELD_DEFINITION_IDENTIFIER)->shouldBe($this->searchHits);
     }
 
     /**
