@@ -6,8 +6,8 @@
     {
         "contentId": contentInfo.id,
         "queryFieldDefinitionIdentifier": field.fieldDefIdentifier,
-        "viewType": content_query_field_view,
-        "resultViewType": result_view_type|default(null)
+        "viewType": ezContentQueryViews['field'],
+        "itemViewType": itemViewType|default(ezContentQueryViews['item'])
     }
 )) }}
 {% endblock %}

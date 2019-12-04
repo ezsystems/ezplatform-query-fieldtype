@@ -1,6 +1,8 @@
-{% for result in query_results %}
+{% for item in items %}
+    {# Should we pass the full item instead ? #}
     {{ render(controller("ez_content:viewAction", {
-        "contentId": result.id,
-        "viewType": parameters['result_view_type']|default(content_query_line_view)
+        "contentId": item.id,
+        "content": item,
+        "viewType": itemViewType
     })) }}
 {% endfor %}
