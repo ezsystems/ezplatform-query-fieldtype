@@ -1,17 +1,21 @@
-imports:
-    - { resource: fieldtypes.yml }
-    - { resource: indexable_fieldtypes.yml }
-    - { resource: field_value_converters.yml }
-    - { resource: graphql.yml }
-
 services:
     _defaults:
         autoconfigure: true
         autowire: true
         public: true
 
-    EzSystems\EzPlatformQueryFieldType\Controller\QueryFieldController: ~
-
     EzSystems\EzPlatformQueryFieldType\Controller\QueryFieldRestController: ~
 
     EzSystems\EzPlatformQueryFieldType\API\QueryFieldService: ~
+
+    EzSystems\EzPlatformQueryFieldType\ContentView\FieldDefinitionIdentifierMatcher:
+        calls:
+            - [setRepository, ['@ezpublish.api.repository']]
+
+    Identifier\FieldDefinition: '@EzSystems\EzPlatformQueryFieldType\ContentView\FieldDefinitionIdentifierMatcher'
+
+    EzSystems\EzPlatformQueryFieldType\ContentView\QueryResultsInjector:
+        arguments:
+            $views: { field: '%ezcontentquery_field_view%', item: '%ezcontentquery_item_view%' }
+        tags:
+            - { name: kernel.event_subscriber }

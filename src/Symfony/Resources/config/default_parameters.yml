@@ -1,0 +1,3 @@
+parameters:
+    ezcontentquery_field_view: 'content_query_field'
+    ezcontentquery_item_view: 'line'

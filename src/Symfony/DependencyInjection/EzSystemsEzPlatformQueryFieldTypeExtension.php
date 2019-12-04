@@ -6,7 +6,6 @@
  */
 namespace EzSystems\EzPlatformQueryFieldType\Symfony\DependencyInjection;
 
-use EzSystems\EzPlatformQueryFieldType\Controller\QueryFieldController;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
@@ -21,9 +20,10 @@ final class EzSystemsEzPlatformQueryFieldTypeExtension extends Extension impleme
     {
         $loader = new YamlFileLoader(
             $container,
-            new FileLocator(__DIR__ . '/../Resources/config/services/')
+            new FileLocator(__DIR__ . '/../Resources/config/')
         );
 
+        $loader->load('default_parameters.yml');
         $loader->load('services.yml');
 
         $this->addContentViewConfig($container);
@@ -31,17 +31,10 @@ final class EzSystemsEzPlatformQueryFieldTypeExtension extends Extension impleme
 
     public function prepend(ContainerBuilder $container)
     {
-        if ($container->hasExtension('assetic')) {
-            $container->prependExtensionConfig('assetic', ['bundles' => ['EzSystemsEzPlatformQueryFieldTypeBundle']]);
-        }
-
-        $configFile = __DIR__ . '/../Resources/config/field_templates.yml';
-        $config = Yaml::parse(file_get_contents($configFile));
-        $container->prependExtensionConfig('ezpublish', $config);
-        $container->addResource(new FileResource($configFile));
-
-        $this->prependTwigConfig($container);
+        $this->prependAsseticConfig($container);
+        $this->prependFieldTemplateConfig($container);
         $this->prependJMSTranslationConfig($container);
+        $this->prependTwigConfig($container);
     }
 
     /**
@@ -52,7 +45,6 @@ final class EzSystemsEzPlatformQueryFieldTypeExtension extends Extension impleme
         $contentViewDefaults = $container->getParameter('ezsettings.default.content_view_defaults');
         $contentViewDefaults['content_query_field'] = [
             'default' => [
-                'controller' => QueryFieldController::class . ':renderQueryFieldAction',
                 'template' => 'EzSystemsEzPlatformQueryFieldTypeBundle::query_field_view.html.twig',
                 'match' => [],
             ],
@@ -62,7 +54,14 @@ final class EzSystemsEzPlatformQueryFieldTypeExtension extends Extension impleme
 
     protected function prependTwigConfig(ContainerBuilder $container): void
     {
-        $container->prependExtensionConfig('twig', Yaml::parseFile(__DIR__ . '/../Resources/config/twig.yml'));
+        $views = Yaml::parseFile(__DIR__ . '/../Resources/config/default_parameters.yml')['parameters'];
+        $twigGlobals = [
+            'ezContentQueryViews' => [
+                'field' => $views['ezcontentquery_field_view'],
+                'item' => $views['ezcontentquery_item_view'],
+            ],
+        ];
+        $container->prependExtensionConfig('twig', ['globals' => $twigGlobals]);
     }
 
     private function prependJMSTranslationConfig(ContainerBuilder $container): void
@@ -79,5 +78,26 @@ final class EzSystemsEzPlatformQueryFieldTypeExtension extends Extension impleme
                 ],
             ],
         ]);
+    }
+
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     */
+    protected function prependAsseticConfig(ContainerBuilder $container): void
+    {
+        if ($container->hasExtension('assetic')) {
+            $container->prependExtensionConfig('assetic', ['bundles' => ['EzSystemsEzPlatformQueryFieldTypeBundle']]);
+        }
+    }
+
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     */
+    protected function prependFieldTemplateConfig(ContainerBuilder $container): void
+    {
+        $configFile = __DIR__ . '/../Resources/config/field_templates.yml';
+        $config = Yaml::parse(file_get_contents($configFile));
+        $container->prependExtensionConfig('ezpublish', $config);
+        $container->addResource(new FileResource($configFile));
     }
 }
