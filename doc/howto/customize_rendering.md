@@ -39,6 +39,19 @@ ezplatform:
 
 As with any content view, a custom controller can also be defined to further customize the view.
 
+Use the `items` iterable to loop over the field's content items:
+```
+{% for item in items %}
+    {{ render(controller("ez_content:viewAction", {
+        "contentId": item.id,
+        "content": item,
+        "viewType": itemViewType
+    })) }}
+{% endfor %}
+```
+
+The usual [content view templates variables](https://doc.ezplatform.com/en/latest/api/field_type_form_and_template/#template-variables) are also available, including `content`, the item that contains the query field.
+
 ## Customizing the line view template
 The line view template, used to render each result, can be customized by creating `line` view configuration rules.
 
@@ -55,6 +68,8 @@ ezplatform:
                             Identifier\ContentType: image
                         template: "path/to/template.html.twig"                    
 ```
+
+The variables are the same as any view template ([documentation]((https://doc.ezplatform.com/en/latest/api/field_type_form_and_template/#template-variables))).
 
 ## Advanced
 
