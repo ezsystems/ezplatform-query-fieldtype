@@ -14,7 +14,7 @@ to the repository itself.
 ## Installation
 Add the package to the requirements:
 ```
-composer require ezsystems/ezplatform-query-fieldtype:^1.0@beta
+composer require ezsystems/ezplatform-query-fieldtype:^1.0@dev
 ```
 
 Add the package to `app/AppKernel.php`:
@@ -22,7 +22,7 @@ Add the package to `app/AppKernel.php`:
 $bundles = [
   // ...
   new EzSystems\EzPlatformQueryFieldType\Symfony\EzSystemsEzPlatformQueryFieldTypeBundle(),
-]
+];
 ```
 
 Add the bundle routes to `app/config/routing.yml`:
