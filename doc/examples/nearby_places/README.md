@@ -10,10 +10,8 @@ field definition.
 "Nearby places" (see [NearbyPlacesQueryType](NearbyPlacesQueryType.php).
 
 ##### Parameters
-```json
-{
-  "distance": 3,
-  "latitude": "@=content.getFieldValue('location').latitude",
-  "longitude": "@=content.getFieldValue('location').longitude",
-}
+```yaml
+distance: 3
+latitude: "@=content.getFieldValue('location').latitude"
+longitude": "@=content.getFieldValue('location').longitude"
 ```
