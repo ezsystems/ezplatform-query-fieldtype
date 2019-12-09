@@ -28,7 +28,7 @@ $bundles = [
 Add the bundle routes to `app/config/routing.yml`:
 ```yml
 ezplatform.query_fieldtype.routes:
-    resource: '@BDEzPlatformQueryFieldTypeBundle/Resources/config/routing/'
+    resource: '@EzSystemsEzPlatformQueryFieldTypeBundle/Resources/config/routing/'
     type: directory
 ```
 
