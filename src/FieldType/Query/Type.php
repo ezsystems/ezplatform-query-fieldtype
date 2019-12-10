@@ -6,6 +6,8 @@
  */
 namespace EzSystems\EzPlatformQueryFieldType\FieldType\Query;
 
+use eZ\Publish\API\Repository\ContentTypeService;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\ValidationError;
@@ -21,16 +23,20 @@ final class Type extends FieldType
 
     protected $settingsSchema = [
         'QueryType' => ['type' => 'string', 'default' => ''],
-        'Parameters' => ['type' => 'string', 'default' => ''],
+        'Parameters' => ['type' => 'array', 'default' => []],
         'ReturnedType' => ['type' => 'string', 'default' => ''],
     ];
 
     /** @var \eZ\Publish\Core\QueryType\QueryTypeRegistry */
     private $queryTypeRegistry;
 
-    public function __construct(QueryTypeRegistry $queryTypeRegistry)
+    /** @var \eZ\Publish\API\Repository\ContentTypeService */
+    private $contentTypeService;
+
+    public function __construct(QueryTypeRegistry $queryTypeRegistry, ContentTypeService $contentTypeService)
     {
         $this->queryTypeRegistry = $queryTypeRegistry;
+        $this->contentTypeService = $contentTypeService;
     }
 
     /**
@@ -189,9 +195,7 @@ final class Type extends FieldType
     {
         $errors = [];
 
-        if (!isset($fieldSettings['QueryType'])) {
-            $errors[] = new ValidationError('A query type needs to be selected');
-        } else {
+        if (isset($fieldSettings['QueryType']) && $fieldSettings['QueryType'] !== "") {
             try {
                 $this->queryTypeRegistry->getQueryType($fieldSettings['QueryType']);
             } catch (InvalidArgumentException $e) {
@@ -199,7 +203,15 @@ final class Type extends FieldType
             }
         }
 
-        if (isset($fieldSettings['Parameters']) && $fieldSettings['Parameters']) {
+        if (isset($fieldSettings['ReturnedType']) && $fieldSettings['ReturnedType'] !== "") {
+            try {
+                $this->contentTypeService->loadContentTypeByIdentifier($fieldSettings['ReturnedType']);
+            } catch (NotFoundException $e) {
+                $errors[] = new ValidationError('The selected returned type could not be loaded');
+            }
+        }
+
+        if (isset($fieldSettings['Parameters'])) {
             if (!is_array($fieldSettings['Parameters'])) {
                 $errors[] = new ValidationError('Parameters is not a valid YAML string');
             }
