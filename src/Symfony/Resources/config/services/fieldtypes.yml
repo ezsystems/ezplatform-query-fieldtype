@@ -11,3 +11,10 @@ services:
             - { name: ez.fieldFormMapper.value, fieldType: ezcontentquery }
         arguments:
             $contentTypeService: '@ezpublish.api.service.content_type'
+            $parametersSubscriber: '@EzSystems\EzPlatformQueryFieldType\FieldType\Mapper\ParametersSubscriber'
+
+    EzSystems\EzPlatformQueryFieldType\FieldType\Mapper\ParametersSubscriber:
+        autowire: true
+        public: false
+        tags:
+            - { name: kernel.event_subscriber }

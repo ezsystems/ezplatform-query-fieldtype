@@ -13,9 +13,11 @@
         {{- form_widget(form.ReturnedType) -}}
     </div>
 
-    <div class="query-parameters{% if group_class is not empty %} {{ group_class }}{% endif %}">
-        {{- form_label(form.Parameters) -}}
-        {{- form_errors(form.Parameters) -}}
-        {{- form_widget(form.Parameters) -}}
-    </div>
+    {% if form.Parameters is defined %}
+        <div class="query-parameters{% if group_class is not empty %} {{ group_class }}{% endif %}">
+            {{- form_label(form.Parameters) -}}
+            {{- form_errors(form.Parameters) -}}
+            {{- form_widget(form.Parameters) -}}
+        </div>
+    {% endif %}
 {% endblock %}
