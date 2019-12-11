@@ -6,14 +6,13 @@
  */
 namespace EzSystems\EzPlatformQueryFieldType\FieldType\Mapper;
 
-use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
-use EzSystems\EzPlatformQueryFieldType\Form\Type\FieldType\QueryFieldType;
+use EzSystems\EzPlatformQueryFieldType\Form\Type\FieldDefinitionParametersType;
+use EzSystems\EzPlatformQueryFieldType\Form\Type\FieldType\FieldValueType;
 use eZ\Publish\API\Repository\ContentTypeService;
 use EzSystems\RepositoryForms\Data\Content\FieldData;
 use EzSystems\RepositoryForms\Data\FieldDefinitionData;
 use EzSystems\RepositoryForms\FieldType\FieldDefinitionFormMapperInterface;
 use EzSystems\RepositoryForms\FieldType\FieldValueFormMapperInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -30,29 +29,14 @@ final class QueryFormMapper implements FieldDefinitionFormMapperInterface, Field
      */
     private $queryTypes;
 
-    /** @var \Symfony\Component\EventDispatcher\EventSubscriberInterface */
-    private $parametersSubscriber;
-
-    public function __construct(ContentTypeService $contentTypeService, EventSubscriberInterface $parametersSubscriber, array $queryTypes = [])
+    public function __construct(ContentTypeService $contentTypeService, array $queryTypes = [])
     {
         $this->contentTypeService = $contentTypeService;
         $this->queryTypes = $queryTypes;
-        $this->parametersSubscriber = $parametersSubscriber;
     }
 
     public function mapFieldDefinitionForm(FormInterface $fieldDefinitionForm, FieldDefinitionData $data)
     {
-        $parametersBuilder = $fieldDefinitionForm->getConfig()->getFormFactory()
-            ->createNamedBuilder(
-                'Parameters',
-                Type\FormType::class,
-                $data->fieldSettings,
-                ['property_path' => 'fieldSettings[Parameters]']
-            )
-            ->setAutoInitialize(false)
-            ->setData($data->fieldSettings)
-            ->addEventSubscriber($this->parametersSubscriber);
-
         $fieldDefinitionForm
             ->add('QueryType', Type\ChoiceType::class,
                 [
@@ -70,8 +54,12 @@ final class QueryFormMapper implements FieldDefinitionFormMapperInterface, Field
                     'required' => true,
                 ]
             )
-            ->add($parametersBuilder->getForm());
-
+            ->add('Parameters', FieldDefinitionParametersType::class,
+                [
+                    'property_path' => 'fieldSettings[Parameters]',
+                    'query_type' => $data->fieldSettings['QueryType'],
+                ]
+            );
     }
 
     public function mapFieldValueForm(FormInterface $fieldForm, FieldData $data)
@@ -86,7 +74,7 @@ final class QueryFormMapper implements FieldDefinitionFormMapperInterface, Field
                 $formConfig->getFormFactory()->createBuilder()
                     ->create(
                         'value',
-                        QueryFieldType::class,
+                        FieldValueType::class,
                         [
                             'required' => $fieldDefinition->isRequired,
                             'label' => $label,

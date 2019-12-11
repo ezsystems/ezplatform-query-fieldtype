@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-
-namespace EzSystems\EzPlatformQueryFieldType\FieldType\Mapper;
+namespace EzSystems\EzPlatformQueryFieldType\Form\EventSubscriber;
 
 use eZ\Publish\Core\QueryType\QueryTypeRegistry;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -12,11 +12,9 @@ use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
-class ParametersSubscriber implements EventSubscriberInterface
+class FieldDefinitionParametersSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var \eZ\Publish\Core\QueryType\QueryTypeRegistry
-     */
+    /** @var \eZ\Publish\Core\QueryType\QueryTypeRegistry */
     private $queryTypeRegistry;
 
     public function __construct(QueryTypeRegistry $queryTypeRegistry)
@@ -35,15 +33,15 @@ class ParametersSubscriber implements EventSubscriberInterface
         if ($data === null) {
             return;
         }
-        $form = $event->getForm();
 
-        if ($data['QueryType'] === '') {
+        $queryTypeIdentifier = $event->getForm()->getConfig()->getOption('query_type');
+        if ($queryTypeIdentifier === null) {
             return;
         }
 
-        $queryType = $this->queryTypeRegistry->getQueryType($data['QueryType']);
+        $queryType = $this->queryTypeRegistry->getQueryType($queryTypeIdentifier);
         foreach ($queryType->getSupportedParameters() as $parameter) {
-            $form->add(
+            $event->getForm()->add(
                 $parameter,
                 Type\TextType::class,
                 [

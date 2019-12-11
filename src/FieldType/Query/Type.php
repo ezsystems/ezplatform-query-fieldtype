@@ -195,7 +195,7 @@ final class Type extends FieldType
     {
         $errors = [];
 
-        if (isset($fieldSettings['QueryType']) && $fieldSettings['QueryType'] !== "") {
+        if (isset($fieldSettings['QueryType']) && $fieldSettings['QueryType'] !== '') {
             try {
                 $this->queryTypeRegistry->getQueryType($fieldSettings['QueryType']);
             } catch (InvalidArgumentException $e) {
@@ -203,7 +203,7 @@ final class Type extends FieldType
             }
         }
 
-        if (isset($fieldSettings['ReturnedType']) && $fieldSettings['ReturnedType'] !== "") {
+        if (isset($fieldSettings['ReturnedType']) && $fieldSettings['ReturnedType'] !== '') {
             try {
                 $this->contentTypeService->loadContentTypeByIdentifier($fieldSettings['ReturnedType']);
             } catch (NotFoundException $e) {
@@ -213,7 +213,7 @@ final class Type extends FieldType
 
         if (isset($fieldSettings['Parameters'])) {
             if (!is_array($fieldSettings['Parameters'])) {
-                $errors[] = new ValidationError('Parameters is not a valid YAML string');
+                $errors[] = new ValidationError('Query type parameters must be an array');
             }
         }
 

@@ -6,14 +6,19 @@ services:
             - {name: ezpublish.fieldType, alias: ezcontentquery}
 
     EzSystems\EzPlatformQueryFieldType\FieldType\Mapper\QueryFormMapper:
+        autowire: true
         tags:
             - { name: ez.fieldFormMapper.definition, fieldType: ezcontentquery }
             - { name: ez.fieldFormMapper.value, fieldType: ezcontentquery }
-        arguments:
-            $contentTypeService: '@ezpublish.api.service.content_type'
-            $parametersSubscriber: '@EzSystems\EzPlatformQueryFieldType\FieldType\Mapper\ParametersSubscriber'
 
-    EzSystems\EzPlatformQueryFieldType\FieldType\Mapper\ParametersSubscriber:
+    EzSystems\EzPlatformQueryFieldType\Form\Type\FieldDefinitionParametersType:
+        autowire: true
+        arguments:
+            $parametersSubscriber: '@EzSystems\EzPlatformQueryFieldType\Form\EventSubscriber\FieldDefinitionParametersSubscriber'
+        tags:
+            - { name: form.type }
+
+    EzSystems\EzPlatformQueryFieldType\Form\EventSubscriber\FieldDefinitionParametersSubscriber:
         autowire: true
         public: false
         tags:
