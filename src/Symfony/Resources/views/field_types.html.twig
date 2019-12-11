@@ -5,6 +5,8 @@
         {{- form_label(form.QueryType) -}}
         {{- form_errors(form.QueryType) -}}
         {{- form_widget(form.QueryType) -}}
+
+        {{- form_widget(form.SetQueryType) -}}
     </div>
 
     <div class="query-returned-type{% if group_class is not empty %} {{ group_class }}{% endif %}">
@@ -13,11 +15,13 @@
         {{- form_widget(form.ReturnedType) -}}
     </div>
 
-    {% if form.Parameters is defined %}
-        <div class="query-parameters{% if group_class is not empty %} {{ group_class }}{% endif %}">
+    <div class="query-parameters{% if group_class is not empty %} {{ group_class }}{% endif %}">
+    {% if form.Parameters.children|length > 0 %}
             {{- form_label(form.Parameters) -}}
             {{- form_errors(form.Parameters) -}}
             {{- form_widget(form.Parameters) -}}
-        </div>
+    {% else %}
+        To edit the parameters, select a query type in the dropdown above and hit 'Set'.
     {% endif %}
+    </div>
 {% endblock %}

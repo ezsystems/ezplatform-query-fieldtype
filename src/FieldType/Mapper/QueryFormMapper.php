@@ -14,6 +14,7 @@ use EzSystems\RepositoryForms\Data\FieldDefinitionData;
 use EzSystems\RepositoryForms\FieldType\FieldDefinitionFormMapperInterface;
 use EzSystems\RepositoryForms\FieldType\FieldValueFormMapperInterface;
 use Symfony\Component\Form\Extension\Core\Type;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -46,6 +47,7 @@ final class QueryFormMapper implements FieldDefinitionFormMapperInterface, Field
                     'required' => true,
                 ]
             )
+            ->add('SetQueryType', Type\SubmitType::class, ['label' => 'Set'])
             ->add('ReturnedType', Type\ChoiceType::class,
                 [
                     'label' => 'Returned type',
