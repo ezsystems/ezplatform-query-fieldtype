@@ -3,13 +3,15 @@ services:
         autowire: true
         parent: ezpublish.fieldType
         tags:
-            - {name: ezpublish.fieldType, alias: ezcontentquery}
+            - { name: ezpublish.fieldType, alias: '%ezcontentquery_identifier%' }
+        arguments:
+            $identifier: '%ezcontentquery_identifier%'
 
     EzSystems\EzPlatformQueryFieldType\FieldType\Mapper\QueryFormMapper:
         autowire: true
         tags:
-            - { name: ez.fieldFormMapper.definition, fieldType: ezcontentquery }
-            - { name: ez.fieldFormMapper.value, fieldType: ezcontentquery }
+            - { name: ez.fieldFormMapper.definition, fieldType: '%ezcontentquery_identifier%' }
+            - { name: ez.fieldFormMapper.value, fieldType: '%ezcontentquery_identifier%' }
 
     EzSystems\EzPlatformQueryFieldType\Form\Type\FieldDefinitionParametersType:
         autowire: true

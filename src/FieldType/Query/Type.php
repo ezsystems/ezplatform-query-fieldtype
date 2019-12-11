@@ -33,10 +33,14 @@ final class Type extends FieldType
     /** @var \eZ\Publish\API\Repository\ContentTypeService */
     private $contentTypeService;
 
-    public function __construct(QueryTypeRegistry $queryTypeRegistry, ContentTypeService $contentTypeService)
+    /** @var string */
+    private $identifier;
+
+    public function __construct(QueryTypeRegistry $queryTypeRegistry, ContentTypeService $contentTypeService, string $identifier)
     {
         $this->queryTypeRegistry = $queryTypeRegistry;
         $this->contentTypeService = $contentTypeService;
+        $this->identifier = $identifier;
     }
 
     /**
@@ -75,7 +79,7 @@ final class Type extends FieldType
      */
     public function getFieldTypeIdentifier()
     {
-        return 'ezcontentquery';
+        return $this->identifier;
     }
 
     /**

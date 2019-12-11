@@ -6,4 +6,4 @@ services:
 
     EzSystems\EzPlatformQueryFieldType\FieldType\Query\SearchField:
         tags:
-            - {name: ezpublish.fieldType.indexable, alias: ezcontentquery}
+            - {name: ezpublish.fieldType.indexable, alias: '%ezcontentquery_identifier%'}
