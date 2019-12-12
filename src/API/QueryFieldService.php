@@ -7,6 +7,7 @@
 namespace EzSystems\EzPlatformQueryFieldType\API;
 
 use eZ\Publish\API\Repository\ContentTypeService;
+use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\SearchService;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -27,14 +28,20 @@ final class QueryFieldService implements QueryFieldServiceInterface
 
     /** @var \eZ\Publish\API\Repository\ContentTypeService */
     private $contentTypeService;
+    /**
+     * @var \eZ\Publish\API\Repository\LocationService
+     */
+    private $locationService;
 
     public function __construct(
         SearchService $searchService,
         ContentTypeService $contentTypeService,
+        LocationService $locationService,
         QueryTypeRegistry $queryTypeRegistry
     ) {
         $this->searchService = $searchService;
         $this->contentTypeService = $contentTypeService;
+        $this->locationService = $locationService;
         $this->queryTypeRegistry = $queryTypeRegistry;
     }
 
@@ -105,12 +112,14 @@ final class QueryFieldService implements QueryFieldServiceInterface
             ->contentTypeService->loadContentType($content->contentInfo->contentTypeId)
             ->getFieldDefinition($fieldDefinitionIdentifier);
 
+        $location = $this->locationService->loadLocation($content->contentInfo->mainLocationId);
         $queryType = $this->queryTypeRegistry->getQueryType($fieldDefinition->fieldSettings['QueryType']);
         $parameters = $this->resolveParameters(
             $fieldDefinition->fieldSettings['Parameters'],
             [
                 'content' => $content,
                 'contentInfo' => $content->contentInfo,
+                'mainLocation' => $location,
                 'returnedType' => $fieldDefinition->fieldSettings['ReturnedType'],
             ]
         );
