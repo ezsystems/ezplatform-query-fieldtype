@@ -2,6 +2,7 @@
 
 namespace spec\EzSystems\EzPlatformQueryFieldType\API;
 
+use eZ\Publish\API\Repository\LocationService;
 use EzSystems\EzPlatformQueryFieldType\API\QueryFieldService;
 use EzSystems\EzPlatformQueryFieldType\FieldType\Query;
 use eZ\Publish\API\Repository\ContentTypeService;
@@ -28,6 +29,7 @@ class QueryFieldServiceSpec extends ObjectBehavior
     function let(
         SearchService $searchService,
         ContentTypeService $contentTypeService,
+        LocationService $locationService,
         QueryTypeRegistry $queryTypeRegistry,
         QueryType $queryType
     ) {
@@ -58,7 +60,7 @@ class QueryFieldServiceSpec extends ObjectBehavior
         $queryType->getQuery(Argument::any())->willReturn(new ApiQuery());
         // @todo this should fail. It does not.
         $searchService->findContent(Argument::any())->willReturn($this->searchResult);
-        $this->beConstructedWith($searchService, $contentTypeService, $queryTypeRegistry);
+        $this->beConstructedWith($searchService, $contentTypeService, $locationService, $queryTypeRegistry);
     }
 
     function it_is_initializable()

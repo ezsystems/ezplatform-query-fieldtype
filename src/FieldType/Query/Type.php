@@ -195,7 +195,7 @@ final class Type extends FieldType
     {
         $errors = [];
 
-        if (isset($fieldSettings['QueryType']) && $fieldSettings['QueryType'] !== "") {
+        if (isset($fieldSettings['QueryType']) && $fieldSettings['QueryType'] !== '') {
             try {
                 $this->queryTypeRegistry->getQueryType($fieldSettings['QueryType']);
             } catch (InvalidArgumentException $e) {
@@ -203,7 +203,7 @@ final class Type extends FieldType
             }
         }
 
-        if (isset($fieldSettings['ReturnedType']) && $fieldSettings['ReturnedType'] !== "") {
+        if (isset($fieldSettings['ReturnedType']) && $fieldSettings['ReturnedType'] !== '') {
             try {
                 $this->contentTypeService->loadContentTypeByIdentifier($fieldSettings['ReturnedType']);
             } catch (NotFoundException $e) {

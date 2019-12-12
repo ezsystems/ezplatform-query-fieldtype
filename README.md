@@ -33,21 +33,28 @@ ezplatform.query_fieldtype.routes:
 ```
 
 ## Usage
-Add a `query` field to a content type.
+Add a Content query field to a content type.
 
-In the Field Definition settings, select a Query Type out of the ones defined in the system, as well as the content type
-that is returned by that field.
+In the Field Definition settings, select a Query Type from the list, as well as the content type that is returned by that field.
 
-Parameters are used to get the query type's parameters, on runtime, based on properties from the content item.
-The syntax for it is YAML.. The key is the name of a query type parameter, and the value either a scalar, or an [expression](https://symfony.com/doc/current/components/expression_language.html).
+Parameters are used to build the query on runtime. They are either static, or mapped to properties from the content
+the field value belongs to. The syntax YAML, with the key being the name of a query type parameter, and the value
+either a scalar, or an [expression](https://symfony.com/doc/current/components/expression_language.html).
+
+The following variables are available for use in expressions:
+- `string returnedType`: the identifier of the content type that was previously selected
+- `eZ\Publish\API\Values\Content\Content content`: the current content item
+  Also gives you access to fields values. Example with an `ezurl` field: `@=content.getFieldValue('url').link`
+- `eZ\Publish\API\Values\Content\ContentInfo contentInfo`: the current content item's content info
+- `eZ\Publish\API\Values\Content\Location mainLocation`: the current content item's main location
 
 A simple example, for a LocationChildren query type that expects:
 - `parent_location_id`: id of the location to fetch children for
 - `content_types`: content type identifier or array of identifiers to filter on
 
 ````yaml
-parent_location_id: "@=content.contentInfo.mainLocationId"
-content_types: "image"
+parent_location_id: "@=mainLocation.id"
+content_types: "@=returnedType"
 ````
 
 See the [`examples`](doc/examples/) directory for full examples.

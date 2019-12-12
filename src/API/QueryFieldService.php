@@ -7,6 +7,7 @@
 namespace EzSystems\EzPlatformQueryFieldType\API;
 
 use eZ\Publish\API\Repository\ContentTypeService;
+use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\SearchService;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -27,14 +28,20 @@ final class QueryFieldService implements QueryFieldServiceInterface
 
     /** @var \eZ\Publish\API\Repository\ContentTypeService */
     private $contentTypeService;
+    /**
+     * @var \eZ\Publish\API\Repository\LocationService
+     */
+    private $locationService;
 
     public function __construct(
         SearchService $searchService,
         ContentTypeService $contentTypeService,
+        LocationService $locationService,
         QueryTypeRegistry $queryTypeRegistry
     ) {
         $this->searchService = $searchService;
         $this->contentTypeService = $contentTypeService;
+        $this->locationService = $locationService;
         $this->queryTypeRegistry = $queryTypeRegistry;
     }
 
@@ -72,28 +79,22 @@ final class QueryFieldService implements QueryFieldServiceInterface
      *
      * @return array
      */
-    private function resolveParameters(array $parameters, Content $content): array
+    private function resolveParameters(array $parameters, array $variables): array
     {
-        foreach ($parameters as $key => $parameter) {
-            $parameters[$key] = $this->resolveExpression($content, $parameter);
+        foreach ($parameters as $key => $expression) {
+            $parameters[$key] = $this->resolveExpression($expression, $variables);
         }
 
         return $parameters;
     }
 
-    private function resolveExpression(Content $content, string $parameter)
+    private function resolveExpression(string $expression, array $variables)
     {
-        if (substr($parameter, 0, 2) !== '@=') {
-            return $parameter;
+        if (substr($expression, 0, 2) !== '@=') {
+            return $expression;
         }
 
-        return (new ExpressionLanguage())->evaluate(
-            substr($parameter, 2),
-            [
-                'content' => $content,
-                'contentInfo' => $content->contentInfo,
-            ]
-        );
+        return (new ExpressionLanguage())->evaluate(substr($expression, 2), $variables);
     }
 
     /**
@@ -111,8 +112,17 @@ final class QueryFieldService implements QueryFieldServiceInterface
             ->contentTypeService->loadContentType($content->contentInfo->contentTypeId)
             ->getFieldDefinition($fieldDefinitionIdentifier);
 
+        $location = $this->locationService->loadLocation($content->contentInfo->mainLocationId);
         $queryType = $this->queryTypeRegistry->getQueryType($fieldDefinition->fieldSettings['QueryType']);
-        $parameters = $this->resolveParameters($fieldDefinition->fieldSettings['Parameters'], $content);
+        $parameters = $this->resolveParameters(
+            $fieldDefinition->fieldSettings['Parameters'],
+            [
+                'content' => $content,
+                'contentInfo' => $content->contentInfo,
+                'mainLocation' => $location,
+                'returnedType' => $fieldDefinition->fieldSettings['ReturnedType'],
+            ]
+        );
 
         return $queryType->getQuery($parameters);
     }
