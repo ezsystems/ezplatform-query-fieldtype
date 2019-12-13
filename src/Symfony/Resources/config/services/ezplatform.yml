@@ -48,3 +48,13 @@ services:
         decorates: ezpublish.templating.field_block_renderer.twig
         arguments:
             $innerRenderer: '@EzSystems\EzPlatformQueryFieldType\eZ\Twig\QueryFieldBlockRenderer.inner'
+
+    EzSystems\EzPlatformQueryFieldType\eZ\FieldType\NamedQuery\Form\FieldDefinitionParametersType:
+        arguments:
+            $parametersSubscriber: '@EzSystems\EzPlatformQueryFieldType\eZ\FieldType\NamedQuery\Form\EventSubscriber\FieldDefinitionParametersSubscriber'
+        tags:
+            - { name: form.type }
+
+    EzSystems\EzPlatformQueryFieldType\eZ\FieldType\NamedQuery\Form\EventSubscriber\FieldDefinitionParametersSubscriber:
+        tags:
+            - { name: kernel.event_subscriber }

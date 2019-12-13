@@ -9,6 +9,7 @@ namespace EzSystems\EzPlatformQueryFieldType\eZ\FieldType\NamedQuery;
 use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\Core\QueryType\QueryTypeRegistry;
 use EzSystems\EzPlatformQueryFieldType\eZ\FieldType\Mapper\ParametersTransformer;
+use EzSystems\EzPlatformQueryFieldType\eZ\FieldType\NamedQuery\Form\FieldDefinitionParametersType;
 use EzSystems\RepositoryForms\Data\FieldDefinitionData;
 use EzSystems\RepositoryForms\FieldType\FieldDefinitionFormMapperInterface;
 use Symfony\Component\Form\Extension\Core\Type;
@@ -37,19 +38,6 @@ final class Mapper implements FieldDefinitionFormMapperInterface
 
     public function mapFieldDefinitionForm(FormInterface $fieldDefinitionForm, FieldDefinitionData $data)
     {
-        $parametersForm = $fieldDefinitionForm->getConfig()->getFormFactory()->createBuilder()
-            ->create(
-                'Parameters',
-                Type\TextareaType::class,
-                [
-                    'label' => 'Parameters',
-                    'property_path' => 'fieldSettings[Parameters]',
-                ]
-            )
-            ->addModelTransformer(new ParametersTransformer())
-            ->setAutoInitialize(false)
-            ->getForm();
-
         $fieldDefinitionForm
             ->add('ReturnedType', Type\ChoiceType::class,
                 [
@@ -59,7 +47,11 @@ final class Mapper implements FieldDefinitionFormMapperInterface
                     'required' => true,
                 ]
             )
-            ->add($parametersForm);
+            ->add('Parameters', FieldDefinitionParametersType::class,
+                [
+                    'property_path' => 'fieldSettings[Parameters]',
+                    'query_type' => $data->fieldSettings['QueryType'],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
