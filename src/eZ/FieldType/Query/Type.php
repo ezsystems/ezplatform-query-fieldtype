@@ -4,7 +4,7 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace EzSystems\EzPlatformQueryFieldType\FieldType\Query;
+namespace EzSystems\EzPlatformQueryFieldType\eZ\FieldType\Query;
 
 use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
@@ -84,7 +84,7 @@ final class Type extends FieldType
      * It will be used to generate content name and url alias if current field is designated
      * to be used in the content name/urlAlias pattern.
      *
-     * @param \EzSystems\EzPlatformQueryFieldType\FieldType\Query\Value $value
+     * @param \EzSystems\EzPlatformQueryFieldType\eZ\FieldType\Query\Value $value
      *
      * @return string
      */

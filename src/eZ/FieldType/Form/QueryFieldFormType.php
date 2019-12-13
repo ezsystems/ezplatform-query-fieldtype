@@ -4,7 +4,7 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace EzSystems\EzPlatformQueryFieldType\Form\Type\FieldType;
+namespace EzSystems\EzPlatformQueryFieldType\eZ\FieldType\Form;
 
 use eZ\Publish\API\Repository\FieldTypeService;
 use EzSystems\RepositoryForms\FieldType\DataTransformer\FieldValueTransformer;
@@ -12,7 +12,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class QueryFieldType extends AbstractType
+class QueryFieldFormType extends AbstractType
 {
     /** @var FieldTypeService */
     private $fieldTypeService;

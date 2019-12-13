@@ -4,9 +4,9 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace EzSystems\EzPlatformQueryFieldType\FieldType\Mapper;
+namespace EzSystems\EzPlatformQueryFieldType\eZ\FieldType\Mapper;
 
-use EzSystems\EzPlatformQueryFieldType\Form\Type\FieldType\QueryFieldType;
+use EzSystems\EzPlatformQueryFieldType\eZ\FieldType\Form\QueryFieldFormType;
 use eZ\Publish\API\Repository\ContentTypeService;
 use EzSystems\RepositoryForms\Data\Content\FieldData;
 use EzSystems\RepositoryForms\Data\FieldDefinitionData;
@@ -82,7 +82,7 @@ final class QueryFormMapper implements FieldDefinitionFormMapperInterface, Field
                 $formConfig->getFormFactory()->createBuilder()
                     ->create(
                         'value',
-                        QueryFieldType::class,
+                        QueryFieldFormType::class,
                         [
                             'required' => $fieldDefinition->isRequired,
                             'label' => $label,
