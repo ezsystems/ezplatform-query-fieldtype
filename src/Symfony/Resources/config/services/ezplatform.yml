@@ -1,0 +1,42 @@
+services:
+    _defaults:
+        public: false
+        autowire: true
+        autoconfigure: true
+
+    EzSystems\EzPlatformQueryFieldType\eZ\FieldType\Query\Type:
+        parent: ezpublish.fieldType
+        public: true
+        autowire: true
+        autoconfigure: false
+        tags:
+            - {name: ezpublish.fieldType, alias: ezcontentquery}
+
+    EzSystems\EzPlatformQueryFieldType\eZ\FieldType\Mapper\QueryFormMapper:
+        tags:
+            - { name: ez.fieldFormMapper.definition, fieldType: ezcontentquery }
+            - { name: ez.fieldFormMapper.value, fieldType: ezcontentquery }
+        arguments:
+            $contentTypeService: '@ezpublish.api.service.content_type'
+
+    EzSystems\EzPlatformQueryFieldType\eZ\FieldTypeForm\Type\FieldType\QueryFieldType: ~
+
+    EzSystems\EzPlatformQueryFieldType\eZ\Persistence\Legacy\Content\FieldValue\Converter\QueryConverter:
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezcontentquery}
+
+    EzSystems\EzPlatformQueryFieldType\eZ\FieldType\Query\SearchField:
+        tags:
+            - {name: ezpublish.fieldType.indexable, alias: ezcontentquery}
+
+    EzSystems\EzPlatformQueryFieldType\eZ\ContentView\FieldDefinitionIdentifierMatcher:
+        calls:
+            - [setRepository, ['@ezpublish.api.repository']]
+
+    Identifier\FieldDefinition: '@EzSystems\EzPlatformQueryFieldType\eZ\ContentView\FieldDefinitionIdentifierMatcher'
+
+    EzSystems\EzPlatformQueryFieldType\eZ\ContentView\QueryResultsInjector:
+        arguments:
+            $views: { field: '%ezcontentquery_field_view%', item: '%ezcontentquery_item_view%' }
+        tags:
+            - { name: kernel.event_subscriber }

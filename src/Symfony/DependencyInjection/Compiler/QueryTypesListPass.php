@@ -6,7 +6,7 @@
  */
 namespace EzSystems\EzPlatformQueryFieldType\Symfony\DependencyInjection\Compiler;
 
-use EzSystems\EzPlatformQueryFieldType\FieldType\Mapper\QueryFormMapper;
+use EzSystems\EzPlatformQueryFieldType\eZ\FieldType\Mapper\QueryFormMapper;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;

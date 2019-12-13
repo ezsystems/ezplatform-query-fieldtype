@@ -1,9 +1,0 @@
-services:
-    _defaults:
-        autowire: true
-        autoconfigure: true
-        public: false
-
-    EzSystems\EzPlatformQueryFieldType\FieldType\Query\SearchField:
-        tags:
-            - {name: ezpublish.fieldType.indexable, alias: ezcontentquery}

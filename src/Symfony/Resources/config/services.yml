@@ -1,6 +1,4 @@
 imports:
-    - { resource: services/field_value_converters.yml }
-    - { resource: services/fieldtypes.yml }
+    - { resource: services/ezplatform.yml }
     - { resource: services/graphql.yml }
-    - { resource: services/indexable_fieldtypes.yml }
     - { resource: services/services.yml }
