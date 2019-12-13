@@ -36,19 +36,6 @@ final class QueryFormMapper implements FieldDefinitionFormMapperInterface, Field
 
     public function mapFieldDefinitionForm(FormInterface $fieldDefinitionForm, FieldDefinitionData $data)
     {
-        $parametersForm = $fieldDefinitionForm->getConfig()->getFormFactory()->createBuilder()
-            ->create(
-                'Parameters',
-                Type\TextareaType::class,
-                [
-                    'label' => 'Parameters',
-                    'property_path' => 'fieldSettings[Parameters]',
-                ]
-            )
-            ->addModelTransformer(new ParametersTransformer())
-            ->setAutoInitialize(false)
-            ->getForm();
-
         $fieldDefinitionForm
             ->add('QueryType', Type\ChoiceType::class,
                 [
@@ -58,6 +45,7 @@ final class QueryFormMapper implements FieldDefinitionFormMapperInterface, Field
                     'required' => true,
                 ]
             )
+            ->add('SetQueryType', Type\SubmitType::class, ['label' => 'Set'])
             ->add('ReturnedType', Type\ChoiceType::class,
                 [
                     'label' => 'Returned type',
@@ -66,14 +54,18 @@ final class QueryFormMapper implements FieldDefinitionFormMapperInterface, Field
                     'required' => true,
                 ]
             )
-            ->add($parametersForm);
+            ->add('Parameters', FieldDefinitionParametersType::class,
+                [
+                    'property_path' => 'fieldSettings[Parameters]',
+                    'query_type' => $data->fieldSettings['QueryType'],
+                ]
+            );
     }
 
     public function mapFieldValueForm(FormInterface $fieldForm, FieldData $data)
     {
         $fieldDefinition = $data->fieldDefinition;
         $formConfig = $fieldForm->getConfig();
-        $validatorConfiguration = $fieldDefinition->getValidatorConfiguration();
         $names = $fieldDefinition->getNames();
         $label = $fieldDefinition->getName($formConfig->getOption('mainLanguageCode')) ?: reset($names);
 

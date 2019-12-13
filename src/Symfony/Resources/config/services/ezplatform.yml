@@ -40,3 +40,13 @@ services:
             $views: { field: '%ezcontentquery_field_view%', item: '%ezcontentquery_item_view%' }
         tags:
             - { name: kernel.event_subscriber }
+
+    EzSystems\EzPlatformQueryFieldType\eZ\FieldType\Form\FieldDefinitionParametersType:
+        arguments:
+            $parametersSubscriber: '@EzSystems\EzPlatformQueryFieldType\eZ\FieldType\Form\EventSubscriber\FieldDefinitionParametersSubscriber'
+        tags:
+            - { name: form.type }
+
+    EzSystems\EzPlatformQueryFieldType\eZ\FieldType\Form\EventSubscriber\FieldDefinitionParametersSubscriber:
+        tags:
+            - { name: kernel.event_subscriber }
