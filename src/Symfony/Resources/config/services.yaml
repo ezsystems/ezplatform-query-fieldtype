@@ -1,0 +1,4 @@
+imports:
+    - { resource: services/ezplatform.yaml }
+    - { resource: services/graphql.yaml }
+    - { resource: services/services.yaml }

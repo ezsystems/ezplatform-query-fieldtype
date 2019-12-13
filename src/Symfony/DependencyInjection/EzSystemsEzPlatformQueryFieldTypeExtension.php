@@ -23,8 +23,8 @@ final class EzSystemsEzPlatformQueryFieldTypeExtension extends Extension impleme
             new FileLocator(__DIR__ . '/../Resources/config/')
         );
 
-        $loader->load('default_parameters.yml');
-        $loader->load('services.yml');
+        $loader->load('default_parameters.yaml');
+        $loader->load('services.yaml');
 
         $this->addContentViewConfig($container);
     }
@@ -54,7 +54,7 @@ final class EzSystemsEzPlatformQueryFieldTypeExtension extends Extension impleme
 
     protected function prependTwigConfig(ContainerBuilder $container): void
     {
-        $views = Yaml::parseFile(__DIR__ . '/../Resources/config/default_parameters.yml')['parameters'];
+        $views = Yaml::parseFile(__DIR__ . '/../Resources/config/default_parameters.yaml')['parameters'];
         $twigGlobals = [
             'ezContentQueryViews' => [
                 'field' => $views['ezcontentquery_field_view'],
@@ -95,7 +95,7 @@ final class EzSystemsEzPlatformQueryFieldTypeExtension extends Extension impleme
      */
     protected function prependFieldTemplateConfig(ContainerBuilder $container): void
     {
-        $configFile = __DIR__ . '/../Resources/config/field_templates.yml';
+        $configFile = __DIR__ . '/../Resources/config/field_templates.yaml';
         $config = Yaml::parse(file_get_contents($configFile));
         $container->prependExtensionConfig('ezpublish', $config);
         $container->addResource(new FileResource($configFile));

@@ -1,4 +1,0 @@
-imports:
-    - { resource: services/ezplatform.yml }
-    - { resource: services/graphql.yml }
-    - { resource: services/services.yml }
