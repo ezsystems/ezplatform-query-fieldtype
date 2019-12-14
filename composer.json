@@ -13,13 +13,21 @@
             "homepage": "https://github.com/ezsystems/ezplatform-query-fieldtype/contributors"
         }
     ],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "require": {
-        "php": ">=7.3",
+        "php": "^7.3",
         "ext-json": "*",
+        "ezsystems/ezplatform-admin-ui": "^2.0@dev",
+        "ezsystems/ezplatform-content-forms": "^1.0@dev",
         "ezsystems/ezplatform-graphql": "^2.0@beta",
         "ezsystems/ezpublish-kernel": "^8.0@beta",
-        "symfony/symfony": "^4.0"
+        "symfony/dependency-injection": "^4.3",
+        "symfony/expression-language": "^4.3",
+        "symfony/event-dispatcher": "^4.3",
+        "symfony/framework-bundle": "^4.3",
+        "symfony/http-kernel": "^4.3",
+        "symfony/translation": "^4.3",
+        "symfony/yaml": "^4.3"
     },
     "autoload": {
         "psr-4": {
