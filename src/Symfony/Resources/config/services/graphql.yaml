@@ -9,6 +9,7 @@ services:
             - { name: overblog_graphql.resolver, alias: "QueryFieldValue", method: "resolveQueryField" }
             - { name: overblog_graphql.resolver, alias: "QueryFieldDefinitionParameters", method: "resolveQueryFieldDefinitionParameters" }
 
+
     EzSystems\EzPlatformQueryFieldType\GraphQL\ContentQueryFieldDefinitionMapper:
         decorates: EzSystems\EzPlatformGraphQL\Schema\Domain\Content\Mapper\FieldDefinition\FieldDefinitionMapper
         arguments:

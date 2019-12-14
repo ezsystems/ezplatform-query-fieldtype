@@ -12,6 +12,7 @@ services:
         tags:
             - { name: ezpublish.fieldType, alias: '%ezcontentquery_identifier%' }
         arguments:
+            $queryTypeRegistry: '@ezpublish.query_type.registry'
             $identifier: '%ezcontentquery_identifier%'
 
     EzSystems\EzPlatformQueryFieldType\eZ\FieldType\Mapper\QueryFormMapper:

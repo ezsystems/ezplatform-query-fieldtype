@@ -6,4 +6,8 @@ services:
 
     EzSystems\EzPlatformQueryFieldType\Controller\QueryFieldRestController: ~
 
-    EzSystems\EzPlatformQueryFieldType\API\QueryFieldService: ~
+    EzSystems\EzPlatformQueryFieldType\API\QueryFieldService:
+        arguments:
+            $queryTypeRegistry: '@ezpublish.query_type.registry'
+
+    EzSystems\EzPlatformQueryFieldType\API\QueryFieldServiceInterface: '@EzSystems\EzPlatformQueryFieldType\API\QueryFieldService'
