@@ -31,7 +31,6 @@ final class EzSystemsEzPlatformQueryFieldTypeExtension extends Extension impleme
 
     public function prepend(ContainerBuilder $container)
     {
-        $this->prependAsseticConfig($container);
         $this->prependFieldTemplateConfig($container);
         $this->prependJMSTranslationConfig($container);
         $this->prependTwigConfig($container);
@@ -78,16 +77,6 @@ final class EzSystemsEzPlatformQueryFieldTypeExtension extends Extension impleme
                 ],
             ],
         ]);
-    }
-
-    /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     */
-    protected function prependAsseticConfig(ContainerBuilder $container): void
-    {
-        if ($container->hasExtension('assetic')) {
-            $container->prependExtensionConfig('assetic', ['bundles' => ['EzSystemsEzPlatformQueryFieldTypeBundle']]);
-        }
     }
 
     /**
