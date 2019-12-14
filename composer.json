@@ -17,8 +17,8 @@
     "require": {
         "php": ">=7.3",
         "ext-json": "*",
-        "ezsystems/ezplatform-graphql": "^2.0",
-        "ezsystems/ezpublish-kernel": "^8.0",
+        "ezsystems/ezplatform-graphql": "^2.0@beta",
+        "ezsystems/ezpublish-kernel": "^8.0@beta",
         "symfony/symfony": "^4.0"
     },
     "autoload": {
@@ -33,7 +33,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0.x-dev"
+            "dev-master": "2.0.x-dev"
         }
     }
 }
