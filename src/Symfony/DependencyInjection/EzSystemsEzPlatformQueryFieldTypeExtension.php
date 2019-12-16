@@ -34,6 +34,7 @@ final class EzSystemsEzPlatformQueryFieldTypeExtension extends Extension impleme
         $this->prependFieldTemplateConfig($container);
         $this->prependJMSTranslationConfig($container);
         $this->prependTwigConfig($container);
+        $this->prependGraphQL($container);
     }
 
     /**
@@ -88,5 +89,21 @@ final class EzSystemsEzPlatformQueryFieldTypeExtension extends Extension impleme
         $config = Yaml::parse(file_get_contents($configFile));
         $container->prependExtensionConfig('ezpublish', $config);
         $container->addResource(new FileResource($configFile));
+    }
+
+    private function prependGraphQL(ContainerBuilder $container): void
+    {
+        $container->prependExtensionConfig('overblog_graphql', [
+            'definitions' => [
+                'mappings' => [
+                    'types' => [
+                        [
+                            'type' => 'yaml',
+                            'dir' => __DIR__ . '/../Resources/config/graphql/types',
+                        ],
+                    ],
+                ],
+            ],
+        ]);
     }
 }
