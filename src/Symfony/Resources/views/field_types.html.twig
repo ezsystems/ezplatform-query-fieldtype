@@ -1,7 +1,7 @@
 {% extends '@EzSystemsRepositoryForms/ContentType/field_types.html.twig' %}
 
 {% block ezcontentquery_field_definition_edit %}
-    <div class="query-query-type{% if group_class is not empty %} {{ group_class }}{% endif %}">
+    <div class="form-inline query-query-type{% if group_class is not empty %} {{ group_class }}{% endif %}">
         {{- form_label(form.QueryType) -}}
         {{- form_errors(form.QueryType) -}}
         {{- form_widget(form.QueryType) -}}
