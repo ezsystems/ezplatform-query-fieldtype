@@ -6,6 +6,7 @@
  */
 namespace EzSystems\EzPlatformQueryFieldType\eZ\FieldType\Mapper;
 
+use EzSystems\EzPlatformQueryFieldType\eZ\FieldType\Form\FieldDefinitionParametersType;
 use EzSystems\EzPlatformQueryFieldType\eZ\FieldType\Form\QueryFieldFormType;
 use eZ\Publish\API\Repository\ContentTypeService;
 use EzSystems\RepositoryForms\Data\Content\FieldData;
