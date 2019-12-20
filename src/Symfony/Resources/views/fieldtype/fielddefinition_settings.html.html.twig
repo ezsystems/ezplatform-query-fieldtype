@@ -7,7 +7,7 @@
         <div class="ez-fielddefinition-setting-name">{{ 'ezcontentquery.query_type.label'|trans|desc("Query type:")}}</div>
         <div class="ez-fielddefinition-setting-value">
             {% if fielddefinition.fieldSettings.QueryType %}
-                fielddefinition.fieldSettings.QueryType
+                {{ fielddefinition.fieldSettings.QueryType }}
             {% else %}
                 <em>{{ "ezcontentquery.no_defined_query_types"|trans()|desc("There are no query types defined") }}</em>
             {% endif %}
