@@ -3,6 +3,6 @@ system:
         fielddefinition_settings_templates:
             - { template: "EzSystemsEzPlatformQueryFieldTypeBundle:fieldtype:fielddefinition_settings.html.twig" }
         fielddefinition_edit_templates:
-            - { template: "EzSystemsEzPlatformQueryFieldTypeBundle:fieldtype:fielddefinition_settings_edit.html.twig" }
+            - { template: "EzSystemsEzPlatformQueryFieldTypeBundle:fieldtype:fielddefinition_edit.html.twig" }
         field_templates:
             - { template: "EzSystemsEzPlatformQueryFieldTypeBundle:fieldtype:field_view.html.twig" }
