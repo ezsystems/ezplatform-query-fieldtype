@@ -6,12 +6,12 @@
  */
 namespace EzSystems\EzPlatformQueryFieldType\eZ\FieldType\Mapper;
 
+use EzSystems\EzPlatformAdminUi\FieldType\FieldDefinitionFormMapperInterface;
+use EzSystems\EzPlatformAdminUi\Form\Data\FieldDefinitionData;
+use EzSystems\EzPlatformContentForms\Data\Content\FieldData;
+use EzSystems\EzPlatformContentForms\FieldType\FieldValueFormMapperInterface;
 use EzSystems\EzPlatformQueryFieldType\eZ\FieldType\Form\QueryFieldFormType;
 use eZ\Publish\API\Repository\ContentTypeService;
-use EzSystems\RepositoryForms\Data\Content\FieldData;
-use EzSystems\RepositoryForms\Data\FieldDefinitionData;
-use EzSystems\RepositoryForms\FieldType\FieldDefinitionFormMapperInterface;
-use EzSystems\RepositoryForms\FieldType\FieldValueFormMapperInterface;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -34,7 +34,7 @@ final class QueryFormMapper implements FieldDefinitionFormMapperInterface, Field
         $this->queryTypes = $queryTypes;
     }
 
-    public function mapFieldDefinitionForm(FormInterface $fieldDefinitionForm, FieldDefinitionData $data)
+    public function mapFieldDefinitionForm(FormInterface $fieldDefinitionForm, FieldDefinitionData $data): void
     {
         $parametersForm = $fieldDefinitionForm->getConfig()->getFormFactory()->createBuilder()
             ->create(

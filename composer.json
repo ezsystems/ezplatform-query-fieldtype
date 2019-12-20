@@ -13,12 +13,22 @@
             "homepage": "https://github.com/ezsystems/ezplatform-query-fieldtype/contributors"
         }
     ],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "require": {
-        "php": ">=7.1",
+        "php": "^7.3",
         "ext-json": "*",
-        "ezsystems/ezplatform-graphql": "^1.0||^2.0",
-        "ezsystems/ezpublish-kernel": "^7.0||^8.0"
+        "ezsystems/ezplatform-admin-ui": "^2.0@dev",
+        "ezsystems/ezplatform-content-forms": "^1.0@dev",
+        "ezsystems/ezplatform-graphql": "^2.0@beta",
+        "ezsystems/ezplatform-rest": "^1.0@dev",
+        "ezsystems/ezpublish-kernel": "^8.0@beta",
+        "symfony/dependency-injection": "^4.3",
+        "symfony/expression-language": "^4.3",
+        "symfony/event-dispatcher": "^4.3",
+        "symfony/framework-bundle": "^4.3",
+        "symfony/http-kernel": "^4.3",
+        "symfony/translation": "^4.3",
+        "symfony/yaml": "^4.3"
     },
     "autoload": {
         "psr-4": {
@@ -26,13 +36,13 @@
         }
     },
     "require-dev": {
-        "phpspec/phpspec": "^5.1",
+        "phpspec/phpspec": "^6.0",
         "ezsystems/ezplatform-code-style": "^0.1.0",
         "friendsofphp/php-cs-fixer": "^2.16.0"
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0.x-dev"
+            "dev-master": "2.0.x-dev"
         }
     }
 }

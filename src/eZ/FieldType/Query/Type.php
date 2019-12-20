@@ -92,7 +92,7 @@ final class Type extends FieldType
      *
      * @return string
      */
-    public function getName(SPIValue $value)
+    public function getName(SPIValue $value, FieldDefinition $fieldDefinition, string $languageCode): string
     {
         return (string)$value->text;
     }

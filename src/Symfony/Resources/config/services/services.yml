@@ -1,9 +1,0 @@
-services:
-    _defaults:
-        autoconfigure: true
-        autowire: true
-        public: true
-
-    EzSystems\EzPlatformQueryFieldType\Controller\QueryFieldRestController: ~
-
-    EzSystems\EzPlatformQueryFieldType\API\QueryFieldService: ~
