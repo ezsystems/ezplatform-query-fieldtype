@@ -18,7 +18,6 @@ services:
     EzSystems\EzPlatformQueryFieldType\eZ\FieldType\Mapper\QueryFormMapper:
         tags:
             - { name: ezplatform.field_type.form_mapper.definition, fieldType: '%ezcontentquery_identifier%' }
-            - { name: ezplatform.field_type.form_mapper.value, fieldType: '%ezcontentquery_identifier%' }
         arguments:
             $contentTypeService: '@ezpublish.api.service.content_type'
 

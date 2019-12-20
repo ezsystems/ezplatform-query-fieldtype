@@ -8,15 +8,12 @@ namespace EzSystems\EzPlatformQueryFieldType\eZ\FieldType\Mapper;
 
 use EzSystems\EzPlatformAdminUi\FieldType\FieldDefinitionFormMapperInterface;
 use EzSystems\EzPlatformAdminUi\Form\Data\FieldDefinitionData;
-use EzSystems\EzPlatformContentForms\Data\Content\FieldData;
-use EzSystems\EzPlatformContentForms\FieldType\FieldValueFormMapperInterface;
-use EzSystems\EzPlatformQueryFieldType\eZ\FieldType\Form\QueryFieldFormType;
 use eZ\Publish\API\Repository\ContentTypeService;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-final class QueryFormMapper implements FieldDefinitionFormMapperInterface, FieldValueFormMapperInterface
+final class QueryFormMapper implements FieldDefinitionFormMapperInterface
 {
     /** @var ContentTypeService */
     private $contentTypeService;
@@ -67,30 +64,6 @@ final class QueryFormMapper implements FieldDefinitionFormMapperInterface, Field
                 ]
             )
             ->add($parametersForm);
-    }
-
-    public function mapFieldValueForm(FormInterface $fieldForm, FieldData $data)
-    {
-        $fieldDefinition = $data->fieldDefinition;
-        $formConfig = $fieldForm->getConfig();
-        $validatorConfiguration = $fieldDefinition->getValidatorConfiguration();
-        $names = $fieldDefinition->getNames();
-        $label = $fieldDefinition->getName($formConfig->getOption('mainLanguageCode')) ?: reset($names);
-
-        $fieldForm
-            ->add(
-                $formConfig->getFormFactory()->createBuilder()
-                    ->create(
-                        'value',
-                        QueryFieldFormType::class,
-                        [
-                            'required' => $fieldDefinition->isRequired,
-                            'label' => $label,
-                        ]
-                    )
-                    ->setAutoInitialize(false)
-                    ->getForm()
-            );
     }
 
     public function configureOptions(OptionsResolver $resolver)
