@@ -45,7 +45,7 @@ final class EzSystemsEzPlatformQueryFieldTypeExtension extends Extension impleme
         $contentViewDefaults = $container->getParameter('ezsettings.default.content_view_defaults');
         $contentViewDefaults['content_query_field'] = [
             'default' => [
-                'template' => 'EzSystemsEzPlatformQueryFieldType/content/contentquery.html.twig',
+                'template' => '@EzSystemsEzPlatformQueryFieldType/content/contentquery.html.twig',
                 'match' => [],
             ],
         ];
