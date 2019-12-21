@@ -10,7 +10,7 @@ ezplatform:
     children:
       query_type: eZ:Children
       default_parameters:
-        location: '@=location'
+        location: '@=mainLocation'
         type: '@=returnedType'
     relating_content:
       query_type: eZ:ContentRelatedTo

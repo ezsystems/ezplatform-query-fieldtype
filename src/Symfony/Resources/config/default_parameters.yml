@@ -2,3 +2,14 @@ parameters:
     ezcontentquery_field_view: 'content_query_field'
     ezcontentquery_item_view: 'line'
     ezcontentquery_identifier: 'ezcontentquery'
+    ezcontentquery_named:
+        children:
+            query_type: eZ:Children
+            default_parameters:
+                location: 'mainLocation'
+                type: 'returnedType'
+        relating:
+            query_type: AppBundle:RelatedToContent
+            default_parameters:
+                to_content: 'content'
+                type: 'returnedType'

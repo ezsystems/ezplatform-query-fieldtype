@@ -43,3 +43,8 @@ services:
             $views: { field: '%ezcontentquery_field_view%', item: '%ezcontentquery_item_view%' }
         tags:
             - { name: kernel.event_subscriber }
+
+    EzSystems\EzPlatformQueryFieldType\eZ\Twig\QueryFieldBlockRenderer:
+        decorates: ezpublish.templating.field_block_renderer.twig
+        arguments:
+            $innerRenderer: '@EzSystems\EzPlatformQueryFieldType\eZ\Twig\QueryFieldBlockRenderer.inner'
