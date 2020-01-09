@@ -42,7 +42,7 @@ class QueryFieldServiceSpec extends ObjectBehavior
         ];
 
         $contentType = new Values\ContentType\ContentType([
-            'fieldDefinitions' => [
+            'fieldDefinitions' => new Values\ContentType\FieldDefinitionCollection([
                 new Values\ContentType\FieldDefinition([
                     'identifier' => self::FIELD_DEFINITION_IDENTIFIER,
                     'fieldTypeIdentifier' => 'ezcontentquery',
@@ -52,7 +52,7 @@ class QueryFieldServiceSpec extends ObjectBehavior
                         'Parameters' => $parameters,
                     ]
                 ]),
-            ],
+            ]),
         ]);
 
         $contentTypeService->loadContentType(self::CONTENT_TYPE_ID)->willReturn($contentType);
