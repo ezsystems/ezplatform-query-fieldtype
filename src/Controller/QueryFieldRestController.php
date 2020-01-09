@@ -77,7 +77,7 @@ final class QueryFieldRestController
                 [
                     'contentId' => $contentId,
                     'versionNumber' => $this->contentService->loadContent($contentId)->versionInfo->versionNo,
-                    'fieldDefinitionIdentifier' => $fieldDefinitionIdentifier
+                    'fieldDefinitionIdentifier' => $fieldDefinitionIdentifier,
                 ]
             )
         );
