@@ -13,8 +13,7 @@ use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
-use eZ\Publish\Core\REST\Server\Values\ContentList;
-use eZ\Publish\Core\REST\Server\Values\RestContent;
+use EzSystems\EzPlatformRest\Server\Values as RestValues;
 
 final class QueryFieldRestController
 {
@@ -42,14 +41,14 @@ final class QueryFieldRestController
         $this->locationService = $locationService;
     }
 
-    public function getResults($contentId, $versionNumber, $fieldDefinitionIdentifier): ContentList
+    public function getResults($contentId, $versionNumber, $fieldDefinitionIdentifier): RestValues\ContentList
     {
         $content = $this->contentService->loadContent($contentId, null, $versionNumber);
 
-        return new ContentList(
+        return new RestValues\ContentList(
             array_map(
                 function (Content $content) {
-                    return new RestContent(
+                    return new RestValues\RestContent(
                         $content->contentInfo,
                         $this->locationService->loadLocation($content->contentInfo->mainLocationId),
                         $content,
