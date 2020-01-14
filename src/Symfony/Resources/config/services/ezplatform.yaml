@@ -31,7 +31,9 @@ services:
         calls:
             - [setRepository, ['@ezpublish.api.repository']]
 
-    Identifier\FieldDefinition: '@EzSystems\EzPlatformQueryFieldType\eZ\ContentView\FieldDefinitionIdentifierMatcher'
+    Identifier\FieldDefinition:
+        alias: 'EzSystems\EzPlatformQueryFieldType\eZ\ContentView\FieldDefinitionIdentifierMatcher'
+        public: true
 
     EzSystems\EzPlatformQueryFieldType\eZ\ContentView\QueryResultsInjector:
         arguments:
