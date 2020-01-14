@@ -16,5 +16,6 @@ final class EzSystemsEzPlatformQueryFieldTypeBundle extends Bundle
     {
         $container->addCompilerPass(new Compiler\QueryTypesListPass());
         $container->addCompilerPass(new Compiler\ConfigurableFieldDefinitionMapperPass());
+        $container->addCompilerPass(new Compiler\FieldDefinitionIdentifierViewMatcherPass());
     }
 }
