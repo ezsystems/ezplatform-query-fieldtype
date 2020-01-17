@@ -28,12 +28,10 @@ services:
             - { name: ezplatform.field_type.legacy_storage.converter, alias: '%ezcontentquery_identifier%' }
 
     EzSystems\EzPlatformQueryFieldType\eZ\ContentView\FieldDefinitionIdentifierMatcher:
+        tags:
+            - { name: ezplatform.view.matcher }
         calls:
             - [setRepository, ['@ezpublish.api.repository']]
-
-    Identifier\FieldDefinition:
-        alias: 'EzSystems\EzPlatformQueryFieldType\eZ\ContentView\FieldDefinitionIdentifierMatcher'
-        public: true
 
     EzSystems\EzPlatformQueryFieldType\eZ\ContentView\QueryResultsInjector:
         arguments:
