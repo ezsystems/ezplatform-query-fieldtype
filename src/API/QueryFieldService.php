@@ -82,7 +82,11 @@ final class QueryFieldService implements QueryFieldServiceInterface
     private function resolveParameters(array $parameters, array $variables): array
     {
         foreach ($parameters as $key => $expression) {
-            $parameters[$key] = $this->resolveExpression($expression, $variables);
+            if (is_array($expression)) {
+                $parameters[$key] = $this->resolveParameters($expression, $variables);
+            } else {
+                $parameters[$key] = $this->resolveExpression($expression, $variables);
+            }
         }
 
         return $parameters;
