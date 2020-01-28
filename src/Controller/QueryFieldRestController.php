@@ -6,6 +6,7 @@
  */
 namespace EzSystems\EzPlatformQueryFieldType\Controller;
 
+use eZ\Publish\Core\REST\Server\Values\TemporaryRedirect;
 use EzSystems\EzPlatformQueryFieldType\API\QueryFieldService;
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\ContentTypeService;
@@ -15,6 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\REST\Server\Values\ContentList;
 use eZ\Publish\Core\REST\Server\Values\RestContent;
+use Symfony\Component\Routing\RouterInterface;
 
 final class QueryFieldRestController
 {
@@ -30,16 +32,21 @@ final class QueryFieldRestController
     /** @var \eZ\Publish\API\Repository\LocationService */
     private $locationService;
 
+    /** @var \Symfony\Component\Routing\RouterInterface */
+    private $router;
+
     public function __construct(
         QueryFieldService $queryFieldService,
         ContentService $contentService,
         ContentTypeService $contentTypeService,
-        LocationService $locationService
+        LocationService $locationService,
+        RouterInterface $router
     ) {
         $this->queryFieldService = $queryFieldService;
         $this->contentService = $contentService;
         $this->contentTypeService = $contentTypeService;
         $this->locationService = $locationService;
+        $this->router = $router;
     }
 
     public function getResults($contentId, $versionNumber, $fieldDefinitionIdentifier): ContentList
@@ -58,6 +65,20 @@ final class QueryFieldRestController
                     );
                 },
                 $this->queryFieldService->loadContentItems($content, $fieldDefinitionIdentifier)
+            )
+        );
+    }
+
+    public function redirectToResults(int $contentId, string $fieldDefinitionIdentifier)
+    {
+        return new TemporaryRedirect(
+            $this->router->generate(
+                'ezplatform_ezcontentquery_rest_field_version_items',
+                [
+                    'contentId' => $contentId,
+                    'versionNumber' => $this->contentService->loadContent($contentId)->versionInfo->versionNo,
+                    'fieldDefinitionIdentifier' => $fieldDefinitionIdentifier,
+                ]
             )
         );
     }

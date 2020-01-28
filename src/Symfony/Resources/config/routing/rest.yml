@@ -1,9 +1,18 @@
-ezpublish_rest_ezcontentquery_field_results:
-    path: /api/ezp/v2/content/objects/{contentId}/versions/{versionNumber}/fields/{fieldDefinitionIdentifier}/query/results
+ezplatform_ezcontentquery_rest_field_version_items:
+    path: /api/ezp/v2/content/objects/{contentId}/versions/{versionNumber}/fields/{fieldDefinitionIdentifier}/items
     defaults:
         _controller: EzSystems\EzPlatformQueryFieldType\Controller\QueryFieldRestController:getResults
     methods: [GET]
     requirements:
         contentId: \d+
-        fieldId: \d+
         versionNumber: \d+
+        fieldDefinitionIdentifier: \w+
+
+ezplatform_ezcontentquery_rest_field_currentversion_items:
+    path: /api/ezp/v2/content/objects/{contentId}/currentversion/fields/{fieldDefinitionIdentifier}/items
+    defaults:
+        _controller: EzSystems\EzPlatformQueryFieldType\Controller\QueryFieldRestController:redirectToResults
+    methods: [GET]
+    requirements:
+        contentId: \d+
+        fieldDefinitionIdentifier: \w+
