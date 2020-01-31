@@ -63,6 +63,19 @@ final class QueryFormMapper implements FieldDefinitionFormMapperInterface
                     'required' => true,
                 ]
             )
+            ->add('EnablePagination', Type\CheckboxType::class,
+                [
+                    'label' => 'Enable pagination',
+                    'property_path' => 'fieldSettings[EnablePagination]',
+                    'required' => false,
+                ]
+            )
+            ->add('ItemsPerPage', Type\NumberType::class,
+                [
+                    'label' => 'Items per page',
+                    'property_path' => 'fieldSettings[ItemsPerPage]',
+                ]
+            )
             ->add($parametersForm);
     }
 

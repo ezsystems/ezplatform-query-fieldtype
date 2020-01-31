@@ -6,3 +6,7 @@
         "viewType": itemViewType
     })) }}
 {% endfor %}
+
+{% if isPaginationEnabled %}
+    {{ pagerfanta( items, 'ez', {'routeName': location, 'pageParameter': pageParameter } ) }}
+{% endif %}

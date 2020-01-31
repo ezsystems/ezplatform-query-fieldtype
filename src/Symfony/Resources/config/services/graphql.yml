@@ -7,9 +7,12 @@ services:
     EzSystems\EzPlatformQueryFieldType\GraphQL\QueryFieldResolver:
         tags:
             - { name: overblog_graphql.resolver, alias: "QueryFieldValue", method: "resolveQueryField" }
+            - { name: overblog_graphql.resolver, alias: "QueryFieldValueConnection", method: "resolveQueryFieldConnection" }
             - { name: overblog_graphql.resolver, alias: "QueryFieldDefinitionParameters", method: "resolveQueryFieldDefinitionParameters" }
 
     EzSystems\EzPlatformQueryFieldType\GraphQL\ContentQueryFieldDefinitionMapper:
         decorates: EzSystems\EzPlatformGraphQL\Schema\Domain\Content\Mapper\FieldDefinition\FieldDefinitionMapper
         arguments:
             $innerMapper: '@EzSystems\EzPlatformQueryFieldType\GraphQL\ContentQueryFieldDefinitionMapper.inner'
+        tags:
+            - { name: ezplatform_graphql.field_definition_args_builder_mapper, fieldtype: 'ezcontentquery' }

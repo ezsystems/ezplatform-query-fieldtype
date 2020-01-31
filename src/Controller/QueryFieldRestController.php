@@ -15,6 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\REST\Server\Values\ContentList;
 use eZ\Publish\Core\REST\Server\Values\RestContent;
+use Symfony\Component\HttpFoundation\Request;
 
 final class QueryFieldRestController
 {
@@ -42,11 +43,19 @@ final class QueryFieldRestController
         $this->locationService = $locationService;
     }
 
-    public function getResults($contentId, $versionNumber, $fieldDefinitionIdentifier): ContentList
+    public function getResults(Request $request, $contentId, $versionNumber, $fieldDefinitionIdentifier): ContentList
     {
-        $content = $this->contentService->loadContent($contentId, null, $versionNumber);
+        $offset = (int)$request->query->get('offset', 0);
+        $limit = (int)$request->query->get('limit', -1);
 
-        return new ContentList(
+        $content = $this->contentService->loadContent($contentId, null, $versionNumber);
+        if ($limit === -1 || !method_exists($this->queryFieldService, 'loadContentItemsSlice')) {
+            $items = $this->queryFieldService->loadContentItems($content, $fieldDefinitionIdentifier);
+        } else {
+            $items = $this->queryFieldService->loadContentItemsSlice($content, $fieldDefinitionIdentifier, $offset, $limit);
+        }
+
+        $list = new ContentList(
             array_map(
                 function (Content $content) {
                     return new RestContent(
@@ -57,9 +66,15 @@ final class QueryFieldRestController
                         $this->contentService->loadRelations($content->getVersionInfo())
                     );
                 },
-                $this->queryFieldService->loadContentItems($content, $fieldDefinitionIdentifier)
+                $items
             )
         );
+
+        if (property_exists($list, 'totalCount')) {
+            $list->totalCount = $this->queryFieldService->countContentItems($content, $fieldDefinitionIdentifier);
+        }
+
+        return $list;
     }
 
     private function getContentType(ContentInfo $contentInfo): ContentType

@@ -63,6 +63,8 @@ class QueryConverter implements Converter
         $storageDef->dataText1 = $fieldDef->fieldTypeConstraints->fieldSettings['QueryType'];
         $storageDef->dataText2 = $fieldDef->fieldTypeConstraints->fieldSettings['ReturnedType'];
         $storageDef->dataText5 = \json_encode($fieldDef->fieldTypeConstraints->fieldSettings['Parameters']);
+        $storageDef->dataInt1 = (int)$fieldDef->fieldTypeConstraints->fieldSettings['EnablePagination'];
+        $storageDef->dataInt2 = $fieldDef->fieldTypeConstraints->fieldSettings['ItemsPerPage'];
     }
 
     /**
@@ -77,6 +79,8 @@ class QueryConverter implements Converter
             'QueryType' => $storageDef->dataText1 ?: null,
             'ReturnedType' => $storageDef->dataText2 ?: null,
             'Parameters' => \json_decode($storageDef->dataText5, true),
+            'EnablePagination' => (bool)$storageDef->dataInt1,
+            'ItemsPerPage' => $storageDef->dataInt2,
         ];
     }
 

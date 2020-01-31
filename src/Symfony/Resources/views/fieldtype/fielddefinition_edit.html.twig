@@ -13,6 +13,18 @@
         {{- form_widget(form.ReturnedType) -}}
     </div>
 
+    <div class="query-enable-pagination{% if group_class is not empty %} {{ group_class }}{% endif %}">
+        {{- form_label(form.EnablePagination) -}}
+        {{- form_errors(form.EnablePagination) -}}
+        {{- form_widget(form.EnablePagination) -}}
+    </div>
+
+    <div class="query-items-per-page{% if group_class is not empty %} {{ group_class }}{% endif %}">
+        {{- form_label(form.ItemsPerPage) -}}
+        {{- form_errors(form.ItemsPerPage) -}}
+        {{- form_widget(form.ItemsPerPage) -}}
+    </div>
+
     <div class="query-parameters{% if group_class is not empty %} {{ group_class }}{% endif %}">
         {{- form_label(form.Parameters) -}}
         {{- form_errors(form.Parameters) -}}
