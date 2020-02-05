@@ -20,14 +20,19 @@ final class ContentQueryFieldDefinitionMapper extends DecoratingFieldDefinitionM
     /** @var ContentTypeService */
     private $contentTypeService;
 
+    /** @var string */
+    private $fieldTypeIdentifier;
+
     public function __construct(
         FieldDefinitionMapper $innerMapper,
         NameHelper $nameHelper,
-        ContentTypeService $contentTypeService
+        ContentTypeService $contentTypeService,
+        string $fieldTypeIdentifier
     ) {
         parent::__construct($innerMapper);
         $this->nameHelper = $nameHelper;
         $this->contentTypeService = $contentTypeService;
+        $this->fieldTypeIdentifier = $fieldTypeIdentifier;
     }
 
     public function mapToFieldValueType(FieldDefinition $fieldDefinition): ?string
@@ -84,7 +89,7 @@ final class ContentQueryFieldDefinitionMapper extends DecoratingFieldDefinitionM
 
     protected function getFieldTypeIdentifier(): string
     {
-        return 'ezcontentquery';
+        return $this->fieldTypeIdentifier;
     }
 
     private function nameValueType($typeIdentifier): string

@@ -15,5 +15,4 @@ services:
         decorates: EzSystems\EzPlatformGraphQL\Schema\Domain\Content\Mapper\FieldDefinition\FieldDefinitionMapper
         arguments:
             $innerMapper: '@EzSystems\EzPlatformQueryFieldType\GraphQL\ContentQueryFieldDefinitionMapper.inner'
-        tags:
-            - { name: ezplatform_graphql.field_definition_args_builder_mapper, fieldtype: 'ezcontentquery' }
+            $fieldTypeIdentifier: '%ezcontentquery_identifier%'

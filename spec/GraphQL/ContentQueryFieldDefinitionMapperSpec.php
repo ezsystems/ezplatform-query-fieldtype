@@ -34,7 +34,7 @@ class ContentQueryFieldDefinitionMapperSpec extends ObjectBehavior
             ->domainContentName($contentType)
             ->willReturn(self::GRAPHQL_TYPE);
 
-        $this->beConstructedWith($innerMapper, $nameHelper, $contentTypeService);
+        $this->beConstructedWith($innerMapper, $nameHelper, $contentTypeService, self::FIELD_TYPE_IDENTIFIER);
     }
 
     function it_is_initializable()
