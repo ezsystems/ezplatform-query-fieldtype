@@ -6,8 +6,6 @@
  */
 namespace EzSystems\EzPlatformQueryFieldType\API;
 
-use eZ\Publish\API\Repository\Values\Content\Content;
-
 /**
  * Pagination related methods for v1.0.
  *
@@ -15,7 +13,4 @@ use eZ\Publish\API\Repository\Values\Content\Content;
  */
 interface QueryFieldPaginationService
 {
-    public function getPaginationConfiguration(Content $content, string $fieldDefinitionIdentifier): int;
-
-    public function loadContentItemsSlice(Content $content, string $fieldDefinitionIdentifier, int $offset, int $limit): iterable;
 }

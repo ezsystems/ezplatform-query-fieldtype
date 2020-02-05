@@ -19,7 +19,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 /**
  * Executes a query and returns the results.
  */
-final class QueryFieldService implements QueryFieldServiceInterface, QueryFieldPaginationService
+final class QueryFieldService implements QueryFieldServiceInterface
 {
     /** @var \eZ\Publish\Core\QueryType\QueryTypeRegistry */
     private $queryTypeRegistry;
