@@ -55,7 +55,7 @@ final class QueryFieldRestController
             $items = $this->queryFieldService->loadContentItemsSlice($content, $fieldDefinitionIdentifier, $offset, $limit);
         }
 
-        $list = new ContentList(
+        return new ContentList(
             array_map(
                 function (Content $content) {
                     return new RestContent(
@@ -67,14 +67,9 @@ final class QueryFieldRestController
                     );
                 },
                 $items
-            )
+            ),
+            $this->queryFieldService->countContentItems($content, $fieldDefinitionIdentifier)
         );
-
-        if (property_exists($list, 'totalCount')) {
-            $list->totalCount = $this->queryFieldService->countContentItems($content, $fieldDefinitionIdentifier);
-        }
-
-        return $list;
     }
 
     private function getContentType(ContentInfo $contentInfo): ContentType
