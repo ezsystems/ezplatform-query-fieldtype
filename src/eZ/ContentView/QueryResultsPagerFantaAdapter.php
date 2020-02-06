@@ -10,7 +10,7 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 use EzSystems\EzPlatformQueryFieldType\API\QueryFieldService;
 use Pagerfanta\Adapter\AdapterInterface;
 
-class QueryResultsPagerFantaAdapter implements AdapterInterface
+final class QueryResultsPagerFantaAdapter implements AdapterInterface
 {
     /** @var \EzSystems\EzPlatformQueryFieldType\API\QueryFieldService */
     private $queryFieldService;

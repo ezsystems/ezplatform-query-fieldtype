@@ -14,7 +14,7 @@ use Pagerfanta\Pagerfanta;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class QueryResultsInjector implements EventSubscriberInterface
+final class QueryResultsInjector implements EventSubscriberInterface
 {
     /** @var \EzSystems\EzPlatformQueryFieldType\API\QueryFieldService */
     private $queryFieldService;
@@ -69,7 +69,7 @@ class QueryResultsInjector implements EventSubscriberInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    protected function buildResults(FilterViewParametersEvent $event): iterable
+    private function buildResults(FilterViewParametersEvent $event): iterable
     {
         $view = $event->getView();
         $content = $view->getContent();
