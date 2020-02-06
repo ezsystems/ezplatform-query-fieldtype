@@ -7,7 +7,10 @@
         "contentId": contentInfo.id,
         "queryFieldDefinitionIdentifier": field.fieldDefIdentifier,
         "viewType": ezContentQueryViews['field'],
-        "itemViewType": itemViewType|default(ezContentQueryViews['item'])
+        "itemViewType": itemViewType|default(ezContentQueryViews['item']),
+        "enablePagination": parameters.enablePagination|default(false),
+        "disablePagination": parameters.disablePagination|default(false),
+        "itemsPerPage": parameters.itemsPerPage|default(false)
     }
 )) }}
 {% endblock %}

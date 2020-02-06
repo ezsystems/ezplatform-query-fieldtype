@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use EzSystems\EzPlatformRest\Server\Values as RestValues;
+use Symfony\Component\HttpFoundation\Request;
 
 final class QueryFieldRestController
 {
@@ -41,9 +42,17 @@ final class QueryFieldRestController
         $this->locationService = $locationService;
     }
 
-    public function getResults($contentId, $versionNumber, $fieldDefinitionIdentifier): RestValues\ContentList
+    public function getResults(Request $request, $contentId, $versionNumber, $fieldDefinitionIdentifier): RestValues\ContentList
     {
+        $offset = (int)$request->query->get('offset', 0);
+        $limit = (int)$request->query->get('limit', -1);
+
         $content = $this->contentService->loadContent($contentId, null, $versionNumber);
+        if ($limit === -1 || !method_exists($this->queryFieldService, 'loadContentItemsSlice')) {
+            $items = $this->queryFieldService->loadContentItems($content, $fieldDefinitionIdentifier);
+        } else {
+            $items = $this->queryFieldService->loadContentItemsSlice($content, $fieldDefinitionIdentifier, $offset, $limit);
+        }
 
         return new RestValues\ContentList(
             array_map(
@@ -56,8 +65,9 @@ final class QueryFieldRestController
                         $this->contentService->loadRelations($content->getVersionInfo())
                     );
                 },
-                $this->queryFieldService->loadContentItems($content, $fieldDefinitionIdentifier)
-            )
+                $items
+            ),
+            $this->queryFieldService->countContentItems($content, $fieldDefinitionIdentifier)
         );
     }
 

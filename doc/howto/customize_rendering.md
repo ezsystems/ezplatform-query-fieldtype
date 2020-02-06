@@ -4,10 +4,16 @@ In this how-to, you will learn how to customize all the rendering phases.
 
 ## Rendering process
 Content query fields are rendered using `ez_render_field()`. 
-The query is executed, the items iterated on, and each is be displayed using the `line` content view.
+The query is executed, the items iterated on, and each is rendered using the `line` content view.
 
 That template renders the content, the view controller, with a custom view type (`content_query_view`). A custom view
 builder executes execute the query, and assigns the results to the view as `items`. The default template for that view (`query_field_view.html.twig`) iterates on each item resulting from the query, and renders each with the `line` view.
+
+The field renderer for a query field supports the following parameters:
+- `bool enablePagination`: force pagination enabled, even if it is disabled for that field definition
+- `bool disablePagination`: force pagination disabled, even if it is disabled for that field definition
+- `int itemsPerPage`: sets how many items are displayed per page with pagination. Required if `enablePagination` is
+  used and pagination is disabled in the field definition
 
 ### Summary
 1. Your template: `ez_render_field(content, 'queryfield')`
@@ -41,6 +47,7 @@ As with any content view, a custom controller can also be defined to further cus
 
 Use the `items` iterable to loop over the field's content items:
 ```
+<div class="my-list">
 {% for item in items %}
     {{ render(controller("ez_content:viewAction", {
         "contentId": item.id,
@@ -48,9 +55,19 @@ Use the `items` iterable to loop over the field's content items:
         "viewType": itemViewType
     })) }}
 {% endfor %}
+</div>
+
+{% if isPaginationEnabled %}
+    {{ pagerfanta( items, 'ez', {'routeName': location, 'pageParameter': pageParameter } ) }}
+{% endif %}
 ```
 
-The usual [content view templates variables](https://doc.ezplatform.com/en/latest/api/field_type_form_and_template/#template-variables) are also available, including `content`, the item that contains the query field.
+In addition to the [usual content view templates variables](https://doc.ezplatform.com/en/latest/api/field_type_form_and_template/#template-variables), the following variables are available:
+- `Content content`: the item that contains the query field.
+- `bool isPaginationEnabled`: indicates if pagination is enabled. When it is, `items` is a `PagerFanta` instance.
+- `string pageParameter`: when pagination is enabled, contains the page parameter to use as the pager fanta
+  `pageParameter` argument (important, as it makes every pager unique, required if there are several query
+  fields in the same item)
 
 ## Customizing the line view template
 The line view template, used to render each result, can be customized by creating `line` view configuration rules.
@@ -69,7 +86,7 @@ ezplatform:
                         template: "path/to/template.html.twig"                    
 ```
 
-The variables are the same as any view template ([documentation]((https://doc.ezplatform.com/en/latest/api/field_type_form_and_template/#template-variables))).
+The variables are the same than other view template ([documentation]((https://doc.ezplatform.com/en/latest/api/field_type_form_and_template/#template-variables))). 
 
 ## Advanced
 
