@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\SearchService;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\QueryType\QueryTypeRegistry;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
@@ -73,23 +74,48 @@ final class QueryFieldService implements QueryFieldServiceInterface
         return $this->searchService->findContent($query)->totalCount;
     }
 
+    public function loadContentItemsSlice(Content $content, string $fieldDefinitionIdentifier, int $offset, int $limit): iterable
+    {
+        $query = $this->prepareQuery($content, $fieldDefinitionIdentifier);
+        $query->offset = $offset;
+        $query->limit = $limit;
+
+        return array_map(
+            function (SearchHit $searchHit) {
+                return $searchHit->valueObject;
+            },
+            $this->searchService->findContent($query)->searchHits
+        );
+    }
+
+    public function getPaginationConfiguration(Content $content, string $fieldDefinitionIdentifier): int
+    {
+        $fieldDefinition = $this->loadFieldDefinition($content, $fieldDefinitionIdentifier);
+
+        if ($fieldDefinition->fieldSettings['EnablePagination'] === false) {
+            return false;
+        }
+
+        return $fieldDefinition->fieldSettings['ItemsPerPage'];
+    }
+
     /**
-     * @param array $parameters parameters that may include expressions to be resolved
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     * @param array $expressions parameters that may include expressions to be resolved
+     * @param array $variables
      *
      * @return array
      */
-    private function resolveParameters(array $parameters, array $variables): array
+    private function resolveParameters(array $expressions, array $variables): array
     {
-        foreach ($parameters as $key => $expression) {
+        foreach ($expressions as $key => $expression) {
             if (is_array($expression)) {
-                $parameters[$key] = $this->resolveParameters($expression, $variables);
+                $expressions[$key] = $this->resolveParameters($expression, $variables);
             } else {
-                $parameters[$key] = $this->resolveExpression($expression, $variables);
+                $expressions[$key] = $this->resolveExpression($expression, $variables);
             }
         }
 
-        return $parameters;
+        return $expressions;
     }
 
     private function resolveExpression(string $expression, array $variables)
@@ -110,24 +136,40 @@ final class QueryFieldService implements QueryFieldServiceInterface
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    private function prepareQuery(Content $content, string $fieldDefinitionIdentifier): Query
+    private function prepareQuery(Content $content, string $fieldDefinitionIdentifier, array $extraParameters = []): Query
     {
-        $fieldDefinition = $this
-            ->contentTypeService->loadContentType($content->contentInfo->contentTypeId)
-            ->getFieldDefinition($fieldDefinitionIdentifier);
+        $fieldDefinition = $this->loadFieldDefinition($content, $fieldDefinitionIdentifier);
 
         $location = $this->locationService->loadLocation($content->contentInfo->mainLocationId);
         $queryType = $this->queryTypeRegistry->getQueryType($fieldDefinition->fieldSettings['QueryType']);
         $parameters = $this->resolveParameters(
             $fieldDefinition->fieldSettings['Parameters'],
-            [
-                'content' => $content,
-                'contentInfo' => $content->contentInfo,
-                'mainLocation' => $location,
-                'returnedType' => $fieldDefinition->fieldSettings['ReturnedType'],
-            ]
+            array_merge(
+                $extraParameters,
+                [
+                    'content' => $content,
+                    'contentInfo' => $content->contentInfo,
+                    'mainLocation' => $location,
+                    'returnedType' => $fieldDefinition->fieldSettings['ReturnedType'],
+                ]
+            )
         );
 
         return $queryType->getQuery($parameters);
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     * @param string $fieldDefinitionIdentifier
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition|null
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    private function loadFieldDefinition(Content $content, string $fieldDefinitionIdentifier): FieldDefinition
+    {
+        return $fieldDefinition = $this
+            ->contentTypeService->loadContentType($content->contentInfo->contentTypeId)
+            ->getFieldDefinition($fieldDefinitionIdentifier);
     }
 }

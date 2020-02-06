@@ -20,14 +20,19 @@ final class ContentQueryFieldDefinitionMapper extends DecoratingFieldDefinitionM
     /** @var ContentTypeService */
     private $contentTypeService;
 
+    /** @var string */
+    private $fieldTypeIdentifier;
+
     public function __construct(
         FieldDefinitionMapper $innerMapper,
         NameHelper $nameHelper,
-        ContentTypeService $contentTypeService
+        ContentTypeService $contentTypeService,
+        string $fieldTypeIdentifier
     ) {
         parent::__construct($innerMapper);
         $this->nameHelper = $nameHelper;
         $this->contentTypeService = $contentTypeService;
+        $this->fieldTypeIdentifier = $fieldTypeIdentifier;
     }
 
     public function mapToFieldValueType(FieldDefinition $fieldDefinition): ?string
@@ -38,7 +43,26 @@ final class ContentQueryFieldDefinitionMapper extends DecoratingFieldDefinitionM
 
         $fieldSettings = $fieldDefinition->getFieldSettings();
 
-        return '[' . $this->getDomainTypeName($fieldSettings['ReturnedType']) . ']';
+        if ($fieldSettings['EnablePagination']) {
+            return $this->nameValueConnectionType($fieldSettings['ReturnedType']);
+        } else {
+            return '[' . $this->nameValueType($fieldSettings['ReturnedType']) . ']';
+        }
+    }
+
+    public function mapToFieldValueResolver(FieldDefinition $fieldDefinition): ?string
+    {
+        if (!$this->canMap($fieldDefinition)) {
+            return parent::mapToFieldValueType($fieldDefinition);
+        }
+
+        $fieldSettings = $fieldDefinition->getFieldSettings();
+
+        if ($fieldSettings['EnablePagination']) {
+            return '@=resolver("QueryFieldValueConnection", [args, field, content])';
+        } else {
+            return '@=resolver("QueryFieldValue", [field, content])';
+        }
     }
 
     public function mapToFieldDefinitionType(FieldDefinition $fieldDefinition): ?string
@@ -50,14 +74,34 @@ final class ContentQueryFieldDefinitionMapper extends DecoratingFieldDefinitionM
         return 'ContentQueryFieldDefinition';
     }
 
-    protected function getFieldTypeIdentifier(): string
+    public function mapToFieldValueArgsBuilder(FieldDefinition $fieldDefinition): ?string
     {
-        return 'ezcontentquery';
+        if (!$this->canMap($fieldDefinition)) {
+            return parent::mapToFieldValueArgsBuilder($fieldDefinition);
+        }
+
+        if ($fieldDefinition->fieldSettings['EnablePagination']) {
+            return 'Relay::Connection';
+        } else {
+            return null;
+        }
     }
 
-    private function getDomainTypeName($typeIdentifier)
+    protected function getFieldTypeIdentifier(): string
+    {
+        return $this->fieldTypeIdentifier;
+    }
+
+    private function nameValueType($typeIdentifier): string
     {
         return $this->nameHelper->domainContentName(
+            $this->contentTypeService->loadContentTypeByIdentifier($typeIdentifier)
+        );
+    }
+
+    private function nameValueConnectionType($typeIdentifier): string
+    {
+        return $this->nameHelper->domainContentConnection(
             $this->contentTypeService->loadContentTypeByIdentifier($typeIdentifier)
         );
     }

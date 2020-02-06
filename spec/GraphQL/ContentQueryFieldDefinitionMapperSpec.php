@@ -34,7 +34,7 @@ class ContentQueryFieldDefinitionMapperSpec extends ObjectBehavior
             ->domainContentName($contentType)
             ->willReturn(self::GRAPHQL_TYPE);
 
-        $this->beConstructedWith($innerMapper, $nameHelper, $contentTypeService);
+        $this->beConstructedWith($innerMapper, $nameHelper, $contentTypeService, self::FIELD_TYPE_IDENTIFIER);
     }
 
     function it_is_initializable()
@@ -79,24 +79,38 @@ class ContentQueryFieldDefinitionMapperSpec extends ObjectBehavior
             ->shouldBe('FieldValue');
     }
 
-    function it_delegates_the_value_resolver_to_the_parent_mapper(FieldDefinitionMapper $innerMapper)
+    function it_maps_the_field_value_when_pagination_is_disabled(FieldDefinitionMapper $innerMapper)
     {
         $fieldDefinition = $this->fieldDefinition();
-        $innerMapper->mapToFieldValueResolver($fieldDefinition)->willReturn('resolver');
+        $innerMapper->mapToFieldValueResolver($fieldDefinition)->shouldNotBeCalled();
         $this
             ->mapToFieldValueResolver($fieldDefinition)
-            ->shouldBe('resolver');
+            ->shouldBe('@=resolver("QueryFieldValue", [field, content])');
+    }
+
+    function it_maps_the_field_value_when_pagination_is_enabled(FieldDefinitionMapper $innerMapper)
+    {
+        $fieldDefinition = $this->fieldDefinition(true);
+        $innerMapper->mapToFieldValueResolver($fieldDefinition)->shouldNotBeCalled();
+        $this
+            ->mapToFieldValueResolver($fieldDefinition)
+            ->shouldBe('@=resolver("QueryFieldValueConnection", [args, field, content])');
     }
 
     /**
+     * @param bool $enablePagination
+     *
      * @return FieldDefinition
      */
-    private function fieldDefinition(): FieldDefinition
+    private function fieldDefinition(bool $enablePagination = false): FieldDefinition
     {
         return new FieldDefinition([
             'identifier' => self::FIELD_IDENTIFIER,
             'fieldTypeIdentifier' => self::FIELD_TYPE_IDENTIFIER,
-            'fieldSettings' => ['ReturnedType' => self::RETURNED_CONTENT_TYPE_IDENTIFIER]
+            'fieldSettings' => [
+                'ReturnedType' => self::RETURNED_CONTENT_TYPE_IDENTIFIER,
+                'EnablePagination' => $enablePagination
+             ]
         ]);
     }
 

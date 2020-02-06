@@ -32,4 +32,8 @@ interface QueryFieldServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function countContentItems(Content $content, string $fieldDefinitionIdentifier): int;
+
+    public function loadContentItemsSlice(Content $content, string $fieldDefinitionIdentifier, int $offset, int $limit): iterable;
+
+    public function getPaginationConfiguration(Content $content, string $fieldDefinitionIdentifier): int;
 }

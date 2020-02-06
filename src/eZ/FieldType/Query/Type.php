@@ -25,6 +25,8 @@ final class Type extends FieldType
         'QueryType' => ['type' => 'string', 'default' => ''],
         'Parameters' => ['type' => 'array', 'default' => []],
         'ReturnedType' => ['type' => 'string', 'default' => ''],
+        'EnablePagination' => ['type' => 'boolean', 'default' => true],
+        'ItemsPerPage' => ['type' => 'integer', 'default' => 10],
     ];
 
     /** @var \eZ\Publish\Core\QueryType\QueryTypeRegistry */
@@ -212,6 +214,18 @@ final class Type extends FieldType
                 $this->contentTypeService->loadContentTypeByIdentifier($fieldSettings['ReturnedType']);
             } catch (NotFoundException $e) {
                 $errors[] = new ValidationError('The selected returned type could not be loaded');
+            }
+        }
+
+        if (isset($fieldSettings['EnablePagination'])) {
+            if (!is_bool($fieldSettings['EnablePagination'])) {
+                $errors[] = new ValidationError('EnablePagination is not a boolean');
+            }
+        }
+
+        if (isset($fieldSettings['ItemsPerPage'])) {
+            if (!is_numeric($fieldSettings['ItemsPerPage'])) {
+                $errors[] = new ValidationError('ItemsPerPage is not an integer');
             }
         }
 

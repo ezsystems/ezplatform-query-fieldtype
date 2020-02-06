@@ -13,7 +13,7 @@ use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued;
 use eZ\Publish\Core\MVC\Symfony\View\ContentValueView;
 use eZ\Publish\Core\MVC\Symfony\View\View;
 
-class FieldDefinitionIdentifierMatcher extends MultipleValued
+final class FieldDefinitionIdentifierMatcher extends MultipleValued
 {
     /**
      * {@inheritdoc}
