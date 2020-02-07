@@ -105,8 +105,10 @@ class QueryResultsInjector implements EventSubscriberInterface
         if ($paginationLimit !== 0 && $disablePagination !== true) {
             if (!$this->queryFieldService instanceof QueryFieldPaginationService) {
                 throw new \Exception(
-                    "Pagination was requested, but the QueryFieldService isn't an instance of %s",
-                    QueryFieldPaginationService::class
+                    sprintf(
+                        "Pagination was requested, but the QueryFieldService isn't an instance of %s",
+                        QueryFieldPaginationService::class
+                    )
                 );
             }
 
