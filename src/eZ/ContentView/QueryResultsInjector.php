@@ -8,7 +8,6 @@ namespace EzSystems\EzPlatformQueryFieldType\eZ\ContentView;
 
 use eZ\Publish\Core\MVC\Symfony\View\Event\FilterViewParametersEvent;
 use eZ\Publish\Core\MVC\Symfony\View\ViewEvents;
-use EzSystems\EzPlatformQueryFieldType\API\QueryFieldPaginationService;
 use EzSystems\EzPlatformQueryFieldType\API\QueryFieldService;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -76,12 +75,7 @@ final class QueryResultsInjector implements EventSubscriberInterface
         $viewParameters = $event->getBuilderParameters();
         $fieldDefinitionIdentifier = $viewParameters['queryFieldDefinitionIdentifier'];
 
-        $paginationLimit = false;
-
-        if ($this->queryFieldService instanceof QueryFieldPaginationService) {
-            $paginationLimit = $this->queryFieldService->getPaginationConfiguration($content, $fieldDefinitionIdentifier);
-        }
-
+        $paginationLimit = $this->queryFieldService->getPaginationConfiguration($content, $fieldDefinitionIdentifier);
         $enablePagination = ($viewParameters['enablePagination'] === true);
         $disablePagination = ($viewParameters['disablePagination'] === true);
 
@@ -103,13 +97,6 @@ final class QueryResultsInjector implements EventSubscriberInterface
         }
 
         if ($paginationLimit !== 0 && $disablePagination !== true) {
-            if (!$this->queryFieldService instanceof QueryFieldPaginationService) {
-                throw new \Exception(
-                    "Pagination was requested, but the QueryFieldService isn't an instance of %s",
-                    QueryFieldPaginationService::class
-                );
-            }
-
             $request = $this->requestStack->getMasterRequest();
 
             $queryParameters = $view->hasParameter('query') ? $view->getParameter('query') : [];

@@ -6,7 +6,6 @@
  */
 namespace EzSystems\EzPlatformQueryFieldType\GraphQL;
 
-use EzSystems\EzPlatformQueryFieldType\API\QueryFieldPaginationService;
 use EzSystems\EzPlatformQueryFieldType\API\QueryFieldServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use EzSystems\EzPlatformGraphQL\GraphQL\Value\Field;
@@ -30,10 +29,6 @@ final class QueryFieldResolver
 
     public function resolveQueryFieldConnection(Argument $args, Field $field, Content $content)
     {
-        if (!$this->queryFieldService instanceof QueryFieldPaginationService) {
-            throw new \Exception("The QueryFieldService isn't able to handle pagination, this should not happen");
-        }
-
         if (!isset($args['first'])) {
             $args['first'] = $this->queryFieldService->getPaginationConfiguration($content, $field->fieldDefIdentifier);
         }
