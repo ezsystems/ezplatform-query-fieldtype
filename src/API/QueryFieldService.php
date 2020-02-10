@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\QueryType\QueryTypeRegistry;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
@@ -168,8 +169,16 @@ final class QueryFieldService implements QueryFieldServiceInterface
      */
     private function loadFieldDefinition(Content $content, string $fieldDefinitionIdentifier): FieldDefinition
     {
-        return $fieldDefinition = $this
-            ->contentTypeService->loadContentType($content->contentInfo->contentTypeId)
-            ->getFieldDefinition($fieldDefinitionIdentifier);
+        $contentType = $this->contentTypeService->loadContentType($content->contentInfo->contentTypeId);
+        $fieldDefinition = $contentType->getFieldDefinition($fieldDefinitionIdentifier);
+
+        if ($fieldDefinition === null) {
+            throw new NotFoundException(
+                'Query field definition',
+                $contentType->identifier . '/' . $fieldDefinitionIdentifier
+            );
+        }
+
+        return $fieldDefinition;
     }
 }
