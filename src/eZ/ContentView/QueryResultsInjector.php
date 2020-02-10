@@ -102,12 +102,12 @@ class QueryResultsInjector implements EventSubscriberInterface
             throw new \InvalidArgumentException("The 'itemsPerPage' parameter must be given with a positive integer value if 'enablePagination' is set");
         }
 
-        if ($paginationLimit !== 0 && $disablePagination !== true) {
+        if ($paginationLimit !== false && $paginationLimit !== 0 && $disablePagination !== true) {
             if (!$this->queryFieldService instanceof QueryFieldPaginationService) {
-                throw new \Exception(
+                throw new \Exception(sprintf(
                     "Pagination was requested, but the QueryFieldService isn't an instance of %s",
                     QueryFieldPaginationService::class
-                );
+                ));
             }
 
             $request = $this->requestStack->getMasterRequest();
