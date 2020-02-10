@@ -6,4 +6,6 @@ services:
 
     EzSystems\EzPlatformQueryFieldType\Controller\QueryFieldRestController: ~
 
+    EzSystems\EzPlatformQueryFieldType\API\QueryFieldServiceInterface: '@EzSystems\EzPlatformQueryFieldType\API\QueryFieldService'
+
     EzSystems\EzPlatformQueryFieldType\API\QueryFieldService: ~

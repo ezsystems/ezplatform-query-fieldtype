@@ -25,6 +25,7 @@ class QueryFieldServiceSpec extends ObjectBehavior
 
     private $searchResult;
     private $searchHits;
+    private $totalCount = 0;
 
     function let(
         SearchService $searchService,
@@ -34,7 +35,7 @@ class QueryFieldServiceSpec extends ObjectBehavior
         QueryType $queryType
     ) {
         $this->searchHits = [];
-        $this->searchResult = new SearchResult(['searchHits' => $this->searchHits]);
+        $this->searchResult = new SearchResult(['searchHits' => $this->searchHits, 'totalCount' => $this->totalCount]);
 
         $parameters = [
             'param1' => 'value1',
@@ -71,6 +72,11 @@ class QueryFieldServiceSpec extends ObjectBehavior
     function it_loads_items_from_a_query_field_for_a_given_content_item()
     {
         $this->loadContentItems($this->getContent(), self::FIELD_DEFINITION_IDENTIFIER)->shouldBe($this->searchHits);
+    }
+
+    function it_counts_items_from_a_query_field_for_a_given_content_item()
+    {
+        $this->countContentItems($this->getContent(), self::FIELD_DEFINITION_IDENTIFIER)->shouldBe($this->totalCount);
     }
 
     /**
