@@ -8,7 +8,7 @@ namespace EzSystems\EzPlatformQueryFieldType\eZ\ContentView;
 
 use eZ\Publish\Core\MVC\Symfony\View\Event\FilterViewParametersEvent;
 use eZ\Publish\Core\MVC\Symfony\View\ViewEvents;
-use EzSystems\EzPlatformQueryFieldType\API\QueryFieldService;
+use EzSystems\EzPlatformQueryFieldType\API\QueryFieldServiceInterface;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -24,7 +24,7 @@ final class QueryResultsInjector implements EventSubscriberInterface
     /** @var \Symfony\Component\HttpFoundation\RequestStack */
     private $requestStack;
 
-    public function __construct(QueryFieldService $queryFieldService, array $views, RequestStack $requestStack)
+    public function __construct(QueryFieldServiceInterface $queryFieldService, array $views, RequestStack $requestStack)
     {
         if (!isset($views['item']) || !isset($views['field'])) {
             throw new \InvalidArgumentException("Both 'item' and 'field' views must be provided");
@@ -84,7 +84,7 @@ final class QueryResultsInjector implements EventSubscriberInterface
             throw new \InvalidArgumentException("the 'enablePagination' and 'disablePagination' parameters can not both be true");
         }
 
-        if (is_numeric($viewParameters['itemsPerPage'])) {
+        if (isset($viewParameters['itemsPerPage']) && is_numeric($viewParameters['itemsPerPage'])) {
             // @todo custom exception
             if ($viewParameters['itemsPerPage'] <= 0) {
                 throw new \InvalidArgumentException('itemsPerPage must be a positive integer');
