@@ -7,12 +7,12 @@
 namespace EzSystems\EzPlatformQueryFieldType\eZ\ContentView;
 
 use eZ\Publish\API\Repository\Values\Content\Content;
-use EzSystems\EzPlatformQueryFieldType\API\QueryFieldService;
+use EzSystems\EzPlatformQueryFieldType\API\QueryFieldServiceInterface;
 use Pagerfanta\Adapter\AdapterInterface;
 
 final class QueryResultsPagerFantaAdapter implements AdapterInterface
 {
-    /** @var \EzSystems\EzPlatformQueryFieldType\API\QueryFieldService */
+    /** @var \EzSystems\EzPlatformQueryFieldType\API\QueryFieldServiceInterface */
     private $queryFieldService;
 
     /** @var \eZ\Publish\API\Repository\Values\Content\Content */
@@ -22,7 +22,7 @@ final class QueryResultsPagerFantaAdapter implements AdapterInterface
     private $fieldDefinitionIdentifier;
 
     public function __construct(
-        QueryFieldService $queryFieldService,
+        QueryFieldServiceInterface $queryFieldService,
         Content $content,
         string $fieldDefinitionIdentifier)
     {
