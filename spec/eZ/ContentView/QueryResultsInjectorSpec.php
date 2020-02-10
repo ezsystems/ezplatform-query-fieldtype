@@ -8,10 +8,12 @@ use eZ\Publish\Core\MVC\Symfony\View\ViewEvents;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use EzSystems\EzPlatformQueryFieldType\API\QueryFieldServiceInterface;
 use EzSystems\EzPlatformQueryFieldType\eZ\ContentView\QueryResultsInjector;
+use Pagerfanta\Pagerfanta;
 use PhpSpec\ObjectBehavior;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Prophecy\Argument;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Webmozart\Assert\Assert;
 
 class QueryResultsInjectorSpec extends ObjectBehavior
 {
@@ -21,6 +23,30 @@ class QueryResultsInjectorSpec extends ObjectBehavior
     const VIEWS = ['field' => self::FIELD_VIEW, 'item' => self::ITEM_VIEW];
     const FIELD_DEFINITION_IDENTIFIER = 'query_field';
 
+    /** @var \eZ\Publish\Core\MVC\Symfony\View\ContentView */
+    private $view;
+
+    /** @var \eZ\Publish\Core\MVC\Symfony\View\Event\FilterViewParametersEvent */
+    private $event;
+
+    public function __construct()
+    {
+        $this->view = new ContentView(
+            null,
+            [],
+            self::FIELD_VIEW,
+        );
+        $this->view->setContent($this->createContentItem());
+        $this->event = new FilterViewParametersEvent(
+            $this->view,
+            [
+                'queryFieldDefinitionIdentifier' => self::FIELD_DEFINITION_IDENTIFIER,
+                'enablePagination' => false,
+                'disablePagination' => false
+            ]
+        );
+    }
+
     function it_is_initializable()
     {
         $this->shouldHaveType(QueryResultsInjector::class);
@@ -29,22 +55,10 @@ class QueryResultsInjectorSpec extends ObjectBehavior
     function let(
         QueryFieldServiceInterface $queryFieldService,
         FilterViewParametersEvent $event,
-        ParameterBagInterface $parameterBag,
-        ContentView $view,
         RequestStack $requestStack
     )
     {
         $this->beConstructedWith($queryFieldService, self::VIEWS, $requestStack);
-        $event->getView()->willReturn($view);
-        $view->getContent()->willReturn($this->createContentItem());
-        $event->getParameterBag()->willReturn($parameterBag);
-        $event->getBuilderParameters()->willReturn(
-            [
-                'queryFieldDefinitionIdentifier' => self::FIELD_DEFINITION_IDENTIFIER,
-                'enablePagination' => false,
-                'disablePagination' => false
-            ]
-        );
     }
 
     function it_throws_an_InvalidArgumentException_if_no_item_view_is_provided(
@@ -75,23 +89,17 @@ class QueryResultsInjectorSpec extends ObjectBehavior
         $this->getSubscribedEvents()->shouldSubscribeTo(ViewEvents::FILTER_VIEW_PARAMETERS);
     }
 
-    function it_does_nothing_for_non_field_views(FilterViewParametersEvent $event, ContentView $view)
+    function it_does_nothing_for_non_field_views(QueryFieldServiceInterface $queryFieldService)
     {
-        $view->getViewType()->willReturn(self::OTHER_VIEW);
-        $this->injectQueryResults($event);
-        $event->getParameterBag()->shouldNotHaveBeenCalled();
+        $this->event->getView()->setViewType(self::OTHER_VIEW);
+        $this->injectQueryResults($this->event);
+        $queryFieldService->getPaginationConfiguration(Argument::any())->shouldNotHaveBeenCalled();
     }
 
-    function it_adds_the_query_results_for_the_field_view(
-        FilterViewParametersEvent $event,
-        ParameterBagInterface $parameterBag,
-        ContentView $view,
-        QueryFieldServiceInterface $queryFieldService
-    )
+    function it_adds_the_query_results_for_the_field_view_without_pagination(QueryFieldServiceInterface $queryFieldService)
     {
         $content = $this->createContentItem();
 
-        $view->getViewType()->willReturn(self::FIELD_VIEW);
         $queryFieldService
             ->getPaginationConfiguration($content, self::FIELD_DEFINITION_IDENTIFIER)
             ->willReturn(0);
@@ -101,15 +109,44 @@ class QueryResultsInjectorSpec extends ObjectBehavior
             self::FIELD_DEFINITION_IDENTIFIER
         )->willReturn($this->getResults());
 
-        $parameterBag->add(
-            [
-                'itemViewType' => self::ITEM_VIEW,
-                'items' => $this->getResults(),
-                'isPaginationEnabled' => false
-            ]
-        )->shouldBeCalled();
+        $this->injectQueryResults($this->event);
 
-        $this->injectQueryResults($event);
+        $parameters = $this->event->getParameterBag();
+        Assert::true($parameters->has('itemViewType'));
+        Assert::eq($parameters->get('itemViewType'), self::ITEM_VIEW);
+        Assert::true($parameters->has('isPaginationEnabled'));
+        Assert::eq($parameters->get('isPaginationEnabled'), false);
+        Assert::true($parameters->has('items'));
+        Assert::eq($parameters->get('items'), $this->getResults());
+    }
+
+    function it_adds_the_query_results_for_the_field_view_with_pagination(
+        FilterViewParametersEvent $event,
+        QueryFieldServiceInterface $queryFieldService
+    )
+    {
+        $content = $this->createContentItem();
+
+        $queryFieldService
+            ->getPaginationConfiguration($content, self::FIELD_DEFINITION_IDENTIFIER)
+            ->willReturn(5);
+
+        $queryFieldService->loadContentItems(
+            $content,
+            self::FIELD_DEFINITION_IDENTIFIER
+        )->willReturn($this->getResults());
+
+        $this->injectQueryResults($this->event);
+
+        $parameters = $this->event->getParameterBag();
+        Assert::true($parameters->has('itemViewType'));
+        Assert::eq($parameters->get('itemViewType'), self::ITEM_VIEW);
+        Assert::true($parameters->has('isPaginationEnabled'));
+        Assert::eq($parameters->get('isPaginationEnabled'), true);
+        Assert::true($parameters->has('pageParameter'));
+        Assert::eq($parameters->get('pageParameter'), '[' . self::FIELD_DEFINITION_IDENTIFIER . '_page]');
+        Assert::true($parameters->has('items'));
+        Assert::isInstanceOf($parameters->get('items'), Pagerfanta::class);
     }
 
     function getMatchers(): array
