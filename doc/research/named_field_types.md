@@ -6,14 +6,14 @@ A higher level version of the query field type. Through configuration, queries a
 
 ```
 ezplatform:
-  named_query_types:
+  queries:
     children:
-      query_type: eZ:Children
+      type: eZ:Children
       default_parameters:
         location: '@=mainLocation'
         type: '@=returnedType'
     relating_content:
-      query_type: eZ:ContentRelatedTo
+      type: eZ:ContentRelatedTo
       default_parameters:
         to_content: '@=content'
         type: '@=returnedType'
@@ -32,11 +32,12 @@ That extra layer is a good place for translating parameters.
 ### Customization
 
 Custom templates could be associated to named query field types, giving extra flexibility.
+It would allow to use or extend the same template when the same list type is used, without
+template configuration.
 
 ### Extensibiliy
 
 Named queries make it easy for 3rd parties to add their own field types without developing any:
 
 - define new query types, with custom criteria if needed
-- define named queries
-
+- define named queries that would show up as field types, without implementing an actual field type
