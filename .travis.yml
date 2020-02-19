@@ -1,8 +1,6 @@
 language: php
-
 php:
   - 7.1
-  - 7.3
 
 branches:
   only:
@@ -14,17 +12,31 @@ cache:
   directories:
     - $HOME/.composer/cache/files
 
-env:
-  matrix:
-    - TARGET="phpspec"
-    - TARGET="codestyle"
 
-before_script:
+matrix:
+  include:
+    - name: "Code Style Check"
+      env: TARGET="codestyle"
+    - name: "phpspec on PHP7.1"
+      php: 7.1
+      env: TARGET="phpspec"
+    - name: "phpspec on PHP7.3"
+      php: 7.3
+      env: TARGET="phpspec"
+
+install:
+  # Disable XDebug for performance
+  - phpenv config-rm xdebug.ini
   - COMPOSER_MEMORY_LIMIT=-1 composer install
 
 script:
   - if [ "$TARGET" == "phpspec" ] ; then ./vendor/bin/phpspec run --format=pretty; fi
   - if [ "$TARGET" == "codestyle" ] ; then ./vendor/bin/php-cs-fixer fix --dry-run -v --show-progress=estimating; fi
 
-notification:
-  email: false
+notifications:
+  slack:
+    rooms:
+      - secure: wwZOJHgyHPeco4yO1f1d644xAUGu56WFhBoFQqEt6NqeQIwt1fX36Q6D9MwAqOwpERkLeckTYBCubKIZZu3tUU5xeQpPWqBIwyin96oKGJ2nk51BWS2cih5ZGP6N47//pPoBpzk6YArH823tJeZibX680NAzkj1604XQIu4NwSkLysB7pTLyY6u/TbnOEVjQknAUjGNMIf6xn6zQx2QxqWA2HWneYcZ0ttI3BeEz9aTL+w3hiYiqzKJ5TumVb3cxWaCP5vzchAFzkJ6a0bMsNvICnny/y6efViVXCL5uN0kfydGPS84dHf0CjKbCSFmc9Eu/3mIHZ1QgfkP3DqeqLmO/aKz+qlF6zHLXg4SSXZ2ua20Hz1r7ooeGYpLEe+nIiriAr0SSXXLXx0fcyNTx5LspAMrP35MVxJhK5IUFplu+6QSq3ZZwwU4DiF+DZjmEcZw2MVp6AMR9UXfhPp2BXPmnbLUuFvJSiq+azhtPNjwTctcKYSziZvQx7cITwKgMkv6hJdWpEGLPVwHKFiwclCLcBhU13wpIIZtJdlc6lIdYTHOGitIyUf85bomNYL2nb4uncPdVyWU24Zqk7Pll3vY72JmR3BcY4SAGhMjmZrtOiLOeL3AWLDgO1wm82EkU1Uu9aZCatPCdV81lel8DcyN9B7/W8MzOXbfwETebazg=
+    on_success: change
+    on_failure: always
+    on_pull_requests: false
