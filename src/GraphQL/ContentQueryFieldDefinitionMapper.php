@@ -49,7 +49,7 @@ final class ContentQueryFieldDefinitionMapper extends DecoratingFieldDefinitionM
     public function mapToFieldValueResolver(FieldDefinition $fieldDefinition): ?string
     {
         if (!$this->canMap($fieldDefinition)) {
-            return parent::mapToFieldValueType($fieldDefinition);
+            return parent::mapToFieldValueResolver($fieldDefinition);
         }
 
         $fieldSettings = $fieldDefinition->getFieldSettings();
