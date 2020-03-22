@@ -20,6 +20,7 @@ use Prophecy\Argument;
 class QueryFieldServiceSpec extends ObjectBehavior
 {
     const CONTENT_TYPE_ID = 1;
+    const LOCATION_ID = 1;
     const QUERY_TYPE_IDENTIFIER = 'query_type_identifier';
     const FIELD_DEFINITION_IDENTIFIER = 'test';
 
@@ -55,8 +56,12 @@ class QueryFieldServiceSpec extends ObjectBehavior
                 ]),
             ]),
         ]);
+        $location = new Values\Content\Location([
+            'id' => self::LOCATION_ID
+        ]);
 
         $contentTypeService->loadContentType(self::CONTENT_TYPE_ID)->willReturn($contentType);
+        $locationService->loadLocation(self::LOCATION_ID)->willReturn($location);
         $queryTypeRegistry->getQueryType(self::QUERY_TYPE_IDENTIFIER)->willReturn($queryType);
         $queryType->getQuery(Argument::any())->willReturn(new ApiQuery());
         // @todo this should fail. It does not.
@@ -86,7 +91,10 @@ class QueryFieldServiceSpec extends ObjectBehavior
     {
         return new Values\Content\Content([
             'versionInfo' => new Values\Content\VersionInfo([
-                'contentInfo' => new ContentInfo(['contentTypeId' => self::CONTENT_TYPE_ID]),
+                'contentInfo' => new ContentInfo([
+                    'contentTypeId' => self::CONTENT_TYPE_ID,
+                    'mainLocationId' => self::LOCATION_ID,
+                ]),
             ])
         ]);
     }
