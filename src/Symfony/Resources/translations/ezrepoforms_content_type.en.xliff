@@ -6,6 +6,16 @@
       <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
     </header>
     <body>
+      <trans-unit id="ba88fdd9f81d0ffddae13dde5e0969d2b16057b1" resname="Enable pagination">
+        <source>Enable pagination</source>
+        <target state="new">Enable pagination</target>
+        <note>key: Enable pagination</note>
+      </trans-unit>
+      <trans-unit id="6a013f3591caa3ee3f7742743ed123abf4cf8af0" resname="Items per page">
+        <source>Items per page</source>
+        <target state="new">Items per page</target>
+        <note>key: Items per page</note>
+      </trans-unit>
       <trans-unit id="a975eea30db9fa05003e3b5097688bd49ec7e01b" resname="Parameters">
         <source>Parameters</source>
         <target state="new">Parameters</target>
