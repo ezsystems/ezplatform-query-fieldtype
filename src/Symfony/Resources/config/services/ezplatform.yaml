@@ -38,3 +38,8 @@ services:
             $views: { field: '%ezcontentquery_field_view%', item: '%ezcontentquery_item_view%' }
         tags:
             - { name: kernel.event_subscriber }
+
+    ezpublish.fieldType.indexable.unindexed:
+        class: eZ\Publish\Core\FieldType\Unindexed
+        tags:
+            - {name: ezplatform.field_type.indexable, alias: ezcontentquery}
