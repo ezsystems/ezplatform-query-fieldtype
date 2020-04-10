@@ -26,7 +26,8 @@ services:
         tags:
             - { name: ezpublish.storageEngine.legacy.converter, alias: '%ezcontentquery_identifier%' }
 
-    EzSystems\EzPlatformQueryFieldType\eZ\FieldType\Query\SearchField:
+    ezplatform.query_field_type.not_indexable:
+        class: eZ\Publish\Core\FieldType\Unindexed
         tags:
             - { name: ezpublish.fieldType.indexable, alias: '%ezcontentquery_identifier%' }
 
