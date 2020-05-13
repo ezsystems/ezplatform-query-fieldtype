@@ -6,8 +6,12 @@
  */
 namespace EzSystems\EzPlatformQueryFieldType\Symfony\DependencyInjection;
 
+use EzSystems\EzPlatformQueryFieldType\eZ\FieldType\NamedQuery;
+use EzSystems\EzPlatformQueryFieldType\eZ\Persistence\Legacy\Content\FieldValue\Converter\QueryConverter;
 use Symfony\Component\Config\Resource\FileResource;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Config\FileLocator;
@@ -27,6 +31,7 @@ final class EzSystemsEzPlatformQueryFieldTypeExtension extends Extension impleme
         $loader->load('services.yml');
 
         $this->addContentViewConfig($container);
+        $this->handleNamedTypes($container);
     }
 
     public function prepend(ContainerBuilder $container)
@@ -99,5 +104,52 @@ final class EzSystemsEzPlatformQueryFieldTypeExtension extends Extension impleme
         $config = Yaml::parse(file_get_contents($configFile));
         $container->prependExtensionConfig('ezpublish', $config);
         $container->addResource(new FileResource($configFile));
+    }
+
+    private function handleNamedTypes(ContainerBuilder $container)
+    {
+        if (!$container->hasParameter('ezcontentquery_named')) {
+            return;
+        }
+        
+        foreach ($container->getParameter('ezcontentquery_named') as $name => $config) {
+            // @todo validate name syntax
+            $fieldTypeIdentifier = 'ezcontentquery_' . $name;
+            
+            $this->defineFieldTypeService($container, $fieldTypeIdentifier, $config);
+            $this->tagFieldTypeConverter($container, $fieldTypeIdentifier);
+            $this->tagFieldTypeFormMapper($container, $config, $fieldTypeIdentifier);
+        }
+    }
+
+    private function defineFieldTypeService(ContainerBuilder $container, string $fieldTypeIdentifier, array $config)
+    {
+        $serviceId = NamedQuery\Type::class . '\\' . $fieldTypeIdentifier;
+
+        $definition = new ChildDefinition('ezpublish.fieldType');
+        $definition->setClass(NamedQuery\Type::class);
+        $definition->setAutowired(true);
+        $definition->setPublic(true);
+        $definition->addTag('ezpublish.fieldType', ['alias' => $fieldTypeIdentifier]);
+        $definition->setArgument('$identifier', $fieldTypeIdentifier);
+        $definition->setArgument('$config', $config);
+        $container->setDefinition($serviceId, $definition);
+    }
+
+    private function tagFieldTypeConverter(ContainerBuilder $container, string $fieldTypeIdentifier)
+    {
+        $container->getDefinition(QueryConverter::class)->addTag(
+            'ezpublish.storageEngine.legacy.converter',
+            ['alias' => $fieldTypeIdentifier]
+        );
+    }
+
+    private function tagFieldTypeFormMapper(ContainerBuilder $container, array $config, string $fieldTypeIdentifier)
+    {
+        $definition = new Definition(NamedQuery\Mapper::class);
+        $definition->addTag('ez.fieldFormMapper.definition', ['fieldType' => $fieldTypeIdentifier]);
+        $definition->setAutowired(true);
+        $definition->setArgument('$queryType', $config['query_type']);
+        $container->setDefinition(NamedQuery\Mapper::class . '\\' . $fieldTypeIdentifier, $definition);
     }
 }
