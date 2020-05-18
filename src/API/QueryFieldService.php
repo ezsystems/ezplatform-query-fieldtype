@@ -10,6 +10,7 @@ use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\SearchService;
 use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
@@ -59,12 +60,7 @@ final class QueryFieldService implements QueryFieldServiceInterface, QueryFieldP
     {
         $query = $this->prepareQuery($content, $fieldDefinitionIdentifier);
 
-        return array_map(
-            function (SearchHit $searchHit) {
-                return $searchHit->valueObject;
-            },
-            $this->searchService->findContent($query)->searchHits
-        );
+        return $this->runQuery($query);
     }
 
     public function countContentItems(Content $content, string $fieldDefinitionIdentifier): int
@@ -72,7 +68,7 @@ final class QueryFieldService implements QueryFieldServiceInterface, QueryFieldP
         $query = $this->prepareQuery($content, $fieldDefinitionIdentifier);
         $query->limit = 0;
 
-        return $this->searchService->findContent($query)->totalCount;
+        return $this->runCountQuery($query);
     }
 
     public function loadContentItemsSlice(Content $content, string $fieldDefinitionIdentifier, int $offset, int $limit): iterable
@@ -81,12 +77,7 @@ final class QueryFieldService implements QueryFieldServiceInterface, QueryFieldP
         $query->offset = $offset;
         $query->limit = $limit;
 
-        return array_map(
-            function (SearchHit $searchHit) {
-                return $searchHit->valueObject;
-            },
-            $this->searchService->findContent($query)->searchHits
-        );
+        return $this->runQuery($query);
     }
 
     public function getPaginationConfiguration(Content $content, string $fieldDefinitionIdentifier): int
@@ -180,5 +171,33 @@ final class QueryFieldService implements QueryFieldServiceInterface, QueryFieldP
         }
 
         return $fieldDefinition;
+    }
+
+    private function runQuery(Query $query): iterable
+    {
+        if ($query instanceof LocationQuery) {
+            return array_map(
+                function (SearchHit $searchHit) {
+                    return $searchHit->valueObject->getContent();
+                },
+                $this->searchService->findLocations($query)->searchHits
+            );
+        } else {
+            return array_map(
+                function (SearchHit $searchHit) {
+                    return $searchHit->valueObject;
+                },
+                $this->searchService->findContent($query)->searchHits
+            );
+        }
+    }
+
+    private function runCountQuery(Query $query): int
+    {
+        if ($query instanceof LocationQuery) {
+            return $this->searchService->findLocations($query)->totalCount;
+        } else {
+            return $this->searchService->findContent($query)->totalCount;
+        }
     }
 }

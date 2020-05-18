@@ -9,11 +9,11 @@ use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\SearchService;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Query as ApiQuery;
+use eZ\Publish\API\Repository\Values\Content\LocationQuery as ApiLocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\Core\QueryType\QueryType;
 use eZ\Publish\Core\QueryType\QueryTypeRegistry;
 use eZ\Publish\Core\Repository\Values;
-use EzSystems\EzPlatformGraphQL\GraphQL\Value\Field;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
@@ -61,6 +61,7 @@ class QueryFieldServiceSpec extends ObjectBehavior
         $queryType->getQuery(Argument::any())->willReturn(new ApiQuery());
         // @todo this should fail. It does not.
         $searchService->findContent(Argument::any())->willReturn($this->searchResult);
+        $searchService->findLocations(Argument::any())->willReturn($this->searchResult);
         $this->beConstructedWith($searchService, $contentTypeService, $locationService, $queryTypeRegistry);
     }
 
@@ -77,6 +78,17 @@ class QueryFieldServiceSpec extends ObjectBehavior
     function it_counts_items_from_a_query_field_for_a_given_content_item()
     {
         $this->countContentItems($this->getContent(), self::FIELD_DEFINITION_IDENTIFIER)->shouldBe($this->totalCount);
+    }
+
+    function it_counts_using_findLocations_if_the_Query_is_a_LocationQuery()
+    {
+        $this->loadContentItems($this->getContent(), self::FIELD_DEFINITION_IDENTIFIER);
+    }
+
+    function it_loads_item_using_findLocations_if_the_Query_is_a_LocationQuery(QueryType $queryType)
+    {
+        $queryType->getQuery(Argument::any())->willReturn(new ApiLocationQuery());
+        $this->loadContentItems($this->getContent(), self::FIELD_DEFINITION_IDENTIFIER);
     }
 
     /**
