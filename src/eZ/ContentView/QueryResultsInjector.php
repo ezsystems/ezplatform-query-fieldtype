@@ -7,8 +7,11 @@
 namespace EzSystems\EzPlatformQueryFieldType\eZ\ContentView;
 
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\MVC\Symfony\View\ContentValueView;
+use eZ\Publish\Core\MVC\Symfony\View\LocationValueView;
 use eZ\Publish\Core\MVC\Symfony\View\Event\FilterViewParametersEvent;
 use eZ\Publish\Core\MVC\Symfony\View\ViewEvents;
+use EzSystems\EzPlatformQueryFieldType\API\QueryFieldLocationService;
 use EzSystems\EzPlatformQueryFieldType\API\QueryFieldServiceInterface;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -74,7 +77,14 @@ final class QueryResultsInjector implements EventSubscriberInterface
     private function buildResults(FilterViewParametersEvent $event): iterable
     {
         $view = $event->getView();
-        $content = $view->getContent();
+        if ($view instanceof LocationValueView) {
+            $location = $view->getLocation();
+        }
+
+        if ($view instanceof ContentValueView) {
+            $content = $view->getContent();
+        }
+
         $viewParameters = $event->getBuilderParameters();
         $fieldDefinitionIdentifier = $viewParameters['queryFieldDefinitionIdentifier'];
 
@@ -119,10 +129,19 @@ final class QueryResultsInjector implements EventSubscriberInterface
 
             return $pager;
         } else {
-            return $this->queryFieldService->loadContentItems(
-                $content,
-                $fieldDefinitionIdentifier
-            );
+            if ($this->queryFieldService instanceof QueryFieldLocationService && isset($location)) {
+                return $this->queryFieldService->loadContentItemsForLocation(
+                    $location,
+                    $fieldDefinitionIdentifier
+                );
+            } elseif (isset($content)) {
+                return $this->queryFieldService->loadContentItems(
+                    $content,
+                    $fieldDefinitionIdentifier
+                );
+            } else {
+                throw new \Exception('No content nor location to get query results for');
+            }
         }
     }
 }
