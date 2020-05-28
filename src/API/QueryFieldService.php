@@ -10,6 +10,7 @@ use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\SearchService;
 use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
@@ -21,7 +22,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 /**
  * Executes a query and returns the results.
  */
-final class QueryFieldService implements QueryFieldServiceInterface
+final class QueryFieldService implements QueryFieldServiceInterface, QueryFieldLocationService
 {
     /** @var \eZ\Publish\Core\QueryType\QueryTypeRegistry */
     private $queryTypeRegistry;
@@ -48,29 +49,33 @@ final class QueryFieldService implements QueryFieldServiceInterface
         $this->queryTypeRegistry = $queryTypeRegistry;
     }
 
-    /**
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
-     * @param string $fieldDefinitionIdentifier
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content[]
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
     public function loadContentItems(Content $content, string $fieldDefinitionIdentifier): iterable
     {
-        $query = $this->prepareQuery($content, $fieldDefinitionIdentifier);
+        $query = $this->prepareQuery($content, $content->contentInfo->getMainLocation(), $fieldDefinitionIdentifier);
 
-        return array_map(
-            function (SearchHit $searchHit) {
-                return $searchHit->valueObject;
-            },
-            $this->searchService->findContent($query)->searchHits
-        );
+        return $this->executeQueryAndMapResult($query);
+    }
+
+    public function loadContentItemsForLocation(Location $location, string $fieldDefinitionIdentifier): iterable
+    {
+        $query = $this->prepareQuery($location->getContent(), $location, $fieldDefinitionIdentifier);
+
+        return $this->executeQueryAndMapResult($query);
     }
 
     public function countContentItems(Content $content, string $fieldDefinitionIdentifier): int
     {
-        $query = $this->prepareQuery($content, $fieldDefinitionIdentifier);
+        $query = $this->prepareQuery($content, $content->contentInfo->getMainLocation(), $fieldDefinitionIdentifier);
+        $query->limit = 0;
+
+        $count = $this->searchService->findContent($query)->totalCount - $query->offset;
+
+        return $count < 0 ? 0 : $count;
+    }
+
+    public function countContentItemsForLocation(Location $location, string $fieldDefinitionIdentifier): int
+    {
+        $query = $this->prepareQuery($location->getContent(), $location, $fieldDefinitionIdentifier);
         $query->limit = 0;
 
         $count = $this->searchService->findContent($query)->totalCount - $query->offset;
@@ -80,16 +85,20 @@ final class QueryFieldService implements QueryFieldServiceInterface
 
     public function loadContentItemsSlice(Content $content, string $fieldDefinitionIdentifier, int $offset, int $limit): iterable
     {
-        $query = $this->prepareQuery($content, $fieldDefinitionIdentifier);
-        $query->offset += $offset;
+        $query = $this->prepareQuery($content, $content->contentInfo->getMainLocation(), $fieldDefinitionIdentifier);
+        $query->offset = $offset;
         $query->limit = $limit;
 
-        return array_map(
-            function (SearchHit $searchHit) {
-                return $searchHit->valueObject;
-            },
-            $this->searchService->findContent($query)->searchHits
-        );
+        return $this->executeQueryAndMapResult($query);
+    }
+
+    public function loadContentItemsSliceForLocation(Location $location, string $fieldDefinitionIdentifier, int $offset, int $limit): iterable
+    {
+        $query = $this->prepareQuery($location->getContent(), $location, $fieldDefinitionIdentifier);
+        $query->offset = $offset;
+        $query->limit = $limit;
+
+        return $this->executeQueryAndMapResult($query);
     }
 
     public function getPaginationConfiguration(Content $content, string $fieldDefinitionIdentifier): int
@@ -146,20 +155,10 @@ final class QueryFieldService implements QueryFieldServiceInterface
         return (new ExpressionLanguage())->evaluate(substr($expression, 2), $variables);
     }
 
-    /**
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
-     * @param string $fieldDefinitionIdentifier
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     */
-    private function prepareQuery(Content $content, string $fieldDefinitionIdentifier, array $extraParameters = []): Query
+    private function prepareQuery(Content $content, Location $location, string $fieldDefinitionIdentifier, array $extraParameters = []): Query
     {
         $fieldDefinition = $this->loadFieldDefinition($content, $fieldDefinitionIdentifier);
 
-        $location = $this->locationService->loadLocation($content->contentInfo->mainLocationId);
         $queryType = $this->queryTypeRegistry->getQueryType($fieldDefinition->fieldSettings['QueryType']);
         $parameters = $this->resolveParameters(
             $fieldDefinition->fieldSettings['Parameters'],
@@ -168,7 +167,8 @@ final class QueryFieldService implements QueryFieldServiceInterface
                 [
                     'content' => $content,
                     'contentInfo' => $content->contentInfo,
-                    'mainLocation' => $location,
+                    'location' => $location,
+                    'mainLocation' => $location->id === $content->contentInfo->mainLocationId ? $location : $content->contentInfo->getMainLocation(),
                     'returnedType' => $fieldDefinition->fieldSettings['ReturnedType'],
                 ]
             )
@@ -198,5 +198,20 @@ final class QueryFieldService implements QueryFieldServiceInterface
         }
 
         return $fieldDefinition;
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\Values\Content\Content[]
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    private function executeQueryAndMapResult(Query $query): array
+    {
+        return array_map(
+            static function (SearchHit $searchHit): Content {
+                return $searchHit->valueObject;
+            },
+            $this->searchService->findContent($query)->searchHits
+        );
     }
 }

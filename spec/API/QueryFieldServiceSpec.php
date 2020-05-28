@@ -123,8 +123,37 @@ class QueryFieldServiceSpec extends ObjectBehavior
                 'contentInfo' => new ContentInfo([
                     'contentTypeId' => self::CONTENT_TYPE_ID,
                     'mainLocationId' => self::LOCATION_ID,
+                    'mainLocation' => new Values\Content\Location([
+                        'id' => self::LOCATION_ID,
+                    ]),
                 ]),
             ]),
         ]);
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
+     */
+    private function getContentType(array $parameters, bool $enablePagination = true, $itemsPerPage = 10): \eZ\Publish\API\Repository\Values\ContentType\ContentType
+    {
+        $contentType = new Values\ContentType\ContentType([
+            'fieldDefinitions' => new Values\ContentType\FieldDefinitionCollection([
+                new Values\ContentType\FieldDefinition([
+                    'identifier' => self::FIELD_DEFINITION_IDENTIFIER,
+                    'fieldTypeIdentifier' => 'ezcontentquery',
+                    'fieldSettings' => [
+                        'ReturnedType' => 'folder',
+                        'QueryType' => self::QUERY_TYPE_IDENTIFIER,
+                        'EnablePagination' => $enablePagination,
+                        'ItemsPerPage' => $itemsPerPage,
+                        'Parameters' => $parameters,
+                    ],
+                ]),
+            ]),
+        ]);
+
+        return $contentType;
     }
 }
