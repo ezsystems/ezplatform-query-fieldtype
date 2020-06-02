@@ -4,7 +4,9 @@ services:
         autowire: true
         public: true
 
-    EzSystems\EzPlatformQueryFieldType\Controller\QueryFieldRestController: ~
+    EzSystems\EzPlatformQueryFieldType\Controller\QueryFieldRestController:
+        arguments:
+            $requestParser: '@ezpublish_rest.request_parser'
 
     EzSystems\EzPlatformQueryFieldType\API\QueryFieldService:
         arguments:
