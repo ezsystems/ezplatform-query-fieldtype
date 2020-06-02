@@ -118,11 +118,19 @@ final class QueryResultsInjector implements EventSubscriberInterface
             $pageParam = sprintf('%s_page', $fieldDefinitionIdentifier);
             $page = isset($request) ? $request->get($pageParam, 1) : 1;
 
-            $pager = new Pagerfanta(
-                new QueryResultsPagerFantaAdapter(
-                    $this->queryFieldService, $content, $fieldDefinitionIdentifier
-                )
-            );
+            if (isset($location)) {
+                $pager = new Pagerfanta(
+                    new QueryResultsWithLocationPagerFantaAdapter(
+                        $this->queryFieldService, $location, $fieldDefinitionIdentifier
+                    )
+                );
+            } else {
+                $pager = new Pagerfanta(
+                    new QueryResultsPagerFantaAdapter(
+                        $this->queryFieldService, $content, $fieldDefinitionIdentifier
+                    )
+                );
+            }
 
             $pager->setMaxPerPage($limit);
             $pager->setCurrentPage($page);
