@@ -4,7 +4,8 @@
 {{ render(controller(
     "ez_content:viewAction",
     {
-        "contentId": contentInfo.id,
+        "content": content,
+        "location": location ?? null,
         "queryFieldDefinitionIdentifier": field.fieldDefIdentifier,
         "viewType": ezContentQueryViews['field'],
         "itemViewType": itemViewType|default(ezContentQueryViews['item']),
