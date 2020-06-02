@@ -13,6 +13,8 @@ use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use EzSystems\EzPlatformRest\Exceptions\NotFoundException;
+use EzSystems\EzPlatformRest\RequestParser;
 use EzSystems\EzPlatformRest\Server\Values as RestValues;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -30,16 +32,21 @@ final class QueryFieldRestController
     /** @var \eZ\Publish\API\Repository\LocationService */
     private $locationService;
 
+    /** @var \EzSystems\EzPlatformRest\RequestParser */
+    private $requestParser;
+
     public function __construct(
         QueryFieldService $queryFieldService,
         ContentService $contentService,
         ContentTypeService $contentTypeService,
-        LocationService $locationService
+        LocationService $locationService,
+        RequestParser $requestParser
     ) {
         $this->queryFieldService = $queryFieldService;
         $this->contentService = $contentService;
         $this->contentTypeService = $contentTypeService;
         $this->locationService = $locationService;
+        $this->requestParser = $requestParser;
     }
 
     public function getResults(Request $request, $contentId, $versionNumber, $fieldDefinitionIdentifier): RestValues\ContentList
@@ -47,11 +54,27 @@ final class QueryFieldRestController
         $offset = (int)$request->query->get('offset', 0);
         $limit = (int)$request->query->get('limit', -1);
 
-        $content = $this->contentService->loadContent($contentId, null, $versionNumber);
-        if ($limit === -1 || !method_exists($this->queryFieldService, 'loadContentItemsSlice')) {
-            $items = $this->queryFieldService->loadContentItems($content, $fieldDefinitionIdentifier);
+        if ($request->query->has('location')) {
+            $locationHrefParts = explode('/', $this->requestParser->parseHref($request->query->get('location'), 'locationPath'));
+            $locationId = array_pop($locationHrefParts);
+            $location = $this->locationService->loadLocation($locationId);
+            $content = $location->getContent();
+            if ($content->id !== $contentId) {
+                throw new NotFoundException('No content with that locationId AND contentId was found');
+            }
+            if ($limit === -1) {
+                $items = $this->queryFieldService->loadContentItemsForLocation($location, $fieldDefinitionIdentifier);
+            } else {
+                $items = $this->queryFieldService->loadContentItemsSliceForLocation($location, $fieldDefinitionIdentifier, $offset, $limit);
+            }
         } else {
-            $items = $this->queryFieldService->loadContentItemsSlice($content, $fieldDefinitionIdentifier, $offset, $limit);
+            $location = null;
+            $content = $this->contentService->loadContent($contentId, null, $versionNumber);
+            if ($limit === -1 || !method_exists($this->queryFieldService, 'loadContentItemsSlice')) {
+                $items = $this->queryFieldService->loadContentItems($content, $fieldDefinitionIdentifier);
+            } else {
+                $items = $this->queryFieldService->loadContentItemsSlice($content, $fieldDefinitionIdentifier, $offset, $limit);
+            }
         }
 
         return new RestValues\ContentList(
