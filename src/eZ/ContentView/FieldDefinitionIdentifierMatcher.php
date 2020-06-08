@@ -71,6 +71,14 @@ final class FieldDefinitionIdentifierMatcher extends MultipleValued
             ->getContentTypeService()
             ->loadContentType($view->getContent()->contentInfo->contentTypeId);
 
-        return $this->hasFieldDefinition($contentType);
+        if (!$this->hasFieldDefinition($contentType)) {
+            return false;
+        }
+
+        if (!$view->hasParameter('fieldIdentifier')) {
+            return false;
+        }
+
+        return in_array($view->getParameter('fieldIdentifier'), $this->getValues());
     }
 }
