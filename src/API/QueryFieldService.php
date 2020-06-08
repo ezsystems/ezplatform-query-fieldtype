@@ -119,9 +119,9 @@ final class QueryFieldService implements QueryFieldServiceInterface, QueryFieldP
         return $expressions;
     }
 
-    private function resolveExpression(string $expression, array $variables)
+    private function resolveExpression($expression, array $variables)
     {
-        if (substr($expression, 0, 2) !== '@=') {
+        if (!is_string($expression) || substr($expression, 0, 2) !== '@=') {
             return $expression;
         }
 
