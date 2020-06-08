@@ -96,6 +96,7 @@ class QueryResultsInjectorSpec extends ObjectBehavior
             [
                 'itemViewType' => self::ITEM_VIEW,
                 'items' => $this->getResults(),
+                'fieldIdentifier' => self::FIELD_DEFINITION_IDENTIFIER,
                 'isPaginationEnabled' => false,
             ]
         )->shouldBeCalled();
