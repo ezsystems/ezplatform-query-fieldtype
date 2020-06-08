@@ -72,13 +72,15 @@ final class QueryFieldService implements QueryFieldServiceInterface, QueryFieldP
         $query = $this->prepareQuery($content, $fieldDefinitionIdentifier);
         $query->limit = 0;
 
-        return $this->searchService->findContent($query)->totalCount;
+        $count = $this->searchService->findContent($query)->totalCount - $query->offset;
+
+        return $count < 0 ? 0 : $count;
     }
 
     public function loadContentItemsSlice(Content $content, string $fieldDefinitionIdentifier, int $offset, int $limit): iterable
     {
         $query = $this->prepareQuery($content, $fieldDefinitionIdentifier);
-        $query->offset = $offset;
+        $query->offset += $offset;
         $query->limit = $limit;
 
         return array_map(
