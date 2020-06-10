@@ -3,6 +3,7 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
 
 namespace EzSystems\EzPlatformQueryFieldType\API;
 
@@ -14,10 +15,10 @@ use eZ\Publish\Core\QueryType\QueryType;
  */
 class QueryFieldSettings
 {
-    /** @var QueryType */
+    /** @var \eZ\Publish\Core\QueryType\QueryType */
     private $queryType;
 
-    /** @var ContentType */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentType */
     private $returnedType;
 
     /** @var array */
@@ -28,19 +29,18 @@ class QueryFieldSettings
 
     /** @var int */
     public $defaultPageLimit;
-    /**
-     * @var string
-     */
+
+    /** @var string */
     private $contentTypeIdentifier;
-    /**
-     * @var string
-     */
+
+    /** @var string */
     private $fieldDefinitionIdentifier;
 
     public function __construct(
         string $contentTypeIdentifier,
         string $fieldDefinitionIdentifier,
         QueryType $queryType,
+        ContentType $returnedType,
         array $parameters,
         bool $isPaginationEnabled,
         int $defaultPageLimit
@@ -52,6 +52,7 @@ class QueryFieldSettings
         $this->parameters = $parameters;
         $this->isPaginationEnabled = $isPaginationEnabled;
         $this->defaultPageLimit = $defaultPageLimit;
+        $this->returnedType = $returnedType;
     }
 
     /**

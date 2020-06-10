@@ -5,28 +5,22 @@
  */
 declare(strict_types=1);
 
-namespace EzSystems\EzPlatformQueryFieldType\Core;
+namespace EzSystems\EzPlatformQueryFieldType\Core\SettingsProvider;
 
 use eZ\Publish\API\Repository\ContentTypeService;
-use eZ\Publish\API\Repository\Values\Content\Content;
-use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\QueryType\QueryTypeRegistry;
 use EzSystems\EzPlatformQueryFieldType\API\QueryFieldSettings;
-use EzSystems\EzPlatformQueryFieldType\API\QueryFieldSettingsProvider as QueryParametersTransformerInterface;
-use EzSystems\EzPlatformQueryFieldType\Exception\ParametersTransformationException;
+use EzSystems\EzPlatformQueryFieldType\API\QueryFieldSettingsProvider;
 use EzSystems\EzPlatformQueryFieldType\Exception\QueryFieldNotFoundException;
-use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 /**
  * Resolves a query field parameter stored in the Field Definition.
  *
  * @internal
  */
-final class FieldDefinitionQueryFieldFieldSettingsProvider implements QueryParametersTransformerInterface
+final class FieldDefinitionQueryFieldSettingsProvider implements QueryFieldSettingsProvider
 {
     /** @var \eZ\Publish\Core\QueryType\QueryTypeRegistry */
     private $queryTypeRegistry;
@@ -42,20 +36,30 @@ final class FieldDefinitionQueryFieldFieldSettingsProvider implements QueryParam
 
     public function getSettings(ContentType $contentType, string $fieldDefinitionIdentifier): QueryFieldSettings
     {
+        $fieldDefinition = $this->loadFieldDefinition($contentType, $fieldDefinitionIdentifier);
+        $settings = $fieldDefinition->getFieldSettings();
 
+        return new QueryFieldSettings(
+            $contentType->identifier,
+            $fieldDefinitionIdentifier,
+            $this->queryTypeRegistry->getQueryType($settings['QueryType']),
+            $this->contentTypeService->loadContentTypeByIdentifier($settings['ReturnedType']),
+            $settings['Parameters'],
+            $settings['EnablePagination'],
+            $settings['ItemsPerPage']
+        );
     }
 
     /**
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      * @param string $fieldDefinitionIdentifier
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition|null
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws QueryFieldNotFoundException
      */
-    private function loadFieldDefinition(Content $content, string $fieldDefinitionIdentifier): FieldDefinition
+    private function loadFieldDefinition(ContentType $contentType, string $fieldDefinitionIdentifier): FieldDefinition
     {
-        $contentType = $this->contentTypeService->loadContentType($content->contentInfo->contentTypeId);
         $fieldDefinition = $contentType->getFieldDefinition($fieldDefinitionIdentifier);
 
         if ($fieldDefinition === null) {

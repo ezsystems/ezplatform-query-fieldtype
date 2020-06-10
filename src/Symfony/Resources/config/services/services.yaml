@@ -6,8 +6,24 @@ services:
 
     EzSystems\EzPlatformQueryFieldType\Controller\QueryFieldRestController: ~
 
-    EzSystems\EzPlatformQueryFieldType\API\QueryFieldService:
-        arguments:
-            $queryTypeRegistry: '@ezpublish.query_type.registry'
+    EzSystems\EzPlatformQueryFieldType\API\QueryFieldService: ~
 
     EzSystems\EzPlatformQueryFieldType\API\QueryFieldServiceInterface: '@EzSystems\EzPlatformQueryFieldType\API\QueryFieldService'
+
+    EzSystems\EzPlatformQueryFieldType\Core\SettingsProvider\FieldDefinitionQueryFieldSettingsProvider:
+        arguments:
+            $queryTypeRegistry: "@ezpublish.query_type.registry"
+
+    EzSystems\EzPlatformQueryFieldType\Core\SettingsProvider\ConfigurationQueryFieldSettingsProvider:
+        arguments:
+            $configResolver: "@ezpublish.config.resolver"
+            $queryTypeRegistry: "@ezpublish.query_type.registry"
+
+    EzSystems\EzPlatformQueryFieldType\Core\SettingsProvider\ChainQueryFieldSettingsProvider:
+        arguments:
+            $providers:
+                - '@EzSystems\EzPlatformQueryFieldType\Core\SettingsProvider\ConfigurationQueryFieldSettingsProvider'
+                - '@EzSystems\EzPlatformQueryFieldType\Core\SettingsProvider\FieldDefinitionQueryFieldSettingsProvider'
+
+    EzSystems\EzPlatformQueryFieldType\API\QueryFieldSettingsProvider: '@EzSystems\EzPlatformQueryFieldType\Core\SettingsProvider\ChainQueryFieldSettingsProvider'
+

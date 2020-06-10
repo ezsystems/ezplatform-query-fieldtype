@@ -87,11 +87,11 @@ final class QueryFieldService implements QueryFieldServiceInterface
     {
         $settings = $this->settingsProvider->getSettings($content->getContentType(), $fieldDefinitionIdentifier);
 
-        if ($fieldDefinition->fieldSettings['EnablePagination'] === false) {
+        if (!$settings->isPaginationEnabled()) {
             return false;
         }
 
-        return $fieldDefinition->fieldSettings['ItemsPerPage'];
+        return $settings->getDefaultPageLimit();
     }
 
     /**
