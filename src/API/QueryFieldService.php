@@ -22,29 +22,23 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
  */
 final class QueryFieldService implements QueryFieldServiceInterface
 {
-    /** @var \eZ\Publish\Core\QueryType\QueryTypeRegistry */
-    private $queryTypeRegistry;
-
     /** @var \eZ\Publish\API\Repository\SearchService */
     private $searchService;
 
-    /** @var \eZ\Publish\API\Repository\ContentTypeService */
-    private $contentTypeService;
-    /**
-     * @var \eZ\Publish\API\Repository\LocationService
-     */
+    /** @var \eZ\Publish\API\Repository\LocationService */
     private $locationService;
+
+    /** @var \EzSystems\EzPlatformQueryFieldType\API\QueryFieldSettingsProvider */
+    private $settingsProvider;
 
     public function __construct(
         SearchService $searchService,
-        ContentTypeService $contentTypeService,
         LocationService $locationService,
-        QueryTypeRegistry $queryTypeRegistry
+        QueryFieldSettingsProvider $settingsProvider
     ) {
         $this->searchService = $searchService;
-        $this->contentTypeService = $contentTypeService;
         $this->locationService = $locationService;
-        $this->queryTypeRegistry = $queryTypeRegistry;
+        $this->settingsProvider = $settingsProvider;
     }
 
     /**
@@ -91,7 +85,7 @@ final class QueryFieldService implements QueryFieldServiceInterface
 
     public function getPaginationConfiguration(Content $content, string $fieldDefinitionIdentifier): int
     {
-        $fieldDefinition = $this->loadFieldDefinition($content, $fieldDefinitionIdentifier);
+        $settings = $this->settingsProvider->getSettings($content->getContentType(), $fieldDefinitionIdentifier);
 
         if ($fieldDefinition->fieldSettings['EnablePagination'] === false) {
             return false;
@@ -139,46 +133,21 @@ final class QueryFieldService implements QueryFieldServiceInterface
      */
     private function prepareQuery(Content $content, string $fieldDefinitionIdentifier, array $extraParameters = []): Query
     {
-        $fieldDefinition = $this->loadFieldDefinition($content, $fieldDefinitionIdentifier);
-
+        $settings = $this->settingsProvider->getSettings($content->getContentType(), $fieldDefinitionIdentifier);
         $location = $this->locationService->loadLocation($content->contentInfo->mainLocationId);
-        $queryType = $this->queryTypeRegistry->getQueryType($fieldDefinition->fieldSettings['QueryType']);
         $parameters = $this->resolveParameters(
-            $fieldDefinition->fieldSettings['Parameters'],
+            $settings->getParameters(),
             array_merge(
                 $extraParameters,
                 [
                     'content' => $content,
                     'contentInfo' => $content->contentInfo,
                     'mainLocation' => $location,
-                    'returnedType' => $fieldDefinition->fieldSettings['ReturnedType'],
+                    'returnedType' => $settings->getReturnedType()->identifier,
                 ]
             )
         );
 
-        return $queryType->getQuery($parameters);
-    }
-
-    /**
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
-     * @param string $fieldDefinitionIdentifier
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition|null
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     */
-    private function loadFieldDefinition(Content $content, string $fieldDefinitionIdentifier): FieldDefinition
-    {
-        $contentType = $this->contentTypeService->loadContentType($content->contentInfo->contentTypeId);
-        $fieldDefinition = $contentType->getFieldDefinition($fieldDefinitionIdentifier);
-
-        if ($fieldDefinition === null) {
-            throw new NotFoundException(
-                'Query field definition',
-                $contentType->identifier . '/' . $fieldDefinitionIdentifier
-            );
-        }
-
-        return $fieldDefinition;
+        return $settings->getQueryType()->getQuery($parameters);
     }
 }
