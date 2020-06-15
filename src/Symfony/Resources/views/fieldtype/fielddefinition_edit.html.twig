@@ -1,31 +1,70 @@
+{% block stylesheets %}
+    {{ encore_entry_link_tags('ezcontentquery-css', null, 'ezplatform') }}
+{% endblock %}
+
 {% block ezcontentquery_field_definition_edit %}
-    <div class="query-query-type{% if group_class is not empty %} {{ group_class }}{% endif %}">
-        {{- form_label(form.QueryType) -}}
-        {{- form_errors(form.QueryType) -}}
-        {{- form_widget(form.QueryType) -}}
-    </div>
+    <div class="ezcontentquery-settings options{% if group_class is not empty %} {{ group_class }}{% endif %}">
 
-    <div class="query-returned-type{% if group_class is not empty %} {{ group_class }}{% endif %}">
-        {{- form_label(form.ReturnedType) -}}
-        {{- form_errors(form.ReturnedType) -}}
-        {{- form_widget(form.ReturnedType) -}}
-    </div>
+        <div class="ezcontentquery-settings-toggle-ui-config">
+            <div class="ez-data-source">
+                <label class="ez-data-source__label">
+                    <input id="ezcontentquery-settings-toggle-ui-config-input-{{ fielddefinition.identifier }}" class="ez-data-source__input" type="checkbox">
+                    <span class="ez-data-source__indicator"></span>
+                </label>
+                <label class="switcher-label" for="ezcontentquery-settings-toggle-ui-config-input-{{ fielddefinition.identifier }}">Configure the query in the UI</label>
+            </div>
 
-    <div class="query-enable-pagination{% if group_class is not empty %} {{ group_class }}{% endif %}">
-        {{- form_label(form.EnablePagination) -}}
-        {{- form_errors(form.EnablePagination) -}}
-        {{- form_widget(form.EnablePagination) -}}
-    </div>
+        </div>
 
-    <div class="query-items-per-page{% if group_class is not empty %} {{ group_class }}{% endif %}">
-        {{- form_label(form.ItemsPerPage) -}}
-        {{- form_errors(form.ItemsPerPage) -}}
-        {{- form_widget(form.ItemsPerPage) -}}
-    </div>
+        <div class="ezcontentquery-settings-query-configuration-ui">
+            <div class="ezcontentquery-query-type{% if group_class is not empty %} {{ group_class }}{% endif %}">
+                {{- form_label(form.QueryType) -}}
+                {{- form_errors(form.QueryType) -}}
+                {{- form_widget(form.QueryType) -}}
+            </div>
 
-    <div class="query-parameters{% if group_class is not empty %} {{ group_class }}{% endif %}">
-        {{- form_label(form.Parameters) -}}
-        {{- form_errors(form.Parameters) -}}
-        {{- form_widget(form.Parameters) -}}
+            <div class="ezcontentquery-settings-returned-type{% if group_class is not empty %} {{ group_class }}{% endif %}">
+                {{- form_label(form.ReturnedType) -}}
+                {{- form_errors(form.ReturnedType) -}}
+                {{- form_widget(form.ReturnedType) -}}
+            </div>
+
+            <div class="ezcontentquery-settings-enable-pagination{% if group_class is not empty %} {{ group_class }}{% endif %}">
+                {{- form_label(form.EnablePagination) -}}
+                {{- form_errors(form.EnablePagination) -}}
+                {{- form_widget(form.EnablePagination) -}}
+            </div>
+
+            <div class="ezcontentquery-settings-items-per-page{% if group_class is not empty %} {{ group_class }}{% endif %}">
+                {{- form_label(form.ItemsPerPage) -}}
+                {{- form_errors(form.ItemsPerPage) -}}
+                {{- form_widget(form.ItemsPerPage) -}}
+            </div>
+
+            <div class="ezcontentquery-settings-parameters{% if group_class is not empty %} {{ group_class }}{% endif %}">
+                {{- form_label(form.Parameters) -}}
+                {{- form_errors(form.Parameters) -}}
+                {{- form_widget(form.Parameters) -}}
+            </div>
+        </div>
+
+        <div class="ezcontentquery-settings-query-configuration-text">
+            <pre>
+ezplatform:
+    system:
+        default:
+            query_fields:
+                {{ data.contentTypeData.identifier }}:
+                    {{ fielddefinition.identifier }}:
+                        query_type: ""
+                        returned_type: ""
+                        enable_pagination: true|false
+                        parameters:
+                            content: "@=content"
+                            filter:
+                                content_type: ["@=returnedType"]
+                            sort: 'date_published desc'
+            </pre>
+        </div>
     </div>
 {% endblock %}

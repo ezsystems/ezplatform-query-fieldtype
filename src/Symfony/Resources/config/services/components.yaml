@@ -1,0 +1,15 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    ezcontentquery.css:
+        parent: EzSystems\EzPlatformAdminUi\Component\TwigComponent
+        autowire: true
+        autoconfigure: false
+        public: false
+        arguments:
+            $template: '@@ezdesign/ezcontentquery/widget_stylesheets.html.twig'
+        tags:
+            - { name: ezplatform.admin_ui.component, group: 'stylesheet-head' }
