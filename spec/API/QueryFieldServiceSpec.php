@@ -1,10 +1,13 @@
 <?php
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 namespace spec\EzSystems\EzPlatformQueryFieldType\API;
 
 use eZ\Publish\API\Repository\LocationService;
 use EzSystems\EzPlatformQueryFieldType\API\QueryFieldService;
-use EzSystems\EzPlatformQueryFieldType\FieldType\Query;
 use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\SearchService;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -13,7 +16,6 @@ use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\Core\QueryType\QueryType;
 use eZ\Publish\Core\QueryType\QueryTypeRegistry;
 use eZ\Publish\Core\Repository\Values;
-use EzSystems\EzPlatformGraphQL\GraphQL\Value\Field;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
@@ -51,7 +53,7 @@ class QueryFieldServiceSpec extends ObjectBehavior
                         'ReturnedType' => 'folder',
                         'QueryType' => self::QUERY_TYPE_IDENTIFIER,
                         'Parameters' => $parameters,
-                    ]
+                    ],
                 ]),
             ],
         ]);
@@ -87,7 +89,7 @@ class QueryFieldServiceSpec extends ObjectBehavior
         return new Values\Content\Content([
             'versionInfo' => new Values\Content\VersionInfo([
                 'contentInfo' => new ContentInfo(['contentTypeId' => self::CONTENT_TYPE_ID]),
-            ])
+            ]),
         ]);
     }
 }

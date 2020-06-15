@@ -1,9 +1,12 @@
 <?php
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 namespace spec\EzSystems\EzPlatformQueryFieldType\eZ\Persistence\Legacy\Content\FieldValue\Converter;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
-use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use EzSystems\EzPlatformQueryFieldType\eZ\Persistence\Legacy\Content\FieldValue\Converter\QueryConverter;
 use PhpSpec\ObjectBehavior;
@@ -38,7 +41,7 @@ class QueryConverterSpec extends ObjectBehavior
 
     function getStorageDefinition(): StorageFieldDefinition
     {
-        $fieldDefinition = new StorageFieldDefinition;
+        $fieldDefinition = new StorageFieldDefinition();
         $fieldDefinition->dataText5 = \json_encode(self::PARAMETERS);
         $fieldDefinition->dataText1 = self::QUERY_TYPE;
         $fieldDefinition->dataText2 = self::RETURNED_TYPE;

@@ -1,10 +1,13 @@
 <?php
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 namespace spec\EzSystems\EzPlatformQueryFieldType\GraphQL;
 
 use EzSystems\EzPlatformQueryFieldType\GraphQL\ContentQueryFieldDefinitionMapper;
 use eZ\Publish\API\Repository\ContentTypeService;
-use eZ\Publish\Core\QueryType\QueryTypeRegistry;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
 use EzSystems\EzPlatformGraphQL\Schema\Domain\Content\Mapper\FieldDefinition\FieldDefinitionMapper;
@@ -22,8 +25,7 @@ class ContentQueryFieldDefinitionMapperSpec extends ObjectBehavior
         FieldDefinitionMapper $innerMapper,
         NameHelper $nameHelper,
         ContentTypeService $contentTypeService
-    )
-    {
+    ) {
         $contentType = new ContentType(['identifier' => self::RETURNED_CONTENT_TYPE_IDENTIFIER]);
 
         $contentTypeService
@@ -109,8 +111,8 @@ class ContentQueryFieldDefinitionMapperSpec extends ObjectBehavior
             'fieldTypeIdentifier' => self::FIELD_TYPE_IDENTIFIER,
             'fieldSettings' => [
                 'ReturnedType' => self::RETURNED_CONTENT_TYPE_IDENTIFIER,
-                'EnablePagination' => $enablePagination
-             ]
+                'EnablePagination' => $enablePagination,
+             ],
         ]);
     }
 
