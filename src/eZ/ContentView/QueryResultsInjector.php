@@ -50,7 +50,7 @@ class QueryResultsInjector implements EventSubscriberInterface
 
         if ($viewType === $this->views['field']) {
             $parameters = [
-                'itemViewType' => $this->views['item'],
+                'itemViewType' => $event->getBuilderParameters()['itemViewType'] ?? $this->views['item'],
                 'items' => $this->buildResults($event),
             ];
             $parameters['isPaginationEnabled'] = ($parameters['items'] instanceof Pagerfanta);
