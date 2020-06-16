@@ -31,7 +31,7 @@ install:
 
 script:
   - if [ "$TARGET" == "phpspec" ] ; then ./vendor/bin/phpspec run --format=pretty; fi
-  - if [ "$TARGET" == "codestyle" ] ; then ./vendor/bin/php-cs-fixer fix --dry-run -v --show-progress=estimating; fi
+  - if [ "$TARGET" == "codestyle" ] ; then ./vendor/bin/php-cs-fixer fix --dry-run -v --show-progress=estimating && ./vendor/bin/php-cs-fixer fix --config=.php_cs.spec --dry-run -v --show-progress=estimating; fi
 
 notifications:
   slack:

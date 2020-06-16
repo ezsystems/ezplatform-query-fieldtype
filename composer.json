@@ -30,6 +30,12 @@
         "ezsystems/ezplatform-code-style": "^0.1.0",
         "friendsofphp/php-cs-fixer": "^2.16.0"
     },
+    "scripts": {
+        "fix-cs": [
+            "php-cs-fixer --ansi fix -v --show-progress=estimating",
+            "php-cs-fixer --ansi fix --config=.php_cs.spec -v --show-progress=estimating"
+        ]
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "1.0.x-dev"
