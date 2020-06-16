@@ -45,7 +45,10 @@
         "friendsofphp/php-cs-fixer": "^2.16.0"
     },
     "scripts": {
-        "fix-cs": "php-cs-fixer fix -v --show-progress=estimating"
+        "fix-cs": [
+            "php-cs-fixer --ansi fix -v --show-progress=estimating",
+            "php-cs-fixer --ansi fix --config=.php_cs.spec -v --show-progress=estimating"
+        ]
     },
     "extra": {
         "_ezplatform_branch_for_behat_tests": "master",

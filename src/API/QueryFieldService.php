@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\QueryType\QueryTypeRegistry;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
@@ -72,13 +73,15 @@ final class QueryFieldService implements QueryFieldServiceInterface
         $query = $this->prepareQuery($content, $fieldDefinitionIdentifier);
         $query->limit = 0;
 
-        return $this->searchService->findContent($query)->totalCount;
+        $count = $this->searchService->findContent($query)->totalCount - $query->offset;
+
+        return $count < 0 ? 0 : $count;
     }
 
     public function loadContentItemsSlice(Content $content, string $fieldDefinitionIdentifier, int $offset, int $limit): iterable
     {
         $query = $this->prepareQuery($content, $fieldDefinitionIdentifier);
-        $query->offset = $offset;
+        $query->offset += $offset;
         $query->limit = $limit;
 
         return array_map(
@@ -111,18 +114,33 @@ final class QueryFieldService implements QueryFieldServiceInterface
         foreach ($expressions as $key => $expression) {
             if (is_array($expression)) {
                 $expressions[$key] = $this->resolveParameters($expression, $variables);
-            } else {
+            } elseif ($this->isExpression($expression)) {
                 $expressions[$key] = $this->resolveExpression($expression, $variables);
+            } else {
+                $expressions[$key] = $expression;
             }
         }
 
         return $expressions;
     }
 
+    private function isExpression($expression): bool
+    {
+        return is_string($expression) && substr($expression, 0, 2) === '@=';
+    }
+
+    /**
+     * @param string $expression
+     * @param array $variables
+     *
+     * @return mixed
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException if $expression is not an expression.
+     */
     private function resolveExpression(string $expression, array $variables)
     {
-        if (substr($expression, 0, 2) !== '@=') {
-            return $expression;
+        if (!$this->isExpression($expression)) {
+            throw new InvalidArgumentException('expression', 'is not an expression');
         }
 
         return (new ExpressionLanguage())->evaluate(substr($expression, 2), $variables);
