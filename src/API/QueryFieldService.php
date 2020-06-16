@@ -133,11 +133,11 @@ final class QueryFieldService implements QueryFieldServiceInterface, QueryFieldP
      * @param string $expression
      * @param array $variables
      *
-     * @return string
+     * @return mixed
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException if $expression is not an expression.
      */
-    private function resolveExpression(string $expression, array $variables): string
+    private function resolveExpression(string $expression, array $variables)
     {
         if (!$this->isExpression($expression)) {
             throw new InvalidArgumentException('expression', 'is not an expression');
