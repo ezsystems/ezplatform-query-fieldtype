@@ -1,0 +1,10 @@
+@import './public/bundles/ezplatformadminui/scss/custom.scss';
+@import './public/bundles/ezplatformadminui/scss/mixins.scss';
+
+.ezcontentquery-settings-toggle-ui-config {
+  @include checkbox-switcher();
+
+  .switcher-label {
+    margin-left: 1.75rem;
+  }
+}
