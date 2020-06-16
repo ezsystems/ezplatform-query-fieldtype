@@ -39,6 +39,7 @@
         "ezsystems/ez-support-tools": "^2.0@dev",
         "ezsystems/ezplatform-design-engine": "^3.0@dev",
         "ezsystems/ezplatform-richtext": "^2.0@dev",
+        "ezsystems/ezplatform-search": "^1.0@dev",
         "ezsystems/ezplatform-user": "^2.0@dev",
         "phpspec/phpspec": "^6.0",
         "ezsystems/ezplatform-code-style": "^0.1.0",
