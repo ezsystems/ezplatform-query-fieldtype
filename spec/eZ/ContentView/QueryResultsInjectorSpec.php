@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 namespace spec\EzSystems\EzPlatformQueryFieldType\eZ\ContentView;
 
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
@@ -56,16 +60,22 @@ class QueryResultsInjectorSpec extends ObjectBehavior
         QueryFieldServiceInterface $queryFieldService,
         FilterViewParametersEvent $event,
         RequestStack $requestStack
-    )
-    {
+    ) {
         $this->beConstructedWith($queryFieldService, self::VIEWS, $requestStack);
+        $event->getView()->willReturn($this->view);
+        $event->getBuilderParameters()->willReturn(
+            [
+                'queryFieldDefinitionIdentifier' => self::FIELD_DEFINITION_IDENTIFIER,
+                'enablePagination' => false,
+                'disablePagination' => false,
+            ]
+        );
     }
 
     function it_throws_an_InvalidArgumentException_if_no_item_view_is_provided(
         QueryFieldServiceInterface $queryFieldService,
         RequestStack $requestStack
-    )
-    {
+    ) {
         $this->beConstructedWith($queryFieldService, ['field' => self::FIELD_VIEW], $requestStack);
         $this->shouldThrow(\InvalidArgumentException::class)->duringInstantiation();
     }
@@ -73,8 +83,7 @@ class QueryResultsInjectorSpec extends ObjectBehavior
     function it_throws_an_InvalidArgumentException_if_no_field_view_is_provided(
         QueryFieldServiceInterface $queryFieldService,
         RequestStack $requestStack
-    )
-    {
+    ) {
         $this->beConstructedWith($queryFieldService, ['item' => 'field'], $requestStack);
         $this->shouldThrow(\InvalidArgumentException::class)->duringInstantiation();
     }
@@ -152,9 +161,9 @@ class QueryResultsInjectorSpec extends ObjectBehavior
     function getMatchers(): array
     {
         return [
-            'subscribeTo' => function($return, $event) {
+            'subscribeTo' => function ($return, $event) {
                 return is_array($return) && isset($return[$event]);
-            }
+            },
         ];
     }
 

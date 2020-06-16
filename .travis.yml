@@ -41,8 +41,7 @@ install:
 
 script:
   - if [ "$TARGET" == "phpspec" ] ; then ./vendor/bin/phpspec run --format=pretty; fi
-  - if [ "$TARGET" == "codestyle" ] ; then ./vendor/bin/php-cs-fixer fix --dry-run -v --show-progress=estimating; fi
-  - if [ "$TARGET" == "behat" ]; then cd "$HOME/build/ezplatform"; docker-compose exec --user www-data app sh -c "bin/ezbehat ${BEHAT_OPTS}" ; fi
+  - if [ "$TARGET" == "codestyle" ] ; then ./vendor/bin/php-cs-fixer fix --dry-run -v --show-progress=estimating && ./vendor/bin/php-cs-fixer fix --config=.php_cs.spec --dry-run -v --show-progress=estimating; fi
 
 notifications:
   slack:
