@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\QueryType\QueryTypeRegistry;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
@@ -111,18 +112,33 @@ final class QueryFieldService implements QueryFieldServiceInterface, QueryFieldP
         foreach ($expressions as $key => $expression) {
             if (is_array($expression)) {
                 $expressions[$key] = $this->resolveParameters($expression, $variables);
-            } else {
+            } elseif ($this->isExpression($expression)) {
                 $expressions[$key] = $this->resolveExpression($expression, $variables);
+            } else {
+                $expressions[$key] = $expression;
             }
         }
 
         return $expressions;
     }
 
-    private function resolveExpression(string $expression, array $variables)
+    private function isExpression($expression): bool
     {
-        if (substr($expression, 0, 2) !== '@=') {
-            return $expression;
+        return is_string($expression) && substr($expression, 0, 2) === '@=';
+    }
+
+    /**
+     * @param string $expression
+     * @param array $variables
+     *
+     * @return string
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException if $expression is not an expression.
+     */
+    private function resolveExpression(string $expression, array $variables): string
+    {
+        if (!$this->isExpression($expression)) {
+            throw new InvalidArgumentException('expression', 'is not an expression');
         }
 
         return (new ExpressionLanguage())->evaluate(substr($expression, 2), $variables);
