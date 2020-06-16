@@ -60,7 +60,7 @@ class QueryFieldServiceSpec extends ObjectBehavior
             ]),
         ]);
         $location = new Values\Content\Location([
-            'id' => self::LOCATION_ID
+            'id' => self::LOCATION_ID,
         ]);
 
         $contentTypeService->loadContentType(self::CONTENT_TYPE_ID)->willReturn($contentType);
@@ -124,7 +124,7 @@ class QueryFieldServiceSpec extends ObjectBehavior
                     'contentTypeId' => self::CONTENT_TYPE_ID,
                     'mainLocationId' => self::LOCATION_ID,
                 ]),
-            ])
+            ]),
         ]);
     }
 }

@@ -46,7 +46,7 @@ class QueryResultsInjectorSpec extends ObjectBehavior
             [
                 'queryFieldDefinitionIdentifier' => self::FIELD_DEFINITION_IDENTIFIER,
                 'enablePagination' => false,
-                'disablePagination' => false
+                'disablePagination' => false,
             ]
         );
     }
@@ -132,8 +132,7 @@ class QueryResultsInjectorSpec extends ObjectBehavior
     function it_adds_the_query_results_for_the_field_view_with_pagination(
         FilterViewParametersEvent $event,
         QueryFieldServiceInterface $queryFieldService
-    )
-    {
+    ) {
         $content = $this->createContentItem();
 
         $queryFieldService
