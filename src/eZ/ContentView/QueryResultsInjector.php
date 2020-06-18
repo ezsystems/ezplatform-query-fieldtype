@@ -6,6 +6,7 @@
  */
 namespace EzSystems\EzPlatformQueryFieldType\eZ\ContentView;
 
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\MVC\Symfony\View\Event\FilterViewParametersEvent;
 use eZ\Publish\Core\MVC\Symfony\View\ViewEvents;
 use EzSystems\EzPlatformQueryFieldType\API\QueryFieldPaginationService;
@@ -46,17 +47,19 @@ class QueryResultsInjector implements EventSubscriberInterface
      */
     public function injectQueryResults(FilterViewParametersEvent $event)
     {
-        $viewType = $event->getView()->getViewType();
-
-        if ($viewType === $this->views['field']) {
+        if ($event->getView()->getViewType() === $this->views['field']) {
+            $builderParameters = $event->getBuilderParameters();
+            if (!isset($builderParameters['queryFieldDefinitionIdentifier'])) {
+                throw new InvalidArgumentException('queryFieldDefinitionIdentifier', 'missing');
+            }
             $parameters = [
                 'itemViewType' => $event->getBuilderParameters()['itemViewType'] ?? $this->views['item'],
                 'items' => $this->buildResults($event),
+                'fieldIdentifier' => $builderParameters['queryFieldDefinitionIdentifier'],
             ];
             $parameters['isPaginationEnabled'] = ($parameters['items'] instanceof Pagerfanta);
             if ($parameters['isPaginationEnabled']) {
-                $fieldDefinitionIdentifier = $event->getBuilderParameters()['queryFieldDefinitionIdentifier'];
-                $parameters['pageParameter'] = sprintf('[%s_page]', $fieldDefinitionIdentifier);
+                $parameters['pageParameter'] = sprintf('[%s_page]', $parameters['fieldIdentifier']);
             }
             $event->getParameterBag()->add($parameters);
         }
@@ -129,7 +132,6 @@ class QueryResultsInjector implements EventSubscriberInterface
 
             return $pager;
         } else {
-            // @todo error handling if parameter not set
             return $this->queryFieldService->loadContentItems(
                 $content,
                 $fieldDefinitionIdentifier
