@@ -1,0 +1,12 @@
+<div class="row text-center text-lg-left">
+{% for item in items %}
+    {{ render(controller("ez_content:viewAction", {
+        "contentId": item.id,
+        "viewType": itemViewType
+    })) }}
+{% endfor %}
+</div>
+
+{% if isPaginationEnabled %}
+    {{ pagerfanta( items, 'ez', {'routeName': location, 'pageParameter': pageParameter } ) }}
+{% endif %}

@@ -1,0 +1,17 @@
+ezpublish:
+    systems:
+        site:
+            content_view:
+                # Customize the layout around all the images
+                content_query_field:
+                    gallery_images:
+                        match:
+                            Identifier\ContentType: gallery
+                            Identifier\FieldDefinition: images
+                        template: "content/view/content_query_field/gallery_images.html.twig"
+                # Customize the layout of each image
+                line:
+                    images:
+                        match:
+                            Identifier\ContentType: image
+                        template: "content/view/line/images.html.twig"
