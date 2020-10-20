@@ -25,6 +25,9 @@ final class EzSystemsEzPlatformQueryFieldTypeExtension extends Extension impleme
 
         $loader->load('default_parameters.yaml');
         $loader->load('services.yaml');
+        if (!$container->hasParameter('kernel.debug') || !$container->getParameter('kernel.debug')) {
+            $loader->load('prod/services.yaml');
+        }
 
         $this->addContentViewConfig($container);
     }
