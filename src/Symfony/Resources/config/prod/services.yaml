@@ -1,0 +1,8 @@
+services:
+    _defaults:
+        autoconfigure: true
+        autowire: true
+        public: true
+
+    EzSystems\EzPlatformQueryFieldType\API\ExceptionSafeQueryFieldService:
+        decorates: 'EzSystems\EzPlatformQueryFieldType\API\QueryFieldServiceInterface'
