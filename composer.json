@@ -53,7 +53,7 @@
         ]
     },
     "extra": {
-        "_ezplatform_branch_for_behat_tests": "3.2",
+        "_ezplatform_branch_for_behat_tests": "master",
         "branch-alias": {
             "dev-tmp_ci_branch": "2.3.x-dev",
             "dev-2.1": "2.3.x-dev"
