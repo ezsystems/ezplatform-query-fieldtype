@@ -61,5 +61,5 @@ interface QueryFieldServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function getPaginationConfiguration($content, string $fieldDefinitionIdentifier): int;
+    public function getPaginationConfiguration(Content $content, string $fieldDefinitionIdentifier): int;
 }
