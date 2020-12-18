@@ -59,9 +59,9 @@ final class ContentQueryFieldDefinitionMapper extends DecoratingFieldDefinitionM
         $fieldSettings = $fieldDefinition->getFieldSettings();
 
         if ($fieldSettings['EnablePagination']) {
-            return '@=resolver("QueryFieldValueConnection", [args, field, content])';
+            return '@=resolver("QueryFieldValueConnection", [args, field, item])';
         } else {
-            return '@=resolver("QueryFieldValue", [field, content])';
+            return '@=resolver("QueryFieldValue", [field, item])';
         }
     }
 
@@ -94,14 +94,14 @@ final class ContentQueryFieldDefinitionMapper extends DecoratingFieldDefinitionM
 
     private function nameValueType($typeIdentifier): string
     {
-        return $this->nameHelper->domainContentName(
+        return $this->nameHelper->itemName(
             $this->contentTypeService->loadContentTypeByIdentifier($typeIdentifier)
         );
     }
 
     private function nameValueConnectionType($typeIdentifier): string
     {
-        return $this->nameHelper->domainContentConnection(
+        return $this->nameHelper->itemConnectionName(
             $this->contentTypeService->loadContentTypeByIdentifier($typeIdentifier)
         );
     }
