@@ -2,7 +2,7 @@
     "name": "ezsystems/ezplatform-query-fieldtype",
     "description": "An eZ Platform Field Type that defines a query.",
     "type": "ezplatform-bundle",
-    "license": "GPL-2.0",
+    "license": "GPL-2.0-only",
     "authors": [
         {
             "name": "Bertrand Dunogier",
