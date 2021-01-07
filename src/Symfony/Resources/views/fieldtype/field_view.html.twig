@@ -5,7 +5,7 @@
     "ez_content:viewAction",
     {
         "content": content,
-        "location": location is defined ? location : null,
+        "location": location ?? null,
         "queryFieldDefinitionIdentifier": field.fieldDefIdentifier,
         "viewType": ezContentQueryViews['field'],
         "itemViewType": itemViewType|default(ezContentQueryViews['item']),

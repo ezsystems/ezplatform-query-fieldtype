@@ -65,7 +65,7 @@ final class QueryFieldService implements QueryFieldServiceInterface, QueryFieldL
 
     public function countContentItems(Content $content, string $fieldDefinitionIdentifier): int
     {
-        $query = $this->prepareQuery($content, $this->locationService->loadLocation($content->contentInfo->mainLocationId), $fieldDefinitionIdentifier);
+        $query = $this->prepareQuery($content, $content->contentInfo->getMainLocation(), $fieldDefinitionIdentifier);
         $query->limit = 0;
 
         return $this->searchService->findContent($query)->totalCount;
@@ -155,9 +155,6 @@ final class QueryFieldService implements QueryFieldServiceInterface, QueryFieldL
 
     private function prepareQuery(Content $content, Location $location, string $fieldDefinitionIdentifier, array $extraParameters = []): Query
     {
-        // @todo change to actual main location
-        $mainLocation = $location;
-
         $fieldDefinition = $this->loadFieldDefinition($content, $fieldDefinitionIdentifier);
 
         $queryType = $this->queryTypeRegistry->getQueryType($fieldDefinition->fieldSettings['QueryType']);
@@ -169,7 +166,7 @@ final class QueryFieldService implements QueryFieldServiceInterface, QueryFieldL
                     'content' => $content,
                     'contentInfo' => $content->contentInfo,
                     'location' => $location,
-                    'mainLocation' => $mainLocation,
+                    'mainLocation' => $location->id === $content->contentInfo->mainLocationId ? $location : $content->contentInfo->getMainLocation(),
                     'returnedType' => $fieldDefinition->fieldSettings['ReturnedType'],
                 ]
             )
