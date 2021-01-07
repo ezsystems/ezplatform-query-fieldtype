@@ -16,7 +16,7 @@ interface QueryFieldServiceInterface
     /**
      * Executes the query without pagination and returns the content items.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Content|\eZ\Publish\API\Repository\Values\Content\Location $content
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $content
      * @param string $fieldDefinitionIdentifier
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content[]
