@@ -52,12 +52,10 @@ interface QueryFieldServiceInterface
     public function loadContentItemsSlice(Content $content, string $fieldDefinitionIdentifier, int $offset, int $limit): iterable;
 
     /**
-     * Returns the configured items per page for a query field definition, or false if pagination is disabled.
-     *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      * @param string $fieldDefinitionIdentifier
      *
-     * @return int|false
+     * @return int The page size, or 0 if pagination is disabled.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */

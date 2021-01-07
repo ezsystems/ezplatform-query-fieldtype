@@ -106,7 +106,7 @@ final class QueryFieldService implements QueryFieldServiceInterface, QueryFieldL
         $fieldDefinition = $this->loadFieldDefinition($content, $fieldDefinitionIdentifier);
 
         if ($fieldDefinition->fieldSettings['EnablePagination'] === false) {
-            return false;
+            return 0;
         }
 
         return $fieldDefinition->fieldSettings['ItemsPerPage'];
