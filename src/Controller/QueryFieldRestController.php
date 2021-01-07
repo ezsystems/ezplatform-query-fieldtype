@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use EzSystems\EzPlatformRest\Exceptions\NotFoundException;
 use EzSystems\EzPlatformRest\RequestParser;
@@ -55,12 +56,15 @@ final class QueryFieldRestController
         $limit = (int)$request->query->get('limit', -1);
 
         if ($request->query->has('location')) {
-            $locationHrefParts = explode('/', $this->requestParser->parseHref($request->query->get('location'), 'locationPath'));
-            $locationId = array_pop($locationHrefParts);
-            $location = $this->locationService->loadLocation($locationId);
+            $location = $this->loadLocationByPath($request);
             $content = $location->getContent();
             if ($content->id !== $contentId) {
-                throw new NotFoundException('No content with that locationId AND contentId was found');
+                $message = sprintf(
+                    'Content with contentId "%s" does not match content found using locationId "%s"',
+                    $contentId,
+                    $content->id
+                );
+                throw new NotFoundException($message);
             }
             if ($limit === -1) {
                 $items = $this->queryFieldService->loadContentItemsForLocation($location, $fieldDefinitionIdentifier);
@@ -104,4 +108,19 @@ final class QueryFieldRestController
 
         return $contentTypes[$contentInfo->contentTypeId];
     }
+
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return array
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    private function loadLocationByPath(Request $request): Location
+    {
+        $locationHrefParts = explode('/', $this->requestParser->parseHref($request->query->get('location'), 'locationPath'));
+        $locationId = array_pop($locationHrefParts);
+
+        return $this->locationService->loadLocation((int)$locationId);
+}
 }
