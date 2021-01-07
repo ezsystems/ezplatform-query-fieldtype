@@ -112,7 +112,6 @@ final class QueryFieldService implements QueryFieldServiceInterface, QueryFieldL
 
     /**
      * @param array $expressions parameters that may include expressions to be resolved
-     * @param array $variables
      *
      * @return array
      */
@@ -137,11 +136,6 @@ final class QueryFieldService implements QueryFieldServiceInterface, QueryFieldL
     }
 
     /**
-     * @param string $expression
-     * @param array $variables
-     *
-     * @return mixed
-     *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException if $expression is not an expression.
      */
     private function resolveExpression(string $expression, array $variables)
@@ -176,11 +170,6 @@ final class QueryFieldService implements QueryFieldServiceInterface, QueryFieldL
     }
 
     /**
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
-     * @param string $fieldDefinitionIdentifier
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition|null
-     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     private function loadFieldDefinition(Content $content, string $fieldDefinitionIdentifier): FieldDefinition
@@ -199,10 +188,6 @@ final class QueryFieldService implements QueryFieldServiceInterface, QueryFieldL
     }
 
     /**
-     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     *
-     * @return array
-     *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     private function executeQueryAndMapResult(Query $query): array
