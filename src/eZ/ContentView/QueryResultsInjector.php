@@ -77,13 +77,8 @@ final class QueryResultsInjector implements EventSubscriberInterface
     private function buildResults(FilterViewParametersEvent $event): iterable
     {
         $view = $event->getView();
-        if ($view instanceof LocationValueView) {
-            $location = $view->getLocation();
-        }
-
-        if ($view instanceof ContentValueView) {
-            $content = $view->getContent();
-        }
+        $location = $view instanceof LocationValueView ? $location = $view->getLocation() : null;
+        $content = $view instanceof ContentValueView ? $view->getContent() : null;
 
         $viewParameters = $event->getBuilderParameters();
         $fieldDefinitionIdentifier = $viewParameters['queryFieldDefinitionIdentifier'];
@@ -118,7 +113,7 @@ final class QueryResultsInjector implements EventSubscriberInterface
             $pageParam = sprintf('%s_page', $fieldDefinitionIdentifier);
             $page = isset($request) ? $request->get($pageParam, 1) : 1;
 
-            if (isset($location)) {
+            if ($location !== null) {
                 $pager = new Pagerfanta(
                     new QueryResultsWithLocationPagerFantaAdapter(
                         $this->queryFieldService, $location, $fieldDefinitionIdentifier
@@ -137,12 +132,12 @@ final class QueryResultsInjector implements EventSubscriberInterface
 
             return $pager;
         } else {
-            if ($this->queryFieldService instanceof QueryFieldLocationService && isset($location)) {
+            if ($this->queryFieldService instanceof QueryFieldLocationService && $location !== null) {
                 return $this->queryFieldService->loadContentItemsForLocation(
                     $location,
                     $fieldDefinitionIdentifier
                 );
-            } elseif (isset($content)) {
+            } elseif ($content !== null) {
                 return $this->queryFieldService->loadContentItems(
                     $content,
                     $fieldDefinitionIdentifier
