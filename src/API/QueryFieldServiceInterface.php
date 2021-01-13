@@ -9,12 +9,14 @@ namespace EzSystems\EzPlatformQueryFieldType\API;
 use eZ\Publish\API\Repository\Values\Content\Content;
 
 /**
- * Executes a query and returns the results.
+ * Executes queries for a query field.
  */
 interface QueryFieldServiceInterface
 {
     /**
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     * Executes the query without pagination and returns the content items.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $content
      * @param string $fieldDefinitionIdentifier
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content[]
@@ -24,16 +26,38 @@ interface QueryFieldServiceInterface
     public function loadContentItems(Content $content, string $fieldDefinitionIdentifier): iterable;
 
     /**
+     * Counts the total results of a query.
+     *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      * @param string $fieldDefinitionIdentifier
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content[]
+     * @return int
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function countContentItems(Content $content, string $fieldDefinitionIdentifier): int;
 
+    /**
+     * Executes a paginated query and return the requested content items slice.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     * @param string $fieldDefinitionIdentifier
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content[]
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
     public function loadContentItemsSlice(Content $content, string $fieldDefinitionIdentifier, int $offset, int $limit): iterable;
 
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     * @param string $fieldDefinitionIdentifier
+     *
+     * @return int The page size, or 0 if pagination is disabled.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
     public function getPaginationConfiguration(Content $content, string $fieldDefinitionIdentifier): int;
 }
