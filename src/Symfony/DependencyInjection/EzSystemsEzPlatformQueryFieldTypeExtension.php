@@ -6,6 +6,7 @@
  */
 namespace EzSystems\EzPlatformQueryFieldType\Symfony\DependencyInjection;
 
+use EzSystems\EzPlatformGraphQL\DependencyInjection\EzSystemsEzPlatformGraphQLExtension;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
@@ -24,9 +25,15 @@ final class EzSystemsEzPlatformQueryFieldTypeExtension extends Extension impleme
         );
 
         $loader->load('default_parameters.yaml');
-        $loader->load('services.yaml');
         if (!$container->hasParameter('kernel.debug') || !$container->getParameter('kernel.debug')) {
             $loader->load('prod/services.yaml');
+        }
+
+        $loader->load('services/ezplatform.yaml');
+        $loader->load('services/services.yaml');
+
+        if ($container->hasExtension('ezplatform_graphql')) {
+            $loader->load('services/graphql.yaml');
         }
 
         $this->addContentViewConfig($container);
