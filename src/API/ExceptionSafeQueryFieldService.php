@@ -7,6 +7,7 @@
 namespace EzSystems\EzPlatformQueryFieldType\API;
 
 use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\Location;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
@@ -15,7 +16,7 @@ use Psr\Log\NullLogger;
 /**
  * Silences exceptions when they occur in query field service, for example due to field type misconfigurations.
  */
-final class ExceptionSafeQueryFieldService implements QueryFieldServiceInterface, LoggerAwareInterface
+final class ExceptionSafeQueryFieldService implements QueryFieldServiceInterface, QueryFieldLocationService, LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
@@ -70,5 +71,44 @@ final class ExceptionSafeQueryFieldService implements QueryFieldServiceInterface
     public function getPaginationConfiguration(Content $content, string $fieldDefinitionIdentifier): int
     {
         return $this->inner->getPaginationConfiguration($content, $fieldDefinitionIdentifier);
+    }
+
+    public function loadContentItemsForLocation(Location $location, string $fieldDefinitionIdentifier): iterable
+    {
+        try {
+            return $this->inner->loadContentItemsForLocation($location, $fieldDefinitionIdentifier);
+        } catch (\Throwable $e) {
+            $this->logger->error($e->getMessage(), [
+                'exception' => $e,
+            ]);
+
+            return [];
+        }
+    }
+
+    public function loadContentItemsSliceForLocation(Location $location, string $fieldDefinitionIdentifier, int $offset, int $limit): iterable
+    {
+        try {
+            return $this->inner->loadContentItemsSliceForLocation($location, $fieldDefinitionIdentifier, $offset, $limit);
+        } catch (\Throwable $e) {
+            $this->logger->error($e->getMessage(), [
+                'exception' => $e,
+            ]);
+
+            return [];
+        }
+    }
+
+    public function countContentItemsForLocation(Location $location, string $fieldDefinitionIdentifier): int
+    {
+        try {
+            return $this->inner->countContentItemsForLocation($location, $fieldDefinitionIdentifier);
+        } catch (\Throwable $e) {
+            $this->logger->error($e->getMessage(), [
+                'exception' => $e,
+            ]);
+
+            return 0;
+        }
     }
 }
