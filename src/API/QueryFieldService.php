@@ -86,7 +86,7 @@ final class QueryFieldService implements QueryFieldServiceInterface, QueryFieldL
     public function loadContentItemsSlice(Content $content, string $fieldDefinitionIdentifier, int $offset, int $limit): iterable
     {
         $query = $this->prepareQuery($content, $content->contentInfo->getMainLocation(), $fieldDefinitionIdentifier);
-        $query->offset = $offset;
+        $query->offset += $offset;
         $query->limit = $limit;
 
         return $this->executeQueryAndMapResult($query);
@@ -95,7 +95,7 @@ final class QueryFieldService implements QueryFieldServiceInterface, QueryFieldL
     public function loadContentItemsSliceForLocation(Location $location, string $fieldDefinitionIdentifier, int $offset, int $limit): iterable
     {
         $query = $this->prepareQuery($location->getContent(), $location, $fieldDefinitionIdentifier);
-        $query->offset = $offset;
+        $query->offset += $offset;
         $query->limit = $limit;
 
         return $this->executeQueryAndMapResult($query);
