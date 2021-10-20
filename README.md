@@ -1,4 +1,4 @@
-# Ibexa Query Field Type bundle
+# Ibexa Query Field Type
 
 This package is part of [Ibexa DXP](https://ibexa.co).
 
@@ -6,7 +6,7 @@ To use this package, [install Ibexa DXP](https://doc.ibexa.co/en/latest/install/
 
 This package contains the Query Field Type for [Ibexa DXP](https://ibexa.co).
 
-This Field Type allows content manager map an executable Repository Query to a Field.
+This Field Type allows the content manager to map an executable Repository Query to a Field.
 
 ## COPYRIGHT
 
