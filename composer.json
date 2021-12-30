@@ -44,17 +44,24 @@
         "ezsystems/ezplatform-user": "^2.0@dev",
         "phpspec/phpspec": "^6.0",
         "ezsystems/ezplatform-code-style": "^0.1.0",
-        "friendsofphp/php-cs-fixer": "^2.16.0"
+        "friendsofphp/php-cs-fixer": "^2.16.0",
+        "ibexa/ci-scripts": "^0.1@dev"
     },
     "scripts": {
         "fix-cs": [
             "php-cs-fixer --ansi fix -v --show-progress=estimating",
             "php-cs-fixer --ansi fix --config=.php_cs.spec -v --show-progress=estimating"
-        ]
+        ],
+        "check-cs": [
+            "php-cs-fixer --ansi fix -v --show-progress=estimating --dry-run",
+            "php-cs-fixer --ansi fix --config=.php_cs.spec -v --show-progress=estimating --dry-run"
+        ],
+        "test": "phpspec run --format=pretty"
     },
     "extra": {
         "_ezplatform_branch_for_behat_tests": "master",
         "branch-alias": {
+            "dev-master": "2.3.x-dev",
             "dev-tmp_ci_branch": "2.3.x-dev",
             "dev-2.1": "2.3.x-dev"
         }
