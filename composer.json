@@ -48,14 +48,8 @@
         "ibexa/ci-scripts": "^0.1@dev"
     },
     "scripts": {
-        "fix-cs": [
-            "php-cs-fixer --ansi fix -v --show-progress=estimating",
-            "php-cs-fixer --ansi fix --config=.php_cs.spec -v --show-progress=estimating"
-        ],
-        "check-cs": [
-            "php-cs-fixer --ansi fix -v --show-progress=estimating --dry-run",
-            "php-cs-fixer --ansi fix --config=.php_cs.spec -v --show-progress=estimating --dry-run"
-        ],
+        "fix-cs": "php-cs-fixer --ansi fix -v --show-progress=estimating",
+        "check-cs": "@fix-cs --dry-run",
         "test": "phpspec run --format=pretty"
     },
     "extra": {

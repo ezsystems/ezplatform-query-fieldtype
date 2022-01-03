@@ -29,13 +29,13 @@ class FieldDefinitionIdentifierMatcherSpec extends ObjectBehavior
 
     const FIELD_DEFINITION_IDENTIFIER = 'field_definition';
 
-    function it_is_initializable()
+    public function it_is_initializable()
     {
         $this->shouldHaveType(FieldDefinitionIdentifierMatcher::class);
         $this->shouldHaveType(ViewMatcherInterface::class);
     }
 
-    static function initialize(Repository $repository, array $matchingConfig): FieldDefinitionIdentifierMatcher
+    public static function initialize(Repository $repository, array $matchingConfig): FieldDefinitionIdentifierMatcher
     {
         $matcher = new FieldDefinitionIdentifierMatcher();
         $matcher->setRepository($repository);
@@ -44,7 +44,7 @@ class FieldDefinitionIdentifierMatcherSpec extends ObjectBehavior
         return  $matcher;
     }
 
-    function let(Repository $repository, ContentTypeService $contentTypeService)
+    public function let(Repository $repository, ContentTypeService $contentTypeService)
     {
         $repository->getContentTypeService()->willReturn($contentTypeService);
         $contentTypeService->loadContentType(self::CONTENT_TYPE_ID_WITHOUT_FIELD_DEFINITION)->willReturn($this->createContentTypeWithoutFieldDefinition());
@@ -52,13 +52,13 @@ class FieldDefinitionIdentifierMatcherSpec extends ObjectBehavior
         $this->beConstructedThrough([$this, 'initialize'], [$repository, [self::FIELD_DEFINITION_IDENTIFIER]]);
     }
 
-    function it_does_not_match_if_field_definition_identifier_does_not_exist()
+    public function it_does_not_match_if_field_definition_identifier_does_not_exist()
     {
         $view = $this->buildView(self::CONTENT_TYPE_ID_WITHOUT_FIELD_DEFINITION);
         $this->match($view)->shouldBe(false);
     }
 
-    function it_matches_if_field_definition_identifier_matches()
+    public function it_matches_if_field_definition_identifier_matches()
     {
         $view = $this->buildView(self::CONTENT_TYPE_ID_WITH_FIELD_DEFINITION);
         $this->match($view)->shouldBe(true);

@@ -32,7 +32,7 @@ class QueryFieldServiceSpec extends ObjectBehavior
     private $searchHits;
     private $totalCount = 0;
 
-    function let(
+    public function let(
         SearchService $searchService,
         ContentTypeService $contentTypeService,
         LocationService $locationService,
@@ -65,22 +65,22 @@ class QueryFieldServiceSpec extends ObjectBehavior
         $this->beConstructedWith($searchService, $contentTypeService, $locationService, $queryTypeRegistry);
     }
 
-    function it_is_initializable()
+    public function it_is_initializable()
     {
         $this->shouldHaveType(QueryFieldService::class);
     }
 
-    function it_loads_items_from_a_query_field_for_a_given_content_item()
+    public function it_loads_items_from_a_query_field_for_a_given_content_item()
     {
         $this->loadContentItems($this->getContent(), self::FIELD_DEFINITION_IDENTIFIER)->shouldBe($this->searchHits);
     }
 
-    function it_counts_items_from_a_query_field_for_a_given_content_item()
+    public function it_counts_items_from_a_query_field_for_a_given_content_item()
     {
         $this->countContentItems($this->getContent(), self::FIELD_DEFINITION_IDENTIFIER)->shouldBe($this->totalCount);
     }
 
-    function it_deducts_any_offset_when_counting_results(QueryType $queryType, SearchService $searchService)
+    public function it_deducts_any_offset_when_counting_results(QueryType $queryType, SearchService $searchService)
     {
         $query = new ApiContentQuery();
         $query->offset = 5;
@@ -93,7 +93,7 @@ class QueryFieldServiceSpec extends ObjectBehavior
         $this->countContentItems($this->getContent(), self::FIELD_DEFINITION_IDENTIFIER)->shouldBe(2);
     }
 
-    function it_returns_zero_if_offset_is_bigger_than_count(QueryType $queryType, SearchService $searchService)
+    public function it_returns_zero_if_offset_is_bigger_than_count(QueryType $queryType, SearchService $searchService)
     {
         $query = new ApiContentQuery();
         $query->offset = 8;
@@ -106,7 +106,7 @@ class QueryFieldServiceSpec extends ObjectBehavior
         $this->countContentItems($this->getContent(), self::FIELD_DEFINITION_IDENTIFIER)->shouldBe(0);
     }
 
-    function it_returns_0_as_pagination_configuration_if_pagination_is_disabled()
+    public function it_returns_0_as_pagination_configuration_if_pagination_is_disabled()
     {
         $this->getPaginationConfiguration(
             $this->getContent(self::CONTENT_TYPE_ID_WITHOUT_PAGINATION),
@@ -114,7 +114,7 @@ class QueryFieldServiceSpec extends ObjectBehavior
         )->shouldBe(0);
     }
 
-    function it_returns_the_items_per_page_number_as_pagination_configuration_if_pagination_is_enabled()
+    public function it_returns_the_items_per_page_number_as_pagination_configuration_if_pagination_is_enabled()
     {
         $this->getPaginationConfiguration(
             $this->getContent(),
