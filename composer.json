@@ -36,13 +36,15 @@
         }
     },
     "require-dev": {
+        "ezsystems/ezplatform-core": "^2.3@dev",
         "ezsystems/doctrine-dbal-schema": "^1.0@dev",
         "ezsystems/ez-support-tools": "^2.0@dev",
         "ezsystems/ezplatform-design-engine": "^3.0@dev",
+        "ezsystems/ezplatform-http-cache": "^2.3@dev",
         "ezsystems/ezplatform-richtext": "^2.0@dev",
         "ezsystems/ezplatform-search": "^1.0@dev",
         "ezsystems/ezplatform-user": "^2.0@dev",
-        "phpspec/phpspec": "^6.0",
+        "phpspec/phpspec": "^7.1",
         "ezsystems/ezplatform-code-style": "^0.1.0",
         "friendsofphp/php-cs-fixer": "^2.16.0",
         "ibexa/ci-scripts": "^0.1@dev"
