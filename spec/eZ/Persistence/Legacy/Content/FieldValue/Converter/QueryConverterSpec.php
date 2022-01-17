@@ -20,12 +20,12 @@ class QueryConverterSpec extends ObjectBehavior
     const ENABLE_PAGINATION = true;
     const ITEMS_PER_PAGE = 10;
 
-    function it_is_initializable()
+    public function it_is_initializable()
     {
         $this->shouldHaveType(QueryConverter::class);
     }
 
-    function getFieldDefinition(): FieldDefinition
+    public function getFieldDefinition(): FieldDefinition
     {
         $fieldDefinition = new FieldDefinition();
         $fieldDefinition->fieldTypeConstraints->fieldSettings = [
@@ -39,7 +39,7 @@ class QueryConverterSpec extends ObjectBehavior
         return $fieldDefinition;
     }
 
-    function getStorageDefinition(): StorageFieldDefinition
+    public function getStorageDefinition(): StorageFieldDefinition
     {
         $fieldDefinition = new StorageFieldDefinition();
         $fieldDefinition->dataText5 = \json_encode(self::PARAMETERS);
@@ -51,70 +51,70 @@ class QueryConverterSpec extends ObjectBehavior
         return $fieldDefinition;
     }
 
-    function it_stores_Parameters_in_dataText5_in_json_format()
+    public function it_stores_Parameters_in_dataText5_in_json_format()
     {
         $storageFieldDefinition = new StorageFieldDefinition();
         $this->toStorageFieldDefinition($this->getFieldDefinition(), $storageFieldDefinition);
         Assert::eq($storageFieldDefinition->dataText5, \json_encode(self::PARAMETERS));
     }
 
-    function it_stores_QueryType_in_dataText1()
+    public function it_stores_QueryType_in_dataText1()
     {
         $storageFieldDefinition = new StorageFieldDefinition();
         $this->toStorageFieldDefinition($this->getFieldDefinition(), $storageFieldDefinition);
         Assert::eq($storageFieldDefinition->dataText1, self::QUERY_TYPE);
     }
 
-    function it_stores_ReturnedType_in_dataText2()
+    public function it_stores_ReturnedType_in_dataText2()
     {
         $storageFieldDefinition = new StorageFieldDefinition();
         $this->toStorageFieldDefinition($this->getFieldDefinition(), $storageFieldDefinition);
         Assert::eq($storageFieldDefinition->dataText2, self::RETURNED_TYPE);
     }
 
-    function it_stores_EnablePagination_in_dataInt1()
+    public function it_stores_EnablePagination_in_dataInt1()
     {
         $storageFieldDefinition = new StorageFieldDefinition();
         $this->toStorageFieldDefinition($this->getFieldDefinition(), $storageFieldDefinition);
         Assert::eq($storageFieldDefinition->dataInt1, self::ENABLE_PAGINATION);
     }
 
-    function it_stores_ItemsPerPage_in_dataInt2()
+    public function it_stores_ItemsPerPage_in_dataInt2()
     {
         $storageFieldDefinition = new StorageFieldDefinition();
         $this->toStorageFieldDefinition($this->getFieldDefinition(), $storageFieldDefinition);
         Assert::eq($storageFieldDefinition->dataInt2, self::ITEMS_PER_PAGE);
     }
 
-    function it_reads_Parameters_from_dataText5_in_json_format()
+    public function it_reads_Parameters_from_dataText5_in_json_format()
     {
         $storageFieldDefinition = new StorageFieldDefinition();
         $this->toStorageFieldDefinition($this->getFieldDefinition(), $storageFieldDefinition);
         Assert::eq($storageFieldDefinition->dataText5, \json_encode(self::PARAMETERS));
     }
 
-    function it_reads_QueryType_from_dataText1()
+    public function it_reads_QueryType_from_dataText1()
     {
         $storageFieldDefinition = new StorageFieldDefinition();
         $this->toStorageFieldDefinition($this->getFieldDefinition(), $storageFieldDefinition);
         Assert::eq($storageFieldDefinition->dataText1, self::QUERY_TYPE);
     }
 
-    function it_reads_ReturnedType_from_dataText2()
+    public function it_reads_ReturnedType_from_dataText2()
     {
         $storageFieldDefinition = new StorageFieldDefinition();
         $this->toStorageFieldDefinition($this->getFieldDefinition(), $storageFieldDefinition);
         Assert::eq($storageFieldDefinition->dataText2, self::RETURNED_TYPE);
     }
 
-    function it_reads_EnablePagination_from_dataInt1()
+    public function it_reads_EnablePagination_from_dataInt1()
     {
         $storageFieldDefinition = new StorageFieldDefinition();
         $this->toStorageFieldDefinition($this->getFieldDefinition(), $storageFieldDefinition);
         Assert::eq($storageFieldDefinition->dataInt1, self::ENABLE_PAGINATION);
     }
 
-    function it_reads_ItemsPerPage_from_dataInt2()
+    public function it_reads_ItemsPerPage_from_dataInt2()
     {
         $storageFieldDefinition = new StorageFieldDefinition();
         $this->toStorageFieldDefinition($this->getFieldDefinition(), $storageFieldDefinition);
