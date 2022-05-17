@@ -31,3 +31,17 @@
         {{- form_widget(form.Parameters) -}}
     </div>
 {% endblock %}
+
+{% block ezcontentquery_named_field_definition_edit %}
+    <div class="query-returned-type{% if group_class is not empty %} {{ group_class }}{% endif %}">
+        {{- form_label(form.ReturnedType) -}}
+        {{- form_errors(form.ReturnedType) -}}
+        {{- form_widget(form.ReturnedType) -}}
+    </div>
+
+    <div class="query-parameters{% if group_class is not empty %} {{ group_class }}{% endif %}">
+        {{- form_label(form.Parameters) -}}
+        {{- form_errors(form.Parameters) -}}
+        {{- form_widget(form.Parameters) -}}
+    </div>
+{% endblock %}
