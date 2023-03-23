@@ -27,8 +27,12 @@ final class QueryFieldResolver
         return $this->queryFieldService->loadContentItems($content, $field->fieldDefIdentifier);
     }
 
-    public function resolveQueryFieldConnection(Argument $args, Field $field, Content $content)
+    public function resolveQueryFieldConnection(Argument $args, ?Field $field, Content $content)
     {
+        if ($field === null) {
+            return  null;
+        }
+
         if (!isset($args['first'])) {
             $args['first'] = $this->queryFieldService->getPaginationConfiguration($content, $field->fieldDefIdentifier);
         }
